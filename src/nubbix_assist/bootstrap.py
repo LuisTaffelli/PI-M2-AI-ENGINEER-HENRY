@@ -38,3 +38,15 @@ def make_retriever(root, build_id, embeddings=None):
     from .retrieval.service import Retriever
 
     return Retriever(load_build(root, build_id), embeddings or local_embeddings(root), load_config(root)["retrieval"])
+
+
+def language_model(root, role, budget):
+    from dotenv import load_dotenv
+    from .configuration.loader import load_config
+    from .llm.providers import configured_provider
+    from .llm.service import LanguageModel
+
+    load_dotenv(root / ".env", override=False)
+    config = load_config(root)["llm"]
+    provider = configured_provider(role, config["timeout_seconds"], config["max_output_tokens"])
+    return LanguageModel(provider, budget, config["max_input_bytes"])

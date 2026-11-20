@@ -1,1 +1,2 @@
-"""Construcción del contexto a partir de los chunks recuperados."""
+def context_items(selected):
+    return [{"chunk_id": item.chunk.chunk_id, "content": item.chunk.content} for item in selected]
