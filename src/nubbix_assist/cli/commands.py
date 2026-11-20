@@ -5,7 +5,7 @@ from dataclasses import asdict
 import json
 from pathlib import Path
 
-from nubbix_assist.bootstrap import STRATEGIES, build
+from nubbix_assist.bootstrap import STRATEGIES, build, prepare_local_model
 from nubbix_assist.ingestion.service import inspect_document
 
 
@@ -16,11 +16,15 @@ def ingest_cli(project_root: Path) -> None:
     inspect.add_argument("source", type=Path, help="Ruta del Markdown relativa al proyecto.")
     inspect.add_argument("--section", help="Mostrar solo los chunks con este título de sección.")
     inspect.add_argument("--strategy", choices=STRATEGIES, default="headings_v1")
+    commands.add_parser("prepare-model", help="Descargar la revisión configurada de E5 a la caché local.")
     build_parser = commands.add_parser("build", help="Construir y verificar un índice local.")
     build_parser.add_argument("--strategy", required=True, choices=STRATEGIES)
     args = parser.parse_args()
 
     try:
+        if args.command == "prepare-model":
+            print(json.dumps({"snapshot": prepare_local_model(project_root)}, ensure_ascii=False))
+            return
         if args.command == "build":
             print(json.dumps(asdict(build(project_root, args.strategy)), ensure_ascii=False, indent=2))
             return

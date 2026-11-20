@@ -19,6 +19,14 @@ def local_embeddings(root):
     return Embeddings(SentenceTransformerProvider(config))
 
 
+def prepare_local_model(root):
+    from .configuration.loader import load_config
+    from .embeddings.providers.sentence_transformers.config import LocalModel
+    from .embeddings.providers.sentence_transformers.download import download_model
+
+    return download_model(LocalModel(**load_config(root)["embeddings"]))
+
+
 def build(root, name):
     from .ingestion.build import build_index
     from .vector_store.providers.chroma.adapter import ChromaIndex

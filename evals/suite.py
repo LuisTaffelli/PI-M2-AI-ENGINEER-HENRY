@@ -5,11 +5,13 @@ from uuid import uuid4
 import json
 
 from nubbix_assist.artifacts.validators import digest, file_digest
-from nubbix_assist.bootstrap import language_model, local_embeddings, make_retriever
+from nubbix_assist.bootstrap import language_model, local_embeddings
 from nubbix_assist.generation.contracts.response import INSUFFICIENT
 from nubbix_assist.generation.prompts import load_prompt
 from nubbix_assist.llm.service import CallBudget
 from nubbix_assist.query.service import answer_retrieval
+from nubbix_assist.configuration.loader import load_config
+from nubbix_assist.retrieval.service import Retriever
 from .groundedness.judge import judge
 from .metrics import retrieval_metrics, summarize
 
@@ -26,13 +28,14 @@ def evaluate(root, builds, dataset, records, *, retrieval_only, max_calls):
                       judge=[evaluator.provider.name, evaluator.provider.model],
                       prompt_hashes=[digest(prompt), digest(judge_prompt)])
     model = local_embeddings(root)
+    retrieval_config = load_config(root)["retrieval"]
     run_id = uuid4().hex
     directory = root / "runs" / run_id
     directory.mkdir(parents=True)
     report = {"run_id": run_id, "settings": config, "strategies": {}}
     for build in builds:
         manifest = build.manifest
-        retriever = make_retriever(root, manifest.build_id, model)
+        retriever = Retriever(build, model, retrieval_config)
         rows = []
         for row in records:
             expected = row["expected_chunks"][manifest.strategy_fingerprint]
