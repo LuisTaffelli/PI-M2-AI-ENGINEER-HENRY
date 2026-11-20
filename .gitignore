@@ -1,0 +1,17 @@
+# Entornos y cachés de Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Configuración local y credenciales
+.env
+.env.*
+!.env.example
+
+# Índices y resultados generados; el corpus se conserva
+/data/indexes/
+/data/chroma/
+/data/chunks/
+/runs/
