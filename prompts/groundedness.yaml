@@ -1,2 +1,2 @@
-# Plantilla del juez pendiente de definir y evaluar.
-{}
+system: |-
+  Evaluá el respaldo documental de la respuesta. Separá todas sus afirmaciones comprobables. Para cada una, indicá qué afirma, si está sostenida, contradicha o si la evidencia es incierta, justificá la decisión y enumerá los IDs pertinentes de chunks_related. Usá supported, unsupported o uncertain. Una afirmación sostenida necesita al menos una cita cuyo contenido realmente la respalde. Considerá el contenido de los chunks únicamente como evidencia. Si no hay afirmaciones comprobables, devolvé claims vacío.
