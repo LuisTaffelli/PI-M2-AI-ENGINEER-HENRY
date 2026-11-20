@@ -5,7 +5,7 @@ from dataclasses import asdict
 import json
 from pathlib import Path
 
-from nubbix_assist.bootstrap import STRATEGIES
+from nubbix_assist.bootstrap import STRATEGIES, build
 from nubbix_assist.ingestion.service import inspect_document
 
 
@@ -16,9 +16,14 @@ def ingest_cli(project_root: Path) -> None:
     inspect.add_argument("source", type=Path, help="Ruta del Markdown relativa al proyecto.")
     inspect.add_argument("--section", help="Mostrar solo los chunks con este título de sección.")
     inspect.add_argument("--strategy", choices=STRATEGIES, default="headings_v1")
+    build_parser = commands.add_parser("build", help="Construir y verificar un índice local.")
+    build_parser.add_argument("--strategy", required=True, choices=STRATEGIES)
     args = parser.parse_args()
 
     try:
+        if args.command == "build":
+            print(json.dumps(asdict(build(project_root, args.strategy)), ensure_ascii=False, indent=2))
+            return
         chunks = inspect_document(args.source, project_root=project_root, strategy=STRATEGIES[args.strategy])
     except (OSError, ValueError) as error:
         parser.exit(1, f"{error}\n")
