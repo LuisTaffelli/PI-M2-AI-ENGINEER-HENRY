@@ -1,0 +1,34 @@
+{
+  "prepared_date": "2026-11-20",
+  "assignment": {
+    "title": "M2PI | Proyecto",
+    "url": "https://aula-viva.soyhenry.com/clase/6yf8ZcZ3a3O-",
+    "snapshot_imported_at": "2026-11-11T00:00:42.669623+00:00",
+    "snapshot_sha256": "2de327fcd8bd67b6aa11ab6ba3bed09eed5be5c3db04483084eb6fe3a89f3624",
+    "local_text": "docs/fuentes/consigna.md"
+  },
+  "corpus": {
+    "archive_filename": "corpus-20261118T214609Z-1-001.zip",
+    "archive_sha256": "ed31792285656c4216b249fd9ba1f0675bcaa7565ac937d2f8a860b3bb7f63f8",
+    "files": [
+      {
+        "path": "data/corpus/hr_policies.md",
+        "sha256": "1233f34807badbc12fe2666fc3dbb44331fdb56e662fd8bfec9619a1315c78ee",
+        "bytes": 2786,
+        "sections_h2": 6
+      },
+      {
+        "path": "data/corpus/it_manual.md",
+        "sha256": "65f92df2e93fdb1777c4c1f8fa74b90e5af777e558cb861d5248ad2204bf2777",
+        "bytes": 2746,
+        "sections_h2": 6
+      },
+      {
+        "path": "data/corpus/finance_processes.md",
+        "sha256": "b8d558ced1f16eb5138f3609488edfb27ac83fa01e70a2764b47ba116f90ae99",
+        "bytes": 2776,
+        "sections_h2": 6
+      }
+    ]
+  }
+}
