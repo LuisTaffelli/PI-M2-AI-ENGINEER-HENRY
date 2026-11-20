@@ -1,1 +1,7 @@
-"""Correspondencia entre identificadores, vectores y espacio efectivo."""
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class EmbeddedText:
+    id: str
+    vector: list[float]

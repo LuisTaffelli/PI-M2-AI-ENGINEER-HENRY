@@ -1,2 +1,11 @@
-# Los parámetros efectivos se incorporarán al implementar cada componente.
-{}
+embeddings:
+  model: intfloat/multilingual-e5-small
+  revision: 614241f622f53c4eeff9890bdc4f31cfecc418b3
+  dimension: 384
+  max_tokens: 512
+  query_prefix: "query: "
+  document_prefix: "passage: "
+retrieval:
+  candidates: 10
+  top_k: 5
+  rrf_constant: 60
