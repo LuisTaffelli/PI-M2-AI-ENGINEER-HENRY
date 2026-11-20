@@ -31,3 +31,10 @@ def load_build(root, build_id):
     from .vector_store.providers.chroma.adapter import ChromaIndex
 
     return open_build(root, build_id, ChromaIndex)
+
+
+def make_retriever(root, build_id, embeddings=None):
+    from .configuration.loader import load_config
+    from .retrieval.service import Retriever
+
+    return Retriever(load_build(root, build_id), embeddings or local_embeddings(root), load_config(root)["retrieval"])
