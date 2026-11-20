@@ -1,1 +1,10 @@
-"""Interfaz compartida por los consumidores de un modelo de lenguaje por API."""
+from typing import Protocol
+from .inputs import Request
+from .outputs import Completion
+
+
+class Provider(Protocol):
+    name: str
+    model: str
+
+    def complete(self, request: Request) -> Completion: ...

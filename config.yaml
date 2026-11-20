@@ -9,3 +9,7 @@ retrieval:
   candidates: 10
   top_k: 5
   rrf_constant: 60
+llm:
+  timeout_seconds: 45
+  max_output_tokens: 2048
+  max_input_bytes: 48000

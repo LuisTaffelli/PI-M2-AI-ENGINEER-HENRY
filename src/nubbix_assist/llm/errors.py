@@ -1,1 +1,4 @@
-"""Errores del modelo de lenguaje independientes de su SDK."""
+class ProviderError(RuntimeError):
+    def __init__(self, message: str, *, retryable: bool = False):
+        super().__init__(message)
+        self.retryable = retryable
