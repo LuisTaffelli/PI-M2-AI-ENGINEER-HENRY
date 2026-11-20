@@ -1,1 +1,9 @@
-"""Interfaz para crear, escribir, abrir, consultar e inspeccionar índices vectoriales."""
+from typing import Protocol
+from .inputs import VectorRecord
+from .outputs import VectorHit
+
+
+class VectorIndex(Protocol):
+    def write(self, records: list[VectorRecord]) -> None: ...
+    def ids(self) -> set[str]: ...
+    def search(self, vector: list[float], limit: int, source: str | None) -> list[VectorHit]: ...

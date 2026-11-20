@@ -1,1 +1,1 @@
-"""Configuración de persistencia y colecciones de Chroma."""
+COLLECTION = "nubbix_chunks"

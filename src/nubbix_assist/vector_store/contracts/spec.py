@@ -1,1 +1,8 @@
-"""Especificación del índice, la métrica y el espacio de embeddings esperado."""
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class IndexSpec:
+    dimension: int
+    embedding_fingerprint: str
+    metric: str = "cosine"

@@ -1,1 +1,2 @@
-"""Errores de almacenamiento y búsqueda independientes del backend."""
+class IndexError(ValueError):
+    """El índice vectorial no satisface el contrato del build."""
