@@ -1,6 +1,6 @@
 # Modularidad y límites de proveedores
 
-La estructura de paquetes ya incluye la carga de documentos y el corte por encabezados. Los módulos de proveedores describen sus responsabilidades para las próximas integraciones.
+Los proveedores implementados son Sentence Transformers, Chroma, OpenAI y Gemini. Los contratos mantienen separados la preparación de texto, la validación de vectores y el uso de las citas.
 
 La separación por componentes, proveedores y validadores fue confirmada por Luis en [ADR 0014](adr/0014-modularizar-proveedores-y-validaciones.md). La CLI con núcleo reutilizable está aceptada en [ADR 0003](adr/0003-aplicacion-python-modular-con-cli.md).
 
@@ -133,4 +133,4 @@ Se aplica el criterio de paquete propio a llm/contracts/ y vector_store/contract
 - Se prueban límites y prefijos con las particularidades del proveedor elegido.
 - Añadir un proveedor no obliga a copiar las validaciones comunes.
 
-Son criterios para verificaciones futuras; todavía no se implementaron esas pruebas ni los proveedores.
+Las pruebas de contrato cubren la reparación de citas, errores permanentes y los formatos de OpenAI y Gemini. La evaluación de calidad con los modelos remotos queda para la corrida con credenciales.

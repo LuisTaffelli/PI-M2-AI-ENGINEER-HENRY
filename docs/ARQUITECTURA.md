@@ -126,7 +126,7 @@ Si falla la construcción, el primer mecanismo de recuperación es repetir la in
 
 En words_v1 una palabra es una secuencia separada por espacios en blanco: no es un token del modelo. Se recorre el documento completo, incluyendo encabezados, sin cruzar documentos. Los offsets apuntan al original y el contexto agregado se guarda como envoltorio separado.
 
-Se verificaron 443 palabras en HR, 449 en IT y 448 en Finance. La inspección con `headings_v1` produjo 18 chunks con metadatos, seis por archivo. La simulación de `words_v1` proyecta 24 ventanas. Ese segundo conteo está pendiente de verificar con la implementación.
+Se verificaron 443 palabras en HR, 449 en IT y 448 en Finance. La inspección con `headings_v1` produjo 18 chunks con metadatos, seis por archivo. La implementación de `words_v1` produjo 24 ventanas, ocho por archivo.
 
 Ambas estrategias agregan contexto de documento/sección con el mismo criterio y comparten modelo de embeddings y política léxica. Los parámetros son una línea de partida, no valores óptimos.
 
@@ -216,7 +216,7 @@ Los errores de generación/juez y los casos no aplicables se muestran con su can
 
 La [ruta de cierre](adr/README.md#ruta-para-cerrar-la-arquitectura) agrupa las revisiones en cuatro bloques: datos/versiones, recuperación/generación, ejecución/fallos y evaluación.
 
-El diseño base cubre responsables, contratos, dependencias, persistencia, reglas de error y casos de aceptación. El primer incremento puede cargar el corpus y construir chunks en local. Los modelos/proveedores, presupuesto y versiones concretas se fijan antes de implementar sus integraciones; el ajuste de calidad y los parámetros óptimos se miden con código y evals.
+El diseño base cubre responsables, contratos, dependencias, persistencia, reglas de error y casos de aceptación. El primer incremento puede cargar el corpus y construir chunks en local. La configuración y las dependencias efectivas están versionadas. La selección de modelos remotos se hace por rol y el ajuste de calidad se mide en las evals.
 
 Los pendientes y estados están en el [registro ADR](adr/README.md), con un archivo por decisión; los casos de aceptación están en [CONTRATOS.md](CONTRATOS.md). Los ADR distinguen acuerdos de opciones en estudio.
 

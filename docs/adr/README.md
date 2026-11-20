@@ -22,6 +22,7 @@ Un ADR por decisión. Este índice reemplaza el registro inicial DECISIONES.md y
 | 0014 | [Modularizar componentes, proveedores y validaciones](0014-modularizar-proveedores-y-validaciones.md) | Aceptada |
 | 0015 | [Organizar los contratos como paquete por funcionalidad](0015-contratos-como-paquete-por-funcionalidad.md) | Aceptada |
 | 0016 | [Limitar a dos los intentos de generación por pregunta](0016-limitar-intentos-de-generacion.md) | Aceptada |
+| 0017 | [Ofrecer OpenAI y Gemini para generación y juez](0017-openai-y-gemini.md) | Aceptada |
 
 ## Cómo mantener el registro
 
@@ -39,16 +40,9 @@ Tres documentos originales; dos estrategias y al menos 20 chunks en una; ingesta
 
 La fuente académica permanece en [la consigna](../fuentes/consigna.md). Estos requisitos no se presentan como elecciones de tecnología.
 
-## Pendientes antes de implementar
+## Pendientes para la ronda de evaluación
 
-| Tema | Qué falta definir | ADR relacionado |
-|---|---|---|
-| Embeddings locales | Modelo/revisión final, normalización, prefijos y límites | [0013](0013-evaluar-multilingual-e5-small.md) |
-| Generación y juez API | Proveedor/modelos y salida estructurada | [0002](0002-embeddings-locales-y-llm-por-api.md) |
-| Presupuesto | Límites de tokens, llamadas, tiempo y costo cuando corresponda | [0012](0012-versionar-configuracion-prompts-y-corridas.md) |
-| Dependencias | Python compatible y librerías/versiones de validación, YAML y BM25 | [0003](0003-aplicacion-python-modular-con-cli.md), [0008](0008-busqueda-hibrida-con-bm25-y-rrf.md) |
-| Léxico | Revisar reglas y librería compatible con IDF positivo y persistencia | [0008](0008-busqueda-hibrida-con-bm25-y-rrf.md) |
-| Calibración y reproducibilidad | Revisar las ventanas 80/20 con muestras del corpus y concretar formatos de trazas y versiones antes de las evals | [0007](0007-comparar-secciones-y-ventanas-de-palabras.md), [0012](0012-versionar-configuracion-prompts-y-corridas.md) |
+Revisar las etiquetas por estrategia, elegir los modelos de cuenta para generación y juez, confirmar el presupuesto para la corrida y comparar calidad. Ya están implementados los cortes H2 y 80/20, E5 por revisión fija, Chroma, BM25 y las trazas. Los ADR 0007, 0012 y 0013 conservan su estado mientras se evalúan sus resultados.
 
 ## Ruta para cerrar la arquitectura
 
@@ -79,4 +73,3 @@ Los cuatro flujos tienen responsables, contratos, persistencia, comportamiento a
 Modelos/proveedores y versiones concretas se fijan antes de implementar sus integraciones. Los parámetros iniciales quedan explícitos en configuración y su calidad se mide durante implementación/evals; los valores óptimos y los benchmarks no son una condición previa para cerrar el diseño.
 
 El registro describe el diseño; no acredita índices construidos, integraciones ejecutadas ni métricas medidas.
-

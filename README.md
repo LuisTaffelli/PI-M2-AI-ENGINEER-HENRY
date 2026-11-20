@@ -1,62 +1,78 @@
 # Nubbix Assist · PI del módulo 2
 
-Asistente RAG para consultar las políticas internas de Nubbix y responder con citas rastreables a los documentos del corpus.
+Asistente RAG para consultar políticas de Nubbix en español con citas al corpus. La ingesta y la búsqueda funcionan localmente. Para responder y evaluar groundedness se puede elegir OpenAI o Gemini por separado.
 
-## Estado del primer incremento
+## Preparación
 
-La ingesta local lee los Markdown y permite inspeccionar un chunk por sección H2. Cada chunk identifica el archivo, su versión y el intervalo exacto del texto original. El índice, la consulta y la evaluación quedan para los siguientes incrementos.
+Entorno verificado en Linux con Python 3.12 y CPU. Desde la raíz del proyecto:
 
-Luis pidió definir la arquitectura antes de programar y eligió embeddings locales con LLM por API. El diseño base quedó acordado para el primer incremento.
+```sh
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.9.1
+python -m pip install -r requirements.txt
+python ingest/run.py prepare-model
+```
 
-- [Arquitectura y flujos](docs/ARQUITECTURA.md): responsabilidades, persistencia, recuperación, generación, errores y evaluación.
-- [Contratos y aceptación](docs/CONTRATOS.md): datos, referencias, golden y verificaciones previstas.
-- [Modularidad y proveedores](docs/MODULARIDAD.md): paquetes por funcionalidad, adaptadores y validadores comunes/específicos.
-- [Almacenamiento e índices](docs/ALMACENAMIENTO.md): contratos del vector store, catálogo y ciclo de vida de un build.
-- [Registro ADR](docs/adr/README.md): índice de decisiones, estados y pendientes, con un archivo por decisión.
+La última orden descarga la revisión de E5 fijada en [config.yaml](config.yaml). Después se puede construir y consultar el índice local con esa caché. La pregunta lleva el prefijo `query: ` y cada chunk, `passage: `. El adaptador valida el límite configurado antes de codificar y comprueba los 384 valores de cada vector normalizado.
 
-## Corpus
-
-| Documento | Tema | Secciones con encabezado H2 |
-|---|---|---:|
-| `data/corpus/hr_policies.md` | Licencias, modalidad de trabajo y beneficios | 6 |
-| `data/corpus/it_manual.md` | Accesos, equipos, seguridad y soporte | 6 |
-| `data/corpus/finance_processes.md` | Reintegros, compras y procesos financieros | 6 |
-
-Los originales se conservan en `data/corpus/`. La procedencia y los SHA-256 están registrados en `docs/fuentes/procedencia.json`.
-
-El corte por sección produjo 18 chunks, seis por documento. La consigna exige al menos 20 en **al menos una** de las dos estrategias. Falta implementar y medir el corte por ventanas.
-
-## Inspeccionar un chunk
-
-Podés inspeccionar «Beneficios» desde la raíz del proyecto con Python 3.10 o posterior y su biblioteca estándar.
+## Ingesta y consulta
 
 ```sh
 python ingest/run.py inspect data/corpus/hr_policies.md --section Beneficios
+python ingest/run.py inspect data/corpus/hr_policies.md --strategy words_v1
+BUILD_H2=$(python ingest/run.py build --strategy headings_v1 | python -c 'import json,sys; print(json.load(sys.stdin)["build_id"])')
+BUILD_WORDS=$(python ingest/run.py build --strategy words_v1 | python -c 'import json,sys; print(json.load(sys.stdin)["build_id"])')
+export PYTHONPATH=src
+python -m nubbix_assist.cli.query --build "$BUILD_H2" --retrieve-only "¿Qué cubre el crédito de capacitación?"
 ```
 
-El comando muestra el chunk como JSON. Al omitir `--section`, muestra todas las secciones del archivo. En la versión del corpus registrada, «Beneficios» ocupa el intervalo `[2473, 2732)`. Podés comprobarlo con `document.raw_text[2473:2732] == chunk.body`. El campo `content` agrega el título del documento y el de la sección para el modelo.
+Cada build guarda su catálogo, estado BM25 y colección Chroma en `data/indexes/<build_id>/`. Se publica después de comprobar sus hashes e IDs. La consulta reabre el build seleccionado. Por defecto recupera hasta diez candidatos por rama y fusiona las posiciones con RRF (constante 60). Envía hasta cinco chunks a generación. El filtro opcional `--source data/corpus/hr_policies.md` se aplica a ambas ramas.
 
-## Flujo que vamos a construir
+Para generar una respuesta, copiá [.env.example](.env.example) a `.env` y elegí `openai` o `gemini` en `NUBBIX_GENERATOR_PROVIDER`. Indicá en `NUBBIX_GENERATOR_MODEL` un modelo disponible en tu cuenta que admita salidas JSON con esquema. Completá la clave del proveedor seleccionado. El juez usa los campos `NUBBIX_JUDGE_PROVIDER` y `NUBBIX_JUDGE_MODEL`.
 
-```text
-Ingesta:  documentos → chunks + metadatos → embeddings → colección persistida
-Consulta: pregunta → búsqueda léxica y vectorial → fusión → LLM → JSON con citas
-Evaluación: mismo golden y top_k → métricas de retrieval por estrategia + groundedness
+```sh
+python -m nubbix_assist.cli.query --build "$BUILD_H2" "¿Qué cubre el crédito de capacitación?"
 ```
 
-## Ruta de trabajo
+La salida JSON contiene `user_question`, `system_answer` y `chunks_related`. Cada cita resuelve ID, origen, texto y puntaje RRF desde el catálogo. Las trazas con rankings, contexto, intentos y uso reportado quedan en `runs/`. Generación permite hasta dos intentos por pregunta. El presupuesto de entrada predeterminado es de 48 000 bytes y la salida reserva hasta 2048 tokens por llamada. Ajustá estos valores al modelo elegido.
 
-Subimos cada cambio independiente a `main` con su propio commit y push. El mensaje del commit describe qué incorpora y, cuando el cambio afecta al código, corremos las pruebas antes de subirlo.
+Ejemplo del formato de rechazo previsto para la pregunta fuera de alcance del golden:
 
-1. Tomar el diseño de los cuatro bloques como referencia para la implementación.
-2. Fijar la regla de corte y los metadatos de los chunks. Elegir cada dependencia cuando su integración la requiera.
-3. Implementar carga y chunking por incrementos, inspeccionar chunks y empezar el golden.
-4. Construir la ingesta persistente y la consulta separada siguiendo los contratos revisados.
-5. Generar respuestas con citas e integrar búsqueda híbrida.
-6. Completar las dos estrategias y el golden revisado de al menos 25 preguntas.
-7. Ejecutar evals separadas, comparar con el mismo dataset y top_k y documentar resultados reales.
+```json
+{
+  "user_question": "¿Cuántos cupos por mes tiene la guardería infantil de la sede central?",
+  "system_answer": "La documentación disponible no alcanza para responder la pregunta.",
+  "chunks_related": []
+}
+```
 
-La base acordada usa Python modular y CLI, con núcleo reutilizable y separación por proveedores y validadores. La ingesta guarda una versión por estrategia en Chroma local. La consulta combina los rankings de BM25 y vectores con RRF. Los modelos concretos y las versiones de dependencias siguen abiertos. La UI y el retrieval avanzado son opcionales según la consigna.
+## Corpus y comparación del chunking
+
+| Estrategia | HR | IT | Finance | Total |
+|---|---:|---:|---:|---:|
+| `headings_v1` · una sección H2 | 6 | 6 | 6 | 18 |
+| `words_v1` · 80 palabras con solapamiento de 20 | 8 | 8 | 8 | 24 |
+
+Los [tres Markdown originales](data/corpus/) conservan los [hashes de procedencia](docs/fuentes/procedencia.json). El cuerpo de cada chunk se recupera con `raw_text[start_char:end_char]`. En RR. HH., «Beneficios» ocupa `[2473, 2732)`.
+
+En una consulta real sobre libros de tecnología y rendición de cursos, ambas estrategias recuperaron «Beneficios» y «Presupuesto de Capacitación y Reembolsos Educativos» entre sus primeros cinco resultados. La selección de la estrategia final queda para la comparación completa.
+
+## Evaluación
+
+El [golden](evals/dataset.jsonl) contiene 27 preguntas en borrador, con extractos, offsets, hechos esperados e IDs relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y un caso fuera de alcance. Revisá la suficiencia de la evidencia y las etiquetas de cada estrategia antes de marcar una pregunta como `reviewed`. El runner confirma versión del corpus, existencia de los IDs y coherencia de los intervalos.
+
+```sh
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --check-dataset
+# Tras la revisión humana
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --retrieve-only
+# Con generador y juez configurados. Este límite autoriza llamadas facturables.
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --max-calls 162
+```
+
+La corrida completa mide precision@5, recall@5, hit rate, groundedness por afirmación y rechazo correcto. El límite de 162 cubre hasta dos intentos de generación y una llamada al juez por cada una de las 27 preguntas y cada estrategia. El reporte detallado queda en `runs/<run_id>/eval.json` e informa cobertura, errores y casos sin afirmaciones evaluables. Las métricas comparativas y los resultados de las APIs están pendientes de la ronda con etiquetas revisadas y credenciales.
+
+Las pruebas locales de contratos se ejecutan con `PYTHONPATH=src python -m unittest discover -s tests -v`. Las pruebas de los adaptadores usan respuestas controladas.
 
 ## Estructura
 
@@ -72,15 +88,12 @@ La base acordada usa Python modular y CLI, con núcleo reutilizable y separació
 - `docs/adr/`: decisiones de arquitectura individuales, índice y plantilla.
 - `docs/USO_IA.md`: asistencia recibida y decisiones revisables.
 
-## Contrato final requerido
 
-`{user_question, system_answer, chunks_related}`. Cada referencia debe permitir rastrear el documento y el contenido usado. Es un requisito pendiente de implementar.
+## Decisiones y flujo de trabajo
+
+La [arquitectura](docs/ARQUITECTURA.md), los [contratos](docs/CONTRATOS.md), el [almacenamiento](docs/ALMACENAMIENTO.md) y el [registro ADR](docs/adr/README.md) describen los límites del proyecto. Subimos cada cambio independiente a `main` con su propio commit y push. Corremos las pruebas pertinentes antes de subir cambios de código.
 
 ## Fuentes
 
 - [Consigna guardada](docs/fuentes/consigna.md).
 - [Fuente en Aula Viva](https://aula-viva.soyhenry.com/clase/6yf8ZcZ3a3O-).
-
-## Próximo paso
-
-Comparar el corte por H2 con la propuesta de ventanas de palabras. Revisar si cada corte conserva la frase sobre el crédito de capacitación y la evidencia complementaria de Finance.

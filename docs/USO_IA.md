@@ -97,3 +97,7 @@ Luis pidió crear las carpetas y los archivos de la arquitectura acordada. Codex
 ## Primer corte por sección
 
 Luis pidió continuar con el ejemplo de «Beneficios». Codex implementó la carga de Markdown, el corte por H2 y el comando de inspección. El cuerpo conserva el intervalo original y el título se agrega por separado al texto preparado. Se comprobó el caso de RR. HH. y se incorporaron pruebas de trazabilidad con acentos y saltos de línea CRLF.
+
+## Implementación del RAG y preparación del golden
+
+Luis pidió completar las implementaciones y eligió OpenAI y Gemini. Codex implementó los cortes, índices, recuperación híbrida, validación de citas, adaptadores y runner en commits separados. Se construyeron ambos índices con los originales y se reabrieron en un proceso independiente. El golden incluye 27 propuestas con extractos y etiquetas por estrategia. La revisión de Luis, las llamadas a modelos remotos y la comparación formal siguen pendientes.
