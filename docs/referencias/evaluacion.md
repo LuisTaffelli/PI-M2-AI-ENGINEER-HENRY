@@ -13,7 +13,7 @@ BUILD_HYBRID=$(python ingest/run.py build --strategy section_words_v1 | python -
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --check-dataset
 ```
 
-El dataset contiene 27 preguntas con extractos, offsets, hechos esperados e IDs de fragmentos relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y una pregunta fuera de alcance. Una misma respuesta puede estar completa en dos ventanas solapadas. Al revisar las etiquetas, comprobá en el texto de cada fragmento qué hecho permite sostener. El validador comprueba la versión del corpus, los intervalos y los IDs, y cuenta las preguntas pendientes para los índices elegidos. [Dataset](../../evals/dataset.jsonl) · [Contrato de etiquetas](../CONTRATOS.md)
+El dataset contiene 27 preguntas con extractos, offsets, hechos esperados e IDs de fragmentos relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y una pregunta fuera de alcance. Una misma respuesta puede estar completa en dos ventanas solapadas. Al revisar las etiquetas, comprobá en el texto de cada fragmento qué hecho permite sostener. El validador comprueba la versión del corpus, los intervalos y los IDs, y cuenta las preguntas pendientes para los índices elegidos. [Dataset](../../evals/dataset.jsonl) · [Contrato de etiquetas](../CONTRATOS.md) · [Respuestas y fragmentos para la revisión conjunta](revision-golden.md)
 
 ## Medir la recuperación local
 

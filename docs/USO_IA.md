@@ -105,3 +105,7 @@ Luis pidió completar las implementaciones y eligió OpenAI y Gemini. Codex impl
 ## 22/11/2026 · Revisión de capacitación y tercera estrategia
 
 Luis aprobó las etiquetas de la pregunta de capacitación para H2 y ventanas corridas, y propuso combinar ambos métodos para evitar mezclar temas. Codex implementó ventanas 80/20 dentro de cada sección, preparó etiquetas candidatas a partir de los extractos del corpus y verificó la consulta en los tres índices locales. Las etiquetas del híbrido quedan para la revisión humana y la elección final depende de la comparación sobre el golden.
+
+## 22/11/2026 · Cotejo conjunto del dataset
+
+Luis aprobó las preguntas 09, 11 y 18 a 26 para las tres estrategias. Al pedir que el cotejo restante se hiciera en una sola tanda, Codex contrastó las otras 16 preguntas con el corpus y los catálogos de fragmentos. Precisó los días consecutivos en la 06 y añadió una segunda ventana que conserva la regla de contraseñas en la 13. Se repitió la medición preliminar local con esas correcciones. La [tabla de revisión](referencias/revision-golden.md) reúne la evidencia de los casos que quedaban pendientes de aprobación humana.

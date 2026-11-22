@@ -14,13 +14,17 @@ El híbrido reinicia el solapamiento al cambiar de sección y repite el encabeza
 
 ## Comparación preliminar de las 27 preguntas
 
-El 22/11/2026 se realizaron 81 búsquedas locales con `top_k=5`. Una pregunta (`q09`) tenía las etiquetas revisadas para las tres estrategias. Las 26 restantes conservaban sus etiquetas en borrador. El promedio de precisión y recall incluye las 26 preguntas respondibles, y el detalle por pregunta está en el CSV en escala de 0 a 1. Las celdas de `q27`, sobre guardería, están vacías porque carece de fragmentos relevantes. La traza local de esta medición es `runs/2765b989f4bd4b56a7a10f42dd1fe8c2/eval.json`. [Tabla comparativa en el README](../../README.md#qué-aprendimos-del-chunking) · [Resultados por pregunta](../../evals/resultados/2026-11-22-retrieval-preliminar.csv)
+El 22/11/2026 se realizaron 81 búsquedas locales con `top_k=5`. Una pregunta (`q09`) tenía las etiquetas revisadas para las tres estrategias. Las 26 restantes conservaban sus etiquetas en borrador. El promedio de precisión y recall incluye las 26 preguntas respondibles, y el detalle por pregunta está en el CSV en escala de 0 a 1. Las celdas de `q27`, sobre guardería, están vacías porque carece de fragmentos relevantes. La traza local de esta medición es `runs/2765b989f4bd4b56a7a10f42dd1fe8c2/eval.json`. [Resultados por pregunta de la primera corrida](../../evals/resultados/2026-11-22-retrieval-preliminar.csv)
 
 Por secciones y con el híbrido, 24 de las 26 preguntas respondibles tienen un solo fragmento etiquetado como relevante. Cuando el buscador lo devuelve entre los cinco primeros, la precisión es 1/5 (20 %) y el recall es 1/1 (100 %). En las ventanas corridas, el solapamiento hace que varias preguntas tengan más de un fragmento relevante. Esto ayuda a explicar que su precisión media sea mayor aunque en `q11` se haya perdido la evidencia sobre el plazo de renovación de notebooks. [Política de renovación de equipos](../../data/corpus/it_manual.md#equipos-de-trabajo-y-hardware)
 
+### Segunda medición tras revisar las etiquetas
+
+Se precisó la condición de días consecutivos en la pregunta de trabajo remoto (`q06`) y se añadió una segunda ventana válida a la pregunta de contraseñas (`q13`). Las dos ventanas contienen el mínimo de 16 caracteres y el vencimiento a 90 días. Al repetir las 81 búsquedas, solo cambió la puntuación de `q13` con ventanas corridas. Su precisión@5 pasó de 1/5 a 2/5, con recall@5 del 100 %. Esto elevó la precisión media de esa estrategia de 23,08 % a 23,85 %. Se mantuvo su recall medio de 96,15 % y las métricas de las otras dos estrategias. La traza local de esta corrida es `runs/771f2c3653c64ab8985f9594f7d3c1f3/eval.json`. [Resultados actualizados por pregunta](../../evals/resultados/2026-11-22-retrieval-etiquetas-corregidas.csv) · [Tabla del README](../../README.md#qué-aprendimos-del-chunking)
+
 ## Qué pasó al usar ventanas de 160 palabras
 
-Se repitieron las 27 consultas con ventanas por sección de 80 y de 160 palabras, manteniendo 20 de solapamiento. Los tres cuerpos de sección que exceden 80 palabras miden 82, 83 y 84. Con 160 todos caben enteros. Verificamos que los 18 fragmentos resultantes coincidieran con H2 en sección y texto, salvo los espacios finales, antes de trasladar sus etiquetas y consultar el índice.
+Este experimento usó las 27 preguntas de la primera corrida con ventanas por sección de 80 y de 160 palabras, manteniendo 20 de solapamiento. Los tres cuerpos de sección que exceden 80 palabras miden 82, 83 y 84. Con 160 todos caben enteros. Verificamos que los 18 fragmentos resultantes coincidieran con H2 en sección y texto, salvo los espacios finales, antes de trasladar sus etiquetas y consultar el índice.
 
 | Ventana por sección | Fragmentos | Precisión@5 | Recall@5 | Primer resultado relevante |
 |---|---:|---:|---:|---:|
