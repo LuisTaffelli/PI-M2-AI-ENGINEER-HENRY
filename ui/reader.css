@@ -21,16 +21,80 @@
   --archive-muted: #605b50;
   --archive-seal: #8b362a;
   --archive-rule: #c9bda8;
+  --archive-field: #e8e1d3;
+  --archive-quote: #f0e8d8;
+  --archive-mark: #ebd39f;
+  --archive-mark-ink: #32251c;
   --archive-margin: clamp(1rem, 3.5vw, 2.5rem);
   --archive-serif: "Baskervville", Georgia, serif;
   --archive-radius: 2px;
 }
+:root[data-nubbix-theme="dark"] {
+  color-scheme: dark;
+  --archive-paper: #1d201e;
+  --archive-page: #272a26;
+  --archive-ink: #efeadd;
+  --archive-muted: #c2bbac;
+  --archive-seal: #f0aa97;
+  --archive-rule: #605f53;
+  --archive-field: #343830;
+  --archive-quote: #35352d;
+  --archive-mark: #665332;
+  --archive-mark-ink: #fff0c9;
+}
 [data-testid="stMainBlockContainer"] {
   --cherry-size: clamp(5.2rem, 10vw, 7.6rem);
   max-width: 68rem;
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.1rem, 3.6vw, 3rem) calc(var(--cherry-size) + 2rem);
-  background: url("./app/static/cerezo.webp") right clamp(1.1rem, 3.6vw, 3rem) bottom 1rem /
-              var(--cherry-size) var(--cherry-size) no-repeat;
+  padding: 1rem clamp(1.1rem, 3.6vw, 3rem);
+}
+.archive-tools, .archive-garden { display: flex; justify-content: flex-end; }
+.archive-tools { margin-bottom: .4rem; }
+.archive-theme, .cherry-tree {
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.archive-theme {
+  padding: .5rem .8rem;
+  color: var(--archive-ink);
+  font-size: .9rem;
+  border: 1px solid var(--archive-rule);
+  border-radius: var(--archive-radius);
+}
+.archive-theme:hover { background: var(--archive-field); }
+.archive-theme [aria-hidden] { margin-right: .2rem; color: var(--archive-seal); }
+.archive-theme .to-light, [data-nubbix-theme="dark"] .archive-theme .to-dark { display: none; }
+[data-nubbix-theme="dark"] .archive-theme .to-light { display: inline; }
+.cherry-tree {
+  width: var(--cherry-size);
+  border: 0;
+  padding: 0;
+  border-radius: var(--archive-radius);
+}
+.cherry-tree img { display: block; width: 100%; height: auto; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cherry-tree img { transform-origin: 48% 96%; transition: transform .2s ease; }
+  .cherry-tree:hover img { transform: rotate(-3deg); }
+}
+.sakura-rain { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 9999; }
+.sakura-rain > span {
+  position: absolute;
+  top: -1.2rem;
+  aspect-ratio: .72;
+  border-radius: 70% 24% 64% 40%;
+  clip-path: polygon(0 0, 49% 0, 59% 20%, 78% 0, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(135deg, #ffe3e7, #f0a3b4 65%, #ca738a);
+  transform: rotate(var(--tilt));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sakura-rain > span { animation: petal-fall linear both; }
+  @keyframes petal-fall {
+    0% { transform: translate(0, 0) rotate(var(--tilt)); opacity: 0; }
+    12% { opacity: .94; }
+    35% { transform: translate(1.6rem, 36dvh) rotate(calc(var(--tilt) + 90deg)) scaleX(.58); }
+    70% { transform: translate(var(--drift), 73dvh) rotate(calc(var(--tilt) + 195deg)); }
+    100% { transform: translate(.4rem, calc(100dvh + 2rem)) rotate(calc(var(--tilt) + 285deg)); opacity: .2; }
+  }
 }
 .archive-cover {
   position: relative;
@@ -104,7 +168,7 @@
   color: var(--archive-ink);
   font-weight: 700;
 }
-.st-key-archive_controls button[role="radio"]:hover { background: #e9e1d2; }
+.st-key-archive_controls button[role="radio"]:hover { background: var(--archive-field); }
 .chunking-guide summary {
   width: fit-content;
   min-height: 1.75rem;
@@ -225,7 +289,7 @@
   margin: .4rem 0 1rem;
   margin-inline-start: var(--reader-indent);
   border-left: 3px solid var(--archive-seal);
-  background: #f0e8d8;
+  background: var(--archive-quote);
   color: var(--archive-ink);
   line-height: 1.55;
   white-space: pre-wrap;
@@ -235,7 +299,53 @@
 .nubbix-reader summary { cursor: pointer; font-weight: 600; color: var(--archive-seal); }
 .nubbix-reader details .source-meta { margin: .7rem 0; overflow-wrap: anywhere; }
 .nubbix-reader pre { margin-inline-start: var(--reader-indent); white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.55; }
-.nubbix-reader mark { color: #32251c; background: #ebd39f; }
+.nubbix-reader mark { color: var(--archive-mark-ink); background: var(--archive-mark); }
+
+/* Los selectores de Streamlit también se abren fuera del contenedor principal. */
+[data-nubbix-theme="dark"] :is(body, [data-testid="stApp"]) {
+  color: var(--archive-ink);
+  background-color: var(--archive-paper);
+}
+[data-nubbix-theme] [data-testid="stHeader"] { background: transparent; }
+[data-nubbix-theme="dark"] .st-key-archive_controls button[role="radio"][aria-checked="true"] {
+  color: var(--archive-seal);
+  border-color: var(--archive-seal);
+  background: var(--archive-page);
+}
+[data-nubbix-theme="dark"] [data-testid="stCaptionContainer"] { opacity: 1; }
+[data-nubbix-theme="dark"] [data-testid="stBaseButton-primaryFormSubmit"] {
+  color: var(--archive-paper);
+  background: var(--archive-seal);
+  border-color: var(--archive-seal);
+}
+[data-nubbix-theme="dark"] [data-testid="stBaseButton-primaryFormSubmit"]:hover { filter: brightness(1.1); }
+[data-nubbix-theme="dark"] [data-testid="stAlertContainer"] {
+  color: var(--archive-ink);
+  background: var(--archive-field);
+  border-inline-start: 3px solid var(--archive-seal);
+}
+[data-nubbix-theme="dark"] :is([data-testid="stWidgetLabel"], [data-testid="stExpander"] summary,
+    [data-testid="stSelectbox"] input, [data-testid="stSelectbox"] button, [data-testid="stTextArea"] textarea) {
+  color: var(--archive-ink);
+}
+[data-nubbix-theme="dark"] :is([data-testid="stSelectbox"] [role="group"], [data-testid="stTextAreaRootElement"],
+    [data-testid="stBaseButton-secondaryFormSubmit"]) {
+  color: var(--archive-ink);
+  background: var(--archive-field);
+  border-color: var(--archive-rule);
+}
+[data-nubbix-theme="dark"] :is([data-testid="stSelectboxVirtualDropdown"], [role="listbox"]) {
+  color: var(--archive-ink);
+  background: var(--archive-page);
+  border-color: var(--archive-rule);
+}
+[data-nubbix-theme="dark"] [role="listbox"] [role="option"] { color: var(--archive-ink); }
+[data-nubbix-theme="dark"] [role="option"]:is([data-focused], [aria-selected="true"], :hover),
+[data-nubbix-theme="dark"] [data-testid="stExpander"] summary:hover {
+  color: var(--archive-ink);
+  background: var(--archive-field);
+}
+[data-nubbix-theme="dark"] :is(input, textarea)::placeholder { color: var(--archive-muted); }
 
 @media (max-width: 700px) {
   .chunking-guide dl { grid-template-columns: 1fr; gap: .2rem; }

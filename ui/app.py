@@ -119,15 +119,7 @@ def live_result():
 
 st.set_page_config(page_title="Nubbix Assist", page_icon="📖", layout="wide")
 st.html(ROOT / "ui/reader.css")
-st.html("""
-<header class="archive-cover">
-  <div class="archive-imprint">
-    <span class="archive-seal" aria-hidden="true">N</span>
-    <div><h1>Nubbix <i>Assist</i></h1>
-      <p>Consultas sobre Recursos Humanos, Finanzas y Tecnología.</p></div>
-  </div>
-</header>
-""")
+st.html(ROOT / "ui/cover.html", unsafe_allow_javascript=True)
 try:
     with st.container(key="archive_controls"):
         modes, selection, version_picker = st.columns([1.1, 1.2, .85], vertical_alignment="bottom")
@@ -152,3 +144,11 @@ try:
         live_result()
 except (OSError, ValueError, RuntimeError, KeyError) as exc:
     st.error(str(exc))
+
+st.html("""
+<footer class="archive-garden">
+  <button type="button" class="cherry-tree" aria-label="Hacer llover pétalos" title="Hacer llover pétalos">
+    <img src="./app/static/cerezo.webp" alt="" draggable="false">
+  </button>
+</footer>
+""")

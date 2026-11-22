@@ -1,0 +1,72 @@
+<div class="archive-tools">
+  <button type="button" class="archive-theme">
+    <span class="to-dark"><span aria-hidden="true">☾</span> Modo oscuro</span>
+    <span class="to-light"><span aria-hidden="true">☀</span> Modo claro</span>
+  </button>
+</div>
+<header class="archive-cover">
+  <div class="archive-imprint">
+    <span class="archive-seal" aria-hidden="true">N</span>
+    <div><h1>Nubbix <i>Assist</i></h1>
+      <p>Consultas sobre Recursos Humanos, Finanzas y Tecnología.</p></div>
+  </div>
+</header>
+<script>
+(() => {
+  const root = document.documentElement;
+  // Streamlit puede volver a montar los botones mientras el documento sigue abierto.
+  if (root.dataset.nubbixTheme) return;
+
+  const storageKey = "nubbix.reader.theme";
+  let theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved === "dark" || saved === "light") theme = saved;
+  } catch { /* La pestaña conserva la elección aunque el almacenamiento esté bloqueado. */ }
+  root.dataset.nubbixTheme = theme;
+
+  function shower(tree) {
+    document.querySelector(".sakura-rain")?.remove();
+    const rain = document.createElement("div");
+    rain.className = "sakura-rain";
+    rain.setAttribute("aria-hidden", "true");
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const crown = tree.getBoundingClientRect();
+    const count = still ? 7 : Math.min(38, Math.ceil(innerWidth / 24));
+    let lifetime = 1000;
+    for (let i = 0; i < count; i++) {
+      const petal = document.createElement("span");
+      // Repartir el inicio entre columnas evita que una ráfaga caiga toda del mismo lado.
+      const lane = (i + Math.random()) / count;
+      petal.style.width = (8 + Math.random() * 7) + "px";
+      petal.style.setProperty("--tilt", Math.random() * 180 + "deg");
+      if (still) {
+        petal.style.left = (crown.left + lane * crown.width) + "px";
+        petal.style.top = (crown.top + crown.height * (.25 + Math.random() * .6)) + "px";
+      } else {
+        petal.style.left = (lane * 100) + "%";
+        const duration = 2600 + Math.random() * 1300;
+        const delay = Math.random() * 700;
+        petal.style.animationDuration = duration + "ms";
+        petal.style.animationDelay = delay + "ms";
+        petal.style.setProperty("--drift", (Math.random() * 100 - 50) + "px");
+        lifetime = Math.max(lifetime, duration + delay);
+      }
+      rain.append(petal);
+    }
+    document.body.append(rain);
+    setTimeout(() => rain.remove(), lifetime + 50);
+  }
+
+  document.addEventListener("click", event => {
+    const button = event.target.closest?.("button");
+    if (button?.classList.contains("archive-theme")) {
+      const next = root.dataset.nubbixTheme === "dark" ? "light" : "dark";
+      root.dataset.nubbixTheme = next;
+      try { localStorage.setItem(storageKey, next); } catch { /* La elección ya se aplicó. */ }
+    } else if (button?.classList.contains("cherry-tree")) {
+      shower(button);
+    }
+  });
+})();
+</script>
