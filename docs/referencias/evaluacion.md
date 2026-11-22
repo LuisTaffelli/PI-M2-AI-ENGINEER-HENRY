@@ -32,6 +32,16 @@ python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --ret
 
 ## Evaluar respuestas con generador y juez
 
+### Qué falta para la entrega
+
+La ingesta, el golden de 27 preguntas y la comparación de recuperación están completos. H2 es la estrategia elegida. [Resultados de recuperación](../../evals/resultados/2026-11-22-retrieval-golden-revisado.csv)
+
+1. **Probar una respuesta con citas.** Usar el índice H2 y la pregunta de capacitación (`q09`). La respuesta debe cubrir el beneficio de RR. HH. y la rendición en Finanzas. Con hasta dos intentos del generador y un veredicto del juez, el piloto requiere como máximo tres llamadas. Guardar el JSON y cotejar las citas con ambos documentos.
+2. **Medir las respuestas de ambas estrategias de la consigna.** Usar H2 y ventanas corridas con los mismos modelos y preguntas. Registrar groundedness por afirmación, cobertura del juez, errores y el rechazo esperado de `q27`. Esta última métrica corresponde al bonus. La tercera estrategia ya participó en la comparación de recuperación.
+3. **Cerrar el README y la entrega.** Incluir un ejemplo real de respuesta con citas, una tabla con las métricas de generación y una conclusión sobre los fallos observados. Comprobar el recorrido documentado desde una copia limpia de la versión final y entregar el enlace al repositorio público actualizado. [Checklist de Henry](../fuentes/consigna.md)
+
+### Configuración y ejecución
+
 Después de revisar las etiquetas, configurá el generador en `.env` y elegí por separado `NUBBIX_JUDGE_PROVIDER` y `NUBBIX_JUDGE_MODEL`. El juez divide cada respuesta en afirmaciones comprobables y contrasta cada una con las citas. Esto permite detectar una respuesta que menciona un ID real pero atribuye a ese fragmento algo que el texto no dice. Para el caso fuera de alcance se mide si el asistente rechaza correctamente la pregunta. [Configuración del generador](consulta.md#generar-una-respuesta) · [Prompt del juez](../../prompts/groundedness.yaml)
 
 El ejemplo siguiente realiza llamadas facturables y fija su límite. Con 27 preguntas, dos intentos de generación como máximo y una llamada al juez por estrategia y pregunta, el máximo teórico es de 162 llamadas para dos índices y 243 para tres. Elegí el presupuesto al ejecutar.
