@@ -13,7 +13,28 @@ from nubbix_assist.query.service import answer_retrieval
 from nubbix_assist.ui.examples import load_examples
 from nubbix_assist.ui.reader import render_result
 
-VERSION_NAMES = {"headings_v1": "Secciones H2", "words_v1": "Ventanas de 80 palabras", "pilot": "Piloto H2"}
+VERSIONS = {
+    "headings_v1": (
+        "Secciones H2",
+        "Cada subtítulo de nivel 2 (H2) inicia un fragmento. Así, una política y las condiciones "
+        "que aparecen bajo el mismo subtítulo se pueden recuperar juntas.",
+    ),
+    "words_v1": (
+        "Ventanas de 80 palabras",
+        "Recorre el documento en bloques de hasta 80 palabras. Dos bloques consecutivos comparten "
+        "20 palabras. Un bloque puede cruzar de una sección a la siguiente.",
+    ),
+    "section_words_v1": (
+        "Ventanas dentro de secciones",
+        "Es el corte híbrido. Primero separa por H2. Si una sección supera las 80 palabras, "
+        "la divide en ventanas que comparten 20 palabras. Cada ventana conserva su subtítulo.",
+    ),
+    "pilot": (
+        "Piloto H2",
+        "Es la primera respuesta guardada sobre el crédito de capacitación. Usa el mismo corte "
+        "por secciones H2 que después se evaluó con las 27 preguntas.",
+    ),
+}
 TOPICS = {
     "q01": "Licencia por matrimonio", "q02": "Días de examen", "q03": "Licencia por adopción",
     "q04": "Solicitud de vacaciones", "q05": "Gastos de trabajo en casa", "q06": "Trabajo desde el exterior",
@@ -32,9 +53,28 @@ def examples():
     return load_examples(ROOT)
 
 
+def chunking_guide():
+    entries = "".join(f"<dt>{label}</dt><dd>{description}</dd>" for label, description in VERSIONS.values())
+    st.html(f"""
+    <details class="chunking-guide">
+      <summary>¿Qué significa cada versión de chunking?</summary>
+      <p>El <i>chunking</i> define cómo se divide un documento en los fragmentos que el buscador
+         puede recuperar y que después ves en las citas.</p>
+      <dl>{entries}</dl>
+      <p>Los ejemplos guardados comparan H2 y ventanas corridas. En «Nueva consulta» también podés probar
+         el híbrido de 80 palabras. Al ensayar el híbrido con <strong>160 palabras</strong>, cada una
+         de las 18 secciones del corpus entró en un solo fragmento.</p>
+    </details>
+    """)
+
+
+def index_label(build):
+    strategy = build.partition("-")[0]
+    name = VERSIONS[strategy][0] if strategy in VERSIONS else build
+    return f"{name} · {build[-8:]}"
+
+
 def live_result():
-    names = {"headings_v1": "Secciones H2", "words_v1": "Ventanas de 80 palabras",
-             "section_words_v1": "Ventanas dentro de secciones"}
     builds = sorted(p.parent.name for p in (ROOT / "data/indexes").glob("*/manifest.json"))
     if not builds:
         st.info("Construí un índice con python ingest/run.py build --strategy headings_v1 para hacer consultas.")
@@ -42,7 +82,7 @@ def live_result():
     with st.form("consultar"):
         question = st.text_area("Tu pregunta", placeholder="¿Qué beneficio cubre libros de tecnología?")
         with st.expander("Opciones de búsqueda"):
-            build = st.selectbox("Índice", builds, format_func=lambda b: names.get(b.split("-")[0], b) + " · " + b[-8:])
+            build = st.selectbox("Índice", builds, format_func=index_label)
             multi = st.checkbox("Multi-query")
             rerank = st.checkbox("Re-ranking local")
         st.caption("Buscar pasajes funciona en tu máquina. Generar una respuesta usa hasta dos llamadas al modelo del .env.")
@@ -102,7 +142,8 @@ try:
             versions = list(question.versions)
             version = version_picker.selectbox("Versión", versions,
                                                index=versions.index("pilot") if "pilot" in versions else 0,
-                                               format_func=VERSION_NAMES.__getitem__)
+                                               format_func=lambda key: VERSIONS[key][0])
+        chunking_guide()
     if mode == "Ejemplos evaluados":
         text, chunks = question.versions[version]
         st.subheader(question.question)

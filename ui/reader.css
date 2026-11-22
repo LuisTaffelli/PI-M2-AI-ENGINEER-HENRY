@@ -105,6 +105,24 @@
   font-weight: 700;
 }
 .st-key-archive_controls button[role="radio"]:hover { background: #e9e1d2; }
+.chunking-guide summary {
+  width: fit-content;
+  min-height: 1.75rem;
+  color: var(--archive-seal);
+  font-weight: 600;
+  cursor: pointer;
+}
+.chunking-guide summary:hover { text-decoration: underline; text-underline-offset: .2em; }
+.chunking-guide p, .chunking-guide dl { max-width: 78ch; margin: .9rem 0 0; }
+.chunking-guide dl {
+  display: grid;
+  grid-template-columns: minmax(10ch, 12rem) 1fr;
+  gap: .8rem 1.3rem;
+  border-left: 2px solid var(--archive-rule);
+  padding-inline-start: 1rem;
+}
+.chunking-guide dt { font-weight: 650; }
+.chunking-guide dd { margin: 0; }
 [data-testid="stSelectbox"] [data-baseweb="select"] > div,
 [data-testid="stTextArea"] textarea {
   border-radius: var(--archive-radius);
@@ -220,6 +238,8 @@
 .nubbix-reader mark { color: #32251c; background: #ebd39f; }
 
 @media (max-width: 700px) {
+  .chunking-guide dl { grid-template-columns: 1fr; gap: .2rem; }
+  .chunking-guide dd + dt { margin-top: .6rem; }
   .archive-cover::before {
     inset: auto 0 0 auto;
     width: 37%;

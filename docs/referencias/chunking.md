@@ -2,6 +2,8 @@
 
 Las tres estrategias trabajan sobre los mismos documentos y usan el mismo modelo de embeddings y buscador. La diferencia está en qué texto viaja junto dentro de un fragmento. Cada H2 suele representar una política, mientras que una ventana corrida puede empezar en una política y terminar en la siguiente. [Corpus](../../data/corpus/) · [Decisión de diseño](../adr/0007-comparar-secciones-y-ventanas-de-palabras.md)
 
+En el lector, abrí **¿Qué significa cada versión de chunking?** debajo de los controles. La guía está disponible tanto en **Ejemplos evaluados** como en **Nueva consulta**. **Piloto H2** identifica la primera respuesta guardada sobre capacitación, generada con el corte por secciones. [Cómo abrir el lector](extra-credits.md#interfaz-con-citas-navegables)
+
 ## Cuántos fragmentos produjo cada estrategia
 
 | Estrategia | RR. HH. | IT | Finanzas | Total |
