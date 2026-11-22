@@ -10,15 +10,15 @@ La consigna exige búsqueda híbrida. Los términos exactos y las paráfrasis ne
 
 ## Decisión
 
-Combinar BM25 y búsqueda vectorial locales con RRF sobre el mismo catálogo. Entregar hasta tres chunks al generador. Para la primera comparación se proponen una constante de 60 y hasta diez candidatos por rama. Ambos parámetros se registrarán y se mantendrán fijos al comparar chunkings.
+BM25 y la búsqueda vectorial consultan el mismo catálogo. Cada rama recupera hasta diez candidatos (`candidates: 10`). RRF combina ambos rankings con `rrf_constant: 60` y el generador recibe hasta cinco fragmentos (`top_k: 5`). La evaluación usa estos mismos parámetros para comparar las estrategias de chunking. [Configuración](../../config.yaml) · [Evaluación de recuperación](../referencias/evaluacion.md#medir-la-recuperación-local)
 
 ## Consecuencias
 
 - Posiciones desde uno, IDs únicos y desempate por ID.
 - Distancia coseno, score BM25 y score RRF se conservan separados; no son probabilidades.
 - Una rama léxica sin coincidencias puede estar vacía; no agrega resultados arbitrarios de score cero.
-- Las reglas léxicas y BM25 están propuestas en la arquitectura y falta elegir una librería compatible.
-- Los parámetros y la mejora de retrieval deben medirse; el acuerdo no asegura mejor top-1.
+- El proyecto implementa BM25 y usa el mismo tokenizador al indexar los fragmentos y al buscar una pregunta. [Índice léxico](../../src/nubbix_assist/lexical/index.py) · [Búsqueda léxica](../../src/nubbix_assist/lexical/search.py)
+- Para evaluar el orden de los resultados, la comparación también cuenta cuántas preguntas recuperan un fragmento relevante en el primer puesto. [Resultados de chunking](../referencias/chunking.md)
 
 ## Alternativas consideradas
 
