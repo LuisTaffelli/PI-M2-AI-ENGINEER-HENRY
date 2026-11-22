@@ -1,4 +1,5 @@
 import json
+from dataclasses import asdict
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
@@ -45,7 +46,17 @@ class RagContractTests(TestCase):
             with self.subTest(provider=provider.name), patch(target, side_effect=replies) as transport:
                 attempts = []
                 answer = generate(self.trace, model, "Instrucciones de prueba", attempts)
-                self.assertEqual(answer.chunks_related[0].chunk_id, self.key)
+                selected = self.trace.selected[0]
+                self.assertEqual(asdict(answer), {
+                    "user_question": self.trace.question,
+                    "system_answer": valid["system_answer"],
+                    "chunks_related": [{
+                        "chunk_id": self.key,
+                        "source": selected.chunk.source,
+                        "content": selected.chunk.content,
+                        "score": selected.score,
+                    }],
+                })
                 self.assertEqual(len(attempts), 2)
                 self.assertIn("error", attempts[0])
                 self.assertEqual(judge(answer, model, "Juez de prueba")["score"], 1)

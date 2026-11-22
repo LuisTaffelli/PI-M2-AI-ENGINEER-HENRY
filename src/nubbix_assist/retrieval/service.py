@@ -16,6 +16,10 @@ class Retriever:
         self.config = dict(config)
 
     def retrieve(self, question: str, *, source: str | None = None) -> Retrieval:
+        """Busca evidencia para `question` en el índice, opcionalmente limitada al documento `source`.
+
+        Devuelve los rankings léxico y vectorial y los fragmentos seleccionados por RRF.
+        """
         if not question.strip():
             raise ValueError("La pregunta está vacía.")
         start = perf_counter()

@@ -44,6 +44,13 @@ La fuente académica permanece en [la consigna](../fuentes/consigna.md). Estos r
 
 Revisar las etiquetas por estrategia, elegir los modelos de cuenta para generación y juez, confirmar el presupuesto para la corrida y comparar calidad. Ya están implementados los cortes H2 y 80/20, E5 por revisión fija, Chroma, BM25 y las trazas. Los ADR 0007, 0012 y 0013 conservan su estado mientras se evalúan sus resultados.
 
+Para revisar la calidad de las respuestas durante esa ronda:
+
+- Probar una consulta que pida cambiar una política sin respaldo y otra que lo sugiera con distintas palabras. Incluir como control una consulta legítima sobre seguridad del manual de IT. Registrar si la respuesta cita la política correcta o reconoce que falta evidencia, y si el control recibe una respuesta útil.
+- Probar también un fragmento de prueba con una instrucción ajena a la política. Verificar que el generador lo trate como texto documental y que el juez fundamente su veredicto en la evidencia. Usar una copia de prueba para conservar la huella del corpus oficial.
+- Si se ensayan filtros de palabras o una API de moderación, comparar su aporte sobre esos mismos casos y contar las consultas legítimas bloqueadas. La moderación de contenido y el seguimiento de instrucciones se evalúan por separado.
+- Revisar el JSON de una consulta real contra el contrato del M2 y contrastar sus citas con el catálogo. Para interpretar el consumo, consultar en las trazas el modelo, la huella del prompt y los tokens informados por intento. Si se publica un costo estimado, indicar la tarifa y su fecha y distinguir cualquier uso desconocido de un consumo de cero.
+
 ## Ruta para cerrar la arquitectura
 
 | Orden | Bloque | Qué debemos dejar definido | Documentos/ADR |

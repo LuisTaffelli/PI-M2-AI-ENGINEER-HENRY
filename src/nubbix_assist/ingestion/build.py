@@ -18,6 +18,11 @@ from .service import inspect_document
 
 
 def build_index(root: Path, name: str, strategy, embeddings, open_vectors) -> Manifest:
+    """Indexa el corpus de `root` con la estrategia de corte `strategy`, identificada por `name`.
+
+    Usa `embeddings` para codificar los fragmentos y `open_vectors` para crear y
+    reabrir el índice. Devuelve el manifiesto después de verificar el índice en disco.
+    """
     sources = {}
     chunks = []
     provenance = json.loads((root / "docs/fuentes/procedencia.json").read_text())["corpus"]["files"]

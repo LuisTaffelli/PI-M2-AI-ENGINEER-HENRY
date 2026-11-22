@@ -35,7 +35,14 @@ Para generar una respuesta, copiá [.env.example](.env.example) a `.env` y eleg�
 python -m nubbix_assist.cli.query --build "$BUILD_H2" "¿Qué cubre el crédito de capacitación?"
 ```
 
-La salida JSON contiene `user_question`, `system_answer` y `chunks_related`. Cada cita resuelve ID, origen, texto y puntaje RRF desde el catálogo. Las trazas con rankings, contexto, intentos y uso reportado quedan en `runs/`. Generación permite hasta dos intentos por pregunta. El presupuesto de entrada predeterminado es de 48 000 bytes y la salida reserva hasta 2048 tokens por llamada. Ajustá estos valores al modelo elegido.
+La CLI devuelve `user_question`, `system_answer` y `chunks_related`. Cada cita identifica el fragmento y su documento e incluye el texto y el puntaje de búsqueda. Podés inspeccionar la evidencia con `--retrieve-only` antes de llamar al modelo.
+
+### Cómo se construye y se evalúa la respuesta
+
+- El [prompt de generación](prompts/generation.yaml) limita la respuesta a los fragmentos recuperados y pide una cita por afirmación. Si falta evidencia, pide un rechazo explícito. El código verifica que los IDs citados pertenezcan al contexto.
+- El [prompt del juez](prompts/groundedness.yaml) divide la respuesta en afirmaciones y contrasta cada una con sus citas. Así se puede detectar una cita real cuyo texto no respalda lo afirmado.
+
+En `runs/<run_id>/query.json` quedan los rankings, el contexto, la huella del prompt, el modelo y el uso que informe el proveedor. La generación admite hasta dos intentos por pregunta, con un límite predeterminado de 48 000 bytes de entrada y hasta 2048 tokens de salida por llamada.
 
 Ejemplo del formato de rechazo previsto para la pregunta fuera de alcance del golden:
 
@@ -81,13 +88,7 @@ Las pruebas locales de contratos se ejecutan con `PYTHONPATH=src python -m unitt
 - [src/nubbix_assist/](src/nubbix_assist/) contiene el núcleo compartido de ingesta y consulta. [ingestion/](src/nubbix_assist/ingestion/) carga documentos y [chunking/](src/nubbix_assist/chunking/) agrupa las estrategias de corte y sus reglas comunes.
 - [embeddings/](src/nubbix_assist/embeddings/), [vector_store/](src/nubbix_assist/vector_store/) y [llm/](src/nubbix_assist/llm/) tienen contratos propios en `contracts/` y un lugar para cada adaptador en `providers/`.
 - [evals/](evals/) reúne el golden, el runner, las métricas de recuperación y el juez de groundedness.
-- `prompts/`: prompts de generación y juez fuera del código.
-- `docs/fuentes/`: consigna y registro de procedencia.
-- `docs/ARQUITECTURA.md` y `docs/CONTRATOS.md`: diseño previo a la implementación.
-- `docs/MODULARIDAD.md`: límites de componentes, proveedores y validaciones.
-- `docs/adr/`: decisiones de arquitectura individuales, índice y plantilla.
-- `docs/USO_IA.md`: asistencia recibida y decisiones revisables.
-
+- En `docs/` se registran la [procedencia del corpus](docs/fuentes/procedencia.json), los [límites de cada componente](docs/MODULARIDAD.md) y el [uso de IA](docs/USO_IA.md).
 
 ## Decisiones y flujo de trabajo
 

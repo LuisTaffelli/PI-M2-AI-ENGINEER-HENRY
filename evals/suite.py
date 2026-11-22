@@ -17,6 +17,12 @@ from .metrics import retrieval_metrics, summarize
 
 
 def evaluate(root, builds, dataset, records, *, retrieval_only, max_calls):
+    """Evalúa los índices de `builds` con los registros revisados de `dataset` recibidos en `records`.
+
+    Con `retrieval_only` mide la búsqueda local. La evaluación completa comparte
+    `max_calls` entre generación y juez. Devuelve el informe por estrategia y
+    lo guarda en `runs/` bajo `root`.
+    """
     budget = CallBudget(max_calls)
     config = {"max_calls": max_calls, "mode": "retrieval" if retrieval_only else "full",
               "config_sha256": file_digest(root / "config.yaml"), "dataset_sha256": file_digest(dataset)}

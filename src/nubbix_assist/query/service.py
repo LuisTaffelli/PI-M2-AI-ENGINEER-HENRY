@@ -9,6 +9,11 @@ from .contracts.result import QueryResult
 
 
 def answer_retrieval(root: Path, retrieval, model, prompt: str) -> QueryResult:
+    """Genera una respuesta con `model` y `prompt` a partir de la evidencia de `retrieval`.
+
+    Guarda la traza en `runs/` bajo `root` y devuelve el ID de corrida, la respuesta
+    con sus citas y la recuperación que se usó para generarla.
+    """
     run_id = uuid4().hex
     directory = root / "runs" / run_id
     directory.mkdir(parents=True)
