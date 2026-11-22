@@ -12,7 +12,7 @@ Un ADR por decisión. Este índice reemplaza el registro inicial DECISIONES.md y
 | 0004 | [Persistir los vectores con Chroma local](0004-persistencia-vectorial-con-chroma-local.md) | Aceptada |
 | 0005 | [Construir builds independientes por estrategia y configuración](0005-builds-independientes-por-estrategia.md) | Aceptada |
 | 0006 | [Publicar builds solo después de verificar su integridad](0006-publicar-builds-tras-verificar-integridad.md) | Aceptada |
-| 0007 | [Comparar secciones H2 con ventanas de palabras](0007-comparar-secciones-y-ventanas-de-palabras.md) | Propuesta |
+| 0007 | [Corte por secciones H2 para el corpus de Nubbix](0007-comparar-secciones-y-ventanas-de-palabras.md) | Aceptada |
 | 0008 | [Fusionar búsqueda vectorial y BM25 con RRF](0008-busqueda-hibrida-con-bm25-y-rrf.md) | Aceptada |
 | 0009 | [Resolver las citas desde el catálogo de chunks](0009-resolver-citas-desde-el-catalogo.md) | Aceptada |
 | 0010 | [Etiquetar evidencia y chunks relevantes por estrategia](0010-golden-con-evidencia-y-etiquetas-por-estrategia.md) | Aceptada |
@@ -42,7 +42,7 @@ La fuente académica permanece en [la consigna](../fuentes/consigna.md). Estos r
 
 ## Pendientes para la ronda de evaluación
 
-Revisar las etiquetas por estrategia, elegir los modelos de cuenta para generación y juez, confirmar el presupuesto para la corrida y comparar calidad. Ya están implementados los cortes H2 y 80/20, E5 por revisión fija, Chroma, BM25 y las trazas. Los ADR 0007, 0012 y 0013 conservan su estado mientras se evalúan sus resultados.
+La revisión de las 27 preguntas y la evaluación de recuperación están completas. Luis aceptó H2 para este corpus. Para la evaluación de respuestas falta elegir los modelos de generación y de juez, fijar el presupuesto y medir el respaldo de las afirmaciones citadas.
 
 Para revisar la calidad de las respuestas durante esa ronda:
 
@@ -60,7 +60,7 @@ Para revisar la calidad de las respuestas durante esa ronda:
 | 3 | Ejecución y fallos | Configuración/ensamblado, errores, responsable de retries, límites por corrida y trazas | ADR 0012–0013 y modularidad |
 | 4 | Evaluación y aceptación | Golden por estrategia, mismo flujo real, métricas, errores del juez y casos verificables | ADR 0010–0011 y contratos |
 
-Luis dio el visto bueno al recorrido de los cuatro bloques. El índice recoge las decisiones aceptadas y conserva como propuestas los cortes exactos, el detalle del versionado de corridas y el candidato de embeddings.
+Luis dio el visto bueno al recorrido de los cuatro bloques. El índice recoge las decisiones aceptadas y conserva como propuestas el detalle del versionado de corridas y el candidato de embeddings.
 
 ### Recorrido para revisar los cuatro bloques
 
@@ -73,7 +73,7 @@ Pregunta de diseño para la revisión conjunta, pendiente de etiquetado humano e
 | 3. Ejecución | El caso de uso controla los intentos. Generación admite hasta dos llamadas en total entre intento inicial, reintento transitorio y posible reparación. Cada llamada consume el presupuesto de la corrida. | Un timeout seguido de una respuesta inválida agota ambos intentos. Se registra el fallo, se conserva la recuperación y la CLI comunica el error. Una credencial inválida detiene la llamada sin reintentos. |
 | 4. Evaluación | Congelar al menos 25 preguntas y sus etiquetas por estrategia. Comparar con el mismo top_k y medir sobre la recuperación que alimentó cada respuesta. El juez evalúa sus afirmaciones contra las citas. | Si falta la evidencia de HR, inspeccionar recall@3. Si llegaron ambas fuentes pero el generador atribuye 60 días a Finance, inspeccionar groundedness. Si responde solo el plazo correcto, revisar completitud aunque la afirmación esté sostenida. |
 
-Las ventanas, el número de candidatos, el modelo de embeddings y los límites operativos son elecciones iniciales revisables. Antes de llamar a la API se fijarán proveedor, modelos de generación y juez, y tope de consumo. Las pruebas de calidad decidirán qué estrategia conviene para la entrega.
+Las ventanas, el número de candidatos, el modelo de embeddings y los límites operativos son elecciones iniciales revisables. Antes de llamar a la API se fijarán proveedor, modelos de generación y juez, y tope de consumo. La elección de H2 para la entrega está documentada en el [ADR 0007](0007-comparar-secciones-y-ventanas-de-palabras.md).
 
 Los cuatro flujos tienen responsables, contratos, persistencia, comportamiento ante fallos y criterios de aceptación para el primer incremento. La tabla de pendientes sitúa las elecciones de implementación en la etapa que las necesita.
 
