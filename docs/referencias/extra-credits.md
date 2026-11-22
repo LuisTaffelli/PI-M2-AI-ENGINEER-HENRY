@@ -48,7 +48,7 @@ python -m pip install -r requirements-ui.txt
 python -m streamlit run ui/app.py --server.address 127.0.0.1
 ```
 
-Abrí la dirección local que imprime Streamlit. En **Ejemplos evaluados** se pueden consultar las respuestas reales de capacitación y guardería sin índices ni claves. Al pulsar una cita numerada se abre el pasaje y su sección. **Leer el documento completo** resalta ese intervalo en el Markdown original. El lector verifica el hash del archivo y sus offsets. La respuesta de guardería aparece con citas vacías.
+Abrí la dirección local que imprime Streamlit. **Ejemplos evaluados** reúne las 27 preguntas del golden. En **Respuesta guardada** podés buscar un tema y en **Versión** elegir la respuesta con secciones H2 o con ventanas de 80 palabras. Capacitación también incluye el piloto original. Las 55 respuestas se leen sin índices ni claves. Al pulsar una cita numerada se abre el pasaje y su sección. **Leer el documento completo** resalta ese intervalo en el Markdown original. El lector verifica el hash del archivo y sus offsets. La respuesta de guardería aparece con citas vacías.
 
 En **Nueva consulta**, **Buscar pasajes** usa el índice local. **Generar respuesta** llama al generador configurado en el `.env` del servidor con un máximo de dos intentos. En **Opciones de búsqueda** se eligen el índice y los extras. Se verificaron los enlaces de RR. HH. y Finanzas, el rechazo y la navegación en Chromium con vistas de escritorio y móvil. El envío a generación se probó con el índice real y un transporte de prueba que devolvió la respuesta guardada del piloto. [Captura de la cita de Finanzas](citas-navegables.png)
 

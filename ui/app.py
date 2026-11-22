@@ -1,6 +1,4 @@
 """Ejecutar con python -m streamlit run ui/app.py desde la raíz."""
-import csv
-import json
 from pathlib import Path
 import sys
 
@@ -8,29 +6,30 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from nubbix_assist.bootstrap import inspect_heading_document, make_retriever, language_model
+from nubbix_assist.bootstrap import make_retriever, language_model
 from nubbix_assist.generation.prompts import load_prompt
 from nubbix_assist.llm.service import CallBudget
 from nubbix_assist.query.service import answer_retrieval
+from nubbix_assist.ui.examples import load_examples
 from nubbix_assist.ui.reader import render_result
+
+VERSION_NAMES = {"headings_v1": "Secciones H2", "words_v1": "Ventanas de 80 palabras", "pilot": "Piloto H2"}
+TOPICS = {
+    "q01": "Licencia por matrimonio", "q02": "Días de examen", "q03": "Licencia por adopción",
+    "q04": "Solicitud de vacaciones", "q05": "Gastos de trabajo en casa", "q06": "Trabajo desde el exterior",
+    "q07": "Certificado por enfermedad", "q08": "Prepaga del grupo familiar", "q09": "Crédito de capacitación",
+    "q10": "Acceso a Producción", "q11": "Renovación de notebooks", "q12": "Aplicaciones para MFA",
+    "q13": "Contraseñas de Google Workspace", "q14": "Wi-Fi de un café", "q15": "Copias de la base de producción",
+    "q16": "Plazos de soporte", "q17": "Baja de accesos", "q18": "Equipo dañado durante un viaje",
+    "q19": "Viáticos para comidas", "q20": "Reintegros después del día 25", "q21": "Compra de licencias",
+    "q22": "Presupuestos de software", "q23": "Recibo de sueldo", "q24": "Cursos ajenos a la función",
+    "q25": "Bono por desempeño", "q26": "Diferencias en una factura", "q27": "Cupos de guardería",
+}
 
 
 @st.cache_data
 def examples():
-    folder = ROOT / "evals/resultados"
-    training = json.loads((folder / "2026-11-22-ejemplo-q09.json").read_text())
-    with (folder / "2026-11-22-generacion-golden-revisado.csv").open(encoding="utf-8") as handle:
-        refusal = next(row for row in csv.DictReader(handle)
-                       if row["pregunta_id"] == "q27" and row["estrategia"] == "headings_v1")
-    catalog = {}
-    for citation in training["chunks_related"]:
-        for chunk in inspect_heading_document(Path(citation["source"]), project_root=ROOT):
-            catalog[chunk.chunk_id] = chunk
-    return {
-        "Crédito de capacitación": (training["user_question"], training["system_answer"],
-                                   [catalog[c["chunk_id"]] for c in training["chunks_related"]]),
-        "Cupos de guardería": (refusal["pregunta"], refusal["respuesta"], []),
-    }
+    return load_examples(ROOT)
 
 
 def live_result():
@@ -91,15 +90,22 @@ st.html("""
 """)
 try:
     with st.container(key="archive_controls"):
-        modes, selection = st.columns([1.1, 1], vertical_alignment="bottom")
+        modes, selection, version_picker = st.columns([1.1, 1.2, .85], vertical_alignment="bottom")
         mode = modes.segmented_control("Modo", ["Ejemplos evaluados", "Nueva consulta"],
                                       default="Ejemplos evaluados", required=True, label_visibility="collapsed")
         if mode == "Ejemplos evaluados":
             saved = examples()
-            example = selection.selectbox("Respuesta guardada", list(saved))
+            ids = list(saved)
+            qid = selection.selectbox("Respuesta guardada", ids, index=ids.index("q09"),
+                                      format_func=lambda key: TOPICS.get(key, saved[key].question))
+            question = saved[qid]
+            versions = list(question.versions)
+            version = version_picker.selectbox("Versión", versions,
+                                               index=versions.index("pilot") if "pilot" in versions else 0,
+                                               format_func=VERSION_NAMES.__getitem__)
     if mode == "Ejemplos evaluados":
-        question, text, chunks = saved[example]
-        st.subheader(question)
+        text, chunks = question.versions[version]
+        st.subheader(question.question)
         st.html(render_result(ROOT, text, chunks))
     else:
         live_result()

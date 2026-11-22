@@ -26,8 +26,11 @@
   --archive-radius: 2px;
 }
 [data-testid="stMainBlockContainer"] {
+  --cherry-size: clamp(5.2rem, 10vw, 7.6rem);
   max-width: 68rem;
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.1rem, 3.6vw, 3rem) 5rem;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.1rem, 3.6vw, 3rem) calc(var(--cherry-size) + 2rem);
+  background: url("./app/static/cerezo.webp") right clamp(1.1rem, 3.6vw, 3rem) bottom 1rem /
+              var(--cherry-size) var(--cherry-size) no-repeat;
 }
 .archive-cover {
   position: relative;
@@ -126,6 +129,8 @@
   outline-offset: 3px;
 }
 .nubbix-reader {
+  --reader-gutter: clamp(1.25rem, 4.5vw, 3.25rem);
+  --reader-indent: clamp(.7rem, 1.6vw, 1.15rem);
   border-block: 2px solid var(--archive-ink);
   border-bottom: 1px solid var(--archive-rule);
   background: var(--archive-page);
@@ -136,7 +141,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
   gap: var(--archive-margin);
-  padding: 1.45rem var(--archive-margin) 1.6rem;
+  padding: 1.45rem var(--reader-gutter) 1.6rem;
 }
 .reader-copy:only-child { grid-column: 1 / -1; }
 .nubbix-reader .reader-label {
@@ -153,8 +158,9 @@
 .nubbix-reader .answer {
   max-width: 64ch;
   margin: 0;
+  margin-inline-start: var(--reader-indent);
   font-size: 1.17rem;
-  line-height: 1.6;
+  line-height: 1.65;
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
@@ -180,7 +186,7 @@
 .source-link:hover .source-document, .source-link:focus-visible .source-document { text-decoration: underline; }
 .nubbix-reader .source-view {
   display: none;
-  padding: 1.4rem var(--archive-margin) 1.65rem;
+  padding: 1.4rem var(--reader-gutter) 1.65rem;
   scroll-margin-top: 4rem;
   border-top: 1px solid var(--archive-rule);
 }
@@ -199,6 +205,7 @@
 .nubbix-reader blockquote {
   padding: .9rem 1.15rem;
   margin: .4rem 0 1rem;
+  margin-inline-start: var(--reader-indent);
   border-left: 3px solid var(--archive-seal);
   background: #f0e8d8;
   color: var(--archive-ink);
@@ -209,7 +216,7 @@
 .nubbix-reader details { margin: 1rem 0; }
 .nubbix-reader summary { cursor: pointer; font-weight: 600; color: var(--archive-seal); }
 .nubbix-reader details .source-meta { margin: .7rem 0; overflow-wrap: anywhere; }
-.nubbix-reader pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.55; }
+.nubbix-reader pre { margin-inline-start: var(--reader-indent); white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.55; }
 .nubbix-reader mark { color: #32251c; background: #ebd39f; }
 
 @media (max-width: 700px) {
