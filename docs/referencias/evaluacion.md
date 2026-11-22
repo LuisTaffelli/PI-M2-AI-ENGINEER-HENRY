@@ -40,6 +40,8 @@ La ingesta, el golden de 27 preguntas y la comparación de recuperación están 
 2. **Medir las respuestas de ambas estrategias de la consigna.** Usar H2 y ventanas corridas con los mismos modelos y preguntas. Registrar groundedness por afirmación, cobertura del juez, errores y el rechazo esperado de `q27`. Esta última métrica corresponde al bonus. La tercera estrategia ya participó en la comparación de recuperación.
 3. **Cerrar el README y la entrega.** Incluir un ejemplo real de respuesta con citas, una tabla con las métricas de generación y una conclusión sobre los fallos observados. Comprobar el recorrido documentado desde una copia limpia de la versión final y entregar el enlace al repositorio público actualizado. [Checklist de Henry](../fuentes/consigna.md)
 
+Para la parte opcional, el plan de los tres *extra credits* y el bonus incluye las pruebas de aceptación y los primeros resultados locales de multi-query. [Plan y resultados del piloto](extra-credits.md)
+
 ### Configuración y ejecución
 
 Después de revisar las etiquetas, configurá el generador en `.env` y elegí por separado `NUBBIX_JUDGE_PROVIDER` y `NUBBIX_JUDGE_MODEL`. El juez divide cada respuesta en afirmaciones comprobables y contrasta cada una con las citas. Esto permite detectar una respuesta que menciona un ID real pero atribuye a ese fragmento algo que el texto no dice. Para el caso fuera de alcance se mide si el asistente rechaza correctamente la pregunta. [Configuración del generador](consulta.md#generar-una-respuesta) · [Prompt del juez](../../prompts/groundedness.yaml)
