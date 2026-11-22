@@ -119,3 +119,5 @@ Luis configuró las credenciales locales y aprobó el piloto de capacitación y,
 ## 22/11/2026 · Re-ranking, multi-query e interfaz
 
 Luis pidió implementar los tres extra credits. Codex integró el cross-encoder local y la reformulación por vocabulario, redactó 27 versiones informales de las preguntas y comparó los rankings contra los del buscador base. Para verificar las citas navegables usó las respuestas guardadas del proyecto y los documentos originales. Estas pruebas usaron cero llamadas a OpenAI y Gemini. [Resultados y captura](referencias/extra-credits.md)
+
+Luis pidió aplicar su estilo Mochi al lector. Codex eligió la dirección de biblioteca japonesa y generó con IA el paisaje de la cabecera. El paisaje y la tipografía Baskervville se sirven desde el repositorio. [Captura del lector](referencias/citas-navegables.png) · [Licencia de la tipografía](../ui/static/fonts/Baskervville-OFL.txt)

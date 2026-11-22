@@ -4,10 +4,14 @@ gatherUsageStats = false
 [client]
 toolbarMode = "minimal"
 
+[server]
+enableStaticServing = true
+
 [theme]
 base = "light"
-primaryColor = "#176153"
-backgroundColor = "#FAFAF6"
-secondaryBackgroundColor = "#EBF1EB"
-textColor = "#202E2B"
+primaryColor = "#8B362A"
+backgroundColor = "#F2EEE4"
+secondaryBackgroundColor = "#E8E1D3"
+textColor = "#292923"
 font = "sans-serif"
+baseRadius = "small"

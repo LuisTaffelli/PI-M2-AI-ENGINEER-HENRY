@@ -15,7 +15,8 @@ def source_view(root, chunk, number):
     key = escape(chunk.chunk_id, quote=True)
     section = escape(" · ".join(chunk.section_paths))
     label = escape(document.title.removesuffix(" - Nubbix"))
-    link = f'<a class="source-link" href="#pasaje-{key}"><b>[{number}]</b> {label} · {section}</a>'
+    link = f'''<a class="source-link" href="#pasaje-{key}"><b>[{number}]</b>
+      <span><span class="source-document">{label}</span><span class="source-section">{section}</span></span></a>'''
     excerpt = escape(chunk.body)
     article = f'''<section class="source-view" id="pasaje-{key}" tabindex="-1">
       <div class="source-meta">{label} · Cita {number}</div><h3>{section}</h3>
@@ -39,8 +40,10 @@ def render_result(root, text, chunks, *, heading="Respuesta"):
     answer = re.sub(r"\[([0-9a-f]{64})\]", reference, escape(text))
     views = [source_view(root, chunk, n) for n, chunk in enumerate(chunks, 1)]
     links = "".join(link for link, _ in views)
-    caption = '<h3 class="source-meta">Fuentes</h3>' if links else ""
+    sources = f'''<nav class="reader-sources" aria-label="Fuentes citadas">
+      <h3 class="reader-label">Fuentes</h3>{links}</nav>''' if links else ""
     return f'''<div class="nubbix-reader" id="resultado">
-      <h2>{escape(heading)}</h2><p class="answer">{answer}</p>{caption}
-      <nav aria-label="Fuentes citadas">{links}</nav>
+      <div class="reader-layout"><div class="reader-copy">
+        <h2 class="reader-label">{escape(heading)}</h2><p class="answer">{answer}</p>
+      </div>{sources}</div>
       {"".join(article for _, article in views)}</div>'''

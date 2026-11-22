@@ -47,8 +47,9 @@ def live_result():
             multi = st.checkbox("Multi-query")
             rerank = st.checkbox("Re-ranking local")
         st.caption("Buscar pasajes funciona en tu máquina. Generar una respuesta usa hasta dos llamadas al modelo del .env.")
-        local = st.form_submit_button("Buscar pasajes")
-        generate = st.form_submit_button("Generar respuesta", type="primary")
+        with st.container(horizontal=True):
+            local = st.form_submit_button("Buscar pasajes")
+            generate = st.form_submit_button("Generar respuesta", type="primary")
     if local or generate:
         st.session_state.pop("result", None)
         if not question.strip():
@@ -77,16 +78,26 @@ def live_result():
         st.html(html)
 
 
-st.set_page_config(page_title="Nubbix Assist", page_icon="📖")
-st.html((ROOT / "ui/reader.css"))
-st.title("Nubbix Assist")
-st.caption("Consultas sobre Recursos Humanos, Finanzas y Tecnología.")
-mode = st.segmented_control("Modo", ["Ejemplos evaluados", "Nueva consulta"], default="Ejemplos evaluados",
-                            required=True, label_visibility="collapsed")
+st.set_page_config(page_title="Nubbix Assist", page_icon="📖", layout="wide")
+st.html(ROOT / "ui/reader.css")
+st.html("""
+<header class="archive-cover">
+  <div class="archive-imprint">
+    <span class="archive-seal" aria-hidden="true">N</span>
+    <div><h1>Nubbix <i>Assist</i></h1>
+      <p>Consultas sobre Recursos Humanos, Finanzas y Tecnología.</p></div>
+  </div>
+</header>
+""")
 try:
+    with st.container(key="archive_controls"):
+        modes, selection = st.columns([1.1, 1], vertical_alignment="bottom")
+        mode = modes.segmented_control("Modo", ["Ejemplos evaluados", "Nueva consulta"],
+                                      default="Ejemplos evaluados", required=True, label_visibility="collapsed")
+        if mode == "Ejemplos evaluados":
+            saved = examples()
+            example = selection.selectbox("Respuesta guardada", list(saved))
     if mode == "Ejemplos evaluados":
-        saved = examples()
-        example = st.selectbox("Respuesta guardada", list(saved))
         question, text, chunks = saved[example]
         st.subheader(question)
         st.html(render_result(ROOT, text, chunks))
