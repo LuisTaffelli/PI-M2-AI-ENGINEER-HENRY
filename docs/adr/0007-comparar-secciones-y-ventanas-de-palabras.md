@@ -22,6 +22,8 @@ Se propone comparar headings_v1, un chunk por sección H2, con words_v1, ventana
 
 ## Alternativas consideradas
 
+El 22/11 se incorporó a propuesta de Luis una tercera estrategia, `section_words_v1`. Reinicia las ventanas al cambiar de H2 y conserva los parámetros 80/20 para comparar directamente con las ventanas corridas. Las secciones breves permanecen enteras. En las extensas, una ventana todavía puede separar una regla de sus condiciones. La comparación con el mismo corpus, preguntas, embeddings y `top_k` permitirá decidir si mejora la recuperación.
+
 Dos variantes de tamaño casi iguales aportarían menos contraste. Otras estrategias podrán evaluarse después, documentando reglas y nuevos IDs.
 
 ## Referencias

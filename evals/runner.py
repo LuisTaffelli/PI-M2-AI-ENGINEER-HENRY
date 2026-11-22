@@ -1,4 +1,4 @@
-"""Comando de revisión de etiquetas y evaluación de ambos índices."""
+"""Comando de revisión de etiquetas y evaluación de los índices elegidos."""
 
 import argparse
 import json
@@ -7,12 +7,12 @@ import sys
 
 
 def main(root: Path):
-    from evals.contracts.golden import load_golden
+    from evals.contracts.golden import load_golden, reviewed_for
     from evals.suite import evaluate
     from nubbix_assist.bootstrap import load_build
 
-    parser = argparse.ArgumentParser(description="Comparar dos estrategias en el mismo golden.")
-    parser.add_argument("--builds", nargs=2, required=True, metavar=("BUILD_A", "BUILD_B"))
+    parser = argparse.ArgumentParser(description="Comparar dos o más estrategias en el mismo golden.")
+    parser.add_argument("--builds", nargs="+", required=True, metavar="BUILD")
     parser.add_argument("--dataset", type=Path, default=Path("evals/dataset.jsonl"))
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--check-dataset", action="store_true", help="Verificar las etiquetas y contar los borradores.")
@@ -24,7 +24,7 @@ def main(root: Path):
         dataset = root / args.dataset
         rows = load_golden(dataset, root, builds, require_review=not args.check_dataset)
         if args.check_dataset:
-            print(json.dumps({"questions": len(rows), "draft": sum(r["labeling_status"] == "draft" for r in rows)}))
+            print(json.dumps({"questions": len(rows), "draft": sum(not reviewed_for(r, builds) for r in rows)}))
             return
         if not args.retrieve_only and args.max_calls < 1:
             parser.error("La evaluación completa requiere un --max-calls positivo.")

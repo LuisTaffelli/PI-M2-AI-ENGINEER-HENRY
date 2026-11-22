@@ -31,3 +31,13 @@ def section_headings(document: Document) -> Iterator[tuple[int, int, str]]:
             if not label:
                 raise ValueError(f"{document.source}: encabezado H2 sin nombre en {start}.")
             yield start, offset, label
+
+
+def section_bodies(document: Document) -> Iterator[tuple[int, int, str]]:
+    """Devuelve el inicio, el fin y el título del cuerpo de cada sección H2."""
+    headings = list(section_headings(document))
+    if not headings:
+        raise ValueError(f"{document.source}: no se encontraron secciones H2.")
+    ends = [start for start, _, _ in headings[1:]] + [len(document.raw_text)]
+    for (_, start, label), end in zip(headings, ends, strict=True):
+        yield start, end, label

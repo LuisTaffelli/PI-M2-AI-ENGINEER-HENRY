@@ -102,12 +102,13 @@ El caso de uso de respuesta devuelve internamente la respuesta pública, el resu
 | evidence | Fuente/hash, intervalo y extracto necesarios |
 | expected_chunks | IDs relevantes por huella de estrategia |
 | labeling_status | Borrador o revisado |
+| reviewed_strategies | Huellas de las estrategias cuyas etiquetas se revisaron, cuando la aprobación es parcial |
 | corpus_fingerprint | Corpus usado para etiquetar |
 | expected_facts | Hechos esperados revisados por Luis |
 
 La evidencia permanece independiente de los chunks. Los IDs se revisan por estrategia; una simple intersección de spans no basta. Se etiquetan alternativas relevantes sin adaptar el golden al resultado del buscador.
 
-El runner exige mínimo 25 preguntas revisadas, IDs únicos y etiquetas existentes en ambos builds. Los casos answerable tienen evidencia e IDs esperados por estrategia; los fuera de alcance se manejan aparte si se incluye el bonus.
+El runner exige al menos 25 preguntas revisadas, IDs únicos y etiquetas existentes en cada build elegido. Para medir una pregunta se requiere `labeling_status=reviewed` y aprobación para cada estrategia seleccionada. En un registro revisado sin `reviewed_strategies`, la aprobación abarca las estrategias de `expected_chunks`. Al añadir una estrategia, se enumeran las huellas ya aprobadas antes de proponer sus nuevas etiquetas. Los casos respondibles tienen evidencia e IDs esperados por estrategia.
 
 Cada resultado conserva IDs recuperados/esperados, precision@k, recall@k, hit, respuesta, citas, tiempos, validaciones y estado del juez.
 

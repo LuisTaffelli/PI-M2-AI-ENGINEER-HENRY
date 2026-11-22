@@ -101,3 +101,7 @@ Luis pidió continuar con el ejemplo de «Beneficios». Codex implementó la car
 ## Implementación del RAG y preparación del golden
 
 Luis pidió completar las implementaciones y eligió OpenAI y Gemini. Codex implementó los cortes, índices, recuperación híbrida, validación de citas, adaptadores y runner en commits separados. Se construyeron ambos índices con los originales y se reabrieron en un proceso independiente. El golden incluye 27 propuestas con extractos y etiquetas por estrategia. La revisión de Luis, las llamadas a modelos remotos y la comparación formal siguen pendientes.
+
+## 22/11/2026 · Revisión de capacitación y tercera estrategia
+
+Luis aprobó las etiquetas de la pregunta de capacitación para H2 y ventanas corridas, y propuso combinar ambos métodos para evitar mezclar temas. Codex implementó ventanas 80/20 dentro de cada sección, preparó etiquetas candidatas a partir de los extractos del corpus y verificó la consulta en los tres índices locales. Las etiquetas del híbrido quedan para la revisión humana y la elección final depende de la comparación sobre el golden.

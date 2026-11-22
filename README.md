@@ -23,6 +23,7 @@ python ingest/run.py inspect data/corpus/hr_policies.md --section Beneficios
 python ingest/run.py inspect data/corpus/hr_policies.md --strategy words_v1
 BUILD_H2=$(python ingest/run.py build --strategy headings_v1 | python -c 'import json,sys; print(json.load(sys.stdin)["build_id"])')
 BUILD_WORDS=$(python ingest/run.py build --strategy words_v1 | python -c 'import json,sys; print(json.load(sys.stdin)["build_id"])')
+BUILD_HYBRID=$(python ingest/run.py build --strategy section_words_v1 | python -c 'import json,sys; print(json.load(sys.stdin)["build_id"])')
 export PYTHONPATH=src
 python -m nubbix_assist.cli.query --build "$BUILD_H2" --retrieve-only "¿Qué cubre el crédito de capacitación?"
 ```
@@ -60,24 +61,28 @@ Ejemplo del formato de rechazo previsto para la pregunta fuera de alcance del go
 |---|---:|---:|---:|---:|
 | `headings_v1` · una sección H2 | 6 | 6 | 6 | 18 |
 | `words_v1` · 80 palabras con solapamiento de 20 | 8 | 8 | 8 | 24 |
+| `section_words_v1` · ventanas 80/20 dentro de cada H2 | 8 | 7 | 6 | 21 |
 
 Los [tres Markdown originales](data/corpus/) conservan los [hashes de procedencia](docs/fuentes/procedencia.json). El cuerpo de cada chunk se recupera con `raw_text[start_char:end_char]`. En RR. HH., «Beneficios» ocupa `[2473, 2732)`.
 
-En una consulta real sobre libros de tecnología y rendición de cursos, ambas estrategias recuperaron «Beneficios» y «Presupuesto de Capacitación y Reembolsos Educativos» entre sus primeros cinco resultados. La selección de la estrategia final queda para la comparación completa.
+El híbrido abre una ventana al comenzar cada H2, repite el encabezado en el texto indexado y mantiene entera cada sección de hasta 80 palabras. En este corpus solo tres secciones superan ese límite. En la pregunta de capacitación (`q09`), tanto el híbrido como H2 recuperaron la sección de Finanzas en primer lugar y la de RR. HH. en segundo. La primera ventana de `words_v1` también incluyó texto sobre cobro de haberes. La elección final queda para la comparación de todo el dataset.
 
 ## Evaluación
 
-El [golden](evals/dataset.jsonl) contiene 27 preguntas en borrador, con extractos, offsets, hechos esperados e IDs relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y un caso fuera de alcance. Revisá la suficiencia de la evidencia y las etiquetas de cada estrategia antes de marcar una pregunta como `reviewed`. El runner confirma versión del corpus, existencia de los IDs y coherencia de los intervalos.
+El [golden](evals/dataset.jsonl) contiene 27 preguntas con extractos, offsets, hechos esperados e IDs relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y un caso fuera de alcance. La revisión de `q09` cubre H2 y ventanas corridas. Las etiquetas del híbrido son propuestas pendientes de revisión humana. El runner comprueba la evidencia y cuenta como pendientes las preguntas que aún necesiten revisión para cualquiera de los índices elegidos.
 
 ```sh
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --check-dataset
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --check-dataset
 # Tras la revisión humana
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --retrieve-only
+# Para incluir el híbrido una vez revisadas sus etiquetas
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --retrieve-only
 # Con generador y juez configurados. Este límite autoriza llamadas facturables.
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --max-calls 162
 ```
 
-La corrida completa mide precision@5, recall@5, hit rate, groundedness por afirmación y rechazo correcto. El límite de 162 cubre hasta dos intentos de generación y una llamada al juez por cada una de las 27 preguntas y cada estrategia. El reporte detallado queda en `runs/<run_id>/eval.json` e informa cobertura, errores y casos sin afirmaciones evaluables. Las métricas comparativas y los resultados de las APIs están pendientes de la ronda con etiquetas revisadas y credenciales.
+La corrida completa mide precision@5, recall@5, hit rate, groundedness por afirmación y rechazo correcto. Con 27 preguntas y hasta tres llamadas por pregunta y estrategia, el máximo teórico es de 162 llamadas para dos estrategias y 243 para tres. El presupuesto se elige al ejecutar. El reporte detallado queda en `runs/<run_id>/eval.json` e informa cobertura, errores y casos sin afirmaciones evaluables. Las métricas comparativas y los resultados de las APIs están pendientes de la ronda con etiquetas revisadas y credenciales.
 
 Las pruebas locales de contratos se ejecutan con `PYTHONPATH=src python -m unittest discover -s tests -v`. Las pruebas de los adaptadores usan respuestas controladas.
 
