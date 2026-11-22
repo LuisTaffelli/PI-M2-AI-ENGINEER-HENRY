@@ -1,0 +1,17 @@
+
+.nubbix-reader { border-top: 1px solid #b7c8bd; padding: 1.15rem 0; color: #202e2b; }
+.nubbix-reader h2 { margin: 0 0 .5rem; padding: 0; font-size: 1.3rem; }
+.nubbix-reader .answer { font-size: 1.1rem; line-height: 1.65; white-space: pre-line; }
+.nubbix-reader nav { display: grid; gap: .35rem; }
+.nubbix-reader a { color: #14564a; text-underline-offset: .17em; }
+.nubbix-reader a:focus-visible, .nubbix-reader summary:focus-visible { outline: 2px solid #176153; outline-offset: 3px; }
+.nubbix-reader .inline-cite { font-size: .85em; font-weight: 650; }
+.nubbix-reader .source-link { display: block; padding: .35rem 0; width: fit-content; }
+.nubbix-reader .source-meta { font-size: .88rem; font-weight: 600; color: #4c625a; margin: 1rem 0 .3rem; padding: 0; }
+.nubbix-reader .source-view { display: none; padding: 1rem 0; scroll-margin-top: 4rem; border-top: 1px solid #cad6cb; margin-top: 1rem; }
+.nubbix-reader .source-view:target { display: block; }
+.nubbix-reader blockquote { color: #203f34; border-left: .25rem solid #4b8064; background: #edf3e9; padding: .85rem 1rem; margin: .6rem 0 1rem; white-space: pre-wrap; }
+.nubbix-reader details { margin: 1rem 0; }
+.nubbix-reader summary { cursor: pointer; color: #185449; }
+.nubbix-reader pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.55; }
+.nubbix-reader mark { color: #213c27; background: #d5e9b6; }

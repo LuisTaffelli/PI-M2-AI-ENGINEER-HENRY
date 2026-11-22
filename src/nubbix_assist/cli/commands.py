@@ -17,11 +17,16 @@ def ingest_cli(project_root: Path) -> None:
     inspect.add_argument("--section", help="Mostrar solo los chunks con este título de sección.")
     inspect.add_argument("--strategy", choices=STRATEGIES, default="headings_v1")
     commands.add_parser("prepare-model", help="Descargar la revisión configurada de E5 a la caché local.")
+    commands.add_parser("prepare-reranker", help="Descargar el cross-encoder opcional a la caché local.")
     build_parser = commands.add_parser("build", help="Construir y verificar un índice local.")
     build_parser.add_argument("--strategy", required=True, choices=STRATEGIES)
     args = parser.parse_args()
 
     try:
+        if args.command == "prepare-reranker":
+            from nubbix_assist.retrieval.rerank import prepare_reranker
+            print(json.dumps({"snapshot": prepare_reranker()}, ensure_ascii=False))
+            return
         if args.command == "prepare-model":
             print(json.dumps({"snapshot": prepare_local_model(project_root)}, ensure_ascii=False))
             return

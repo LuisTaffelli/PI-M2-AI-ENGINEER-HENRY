@@ -43,11 +43,13 @@ def load_build(root, build_id):
     return open_build(root, build_id, ChromaIndex)
 
 
-def make_retriever(root, build_id, embeddings=None):
+def make_retriever(root, build_id, embeddings=None, *, rerank=False, multi_query=False):
     from .configuration.loader import load_config
     from .retrieval.service import Retriever
+    from .retrieval.rerank import LocalReranker
 
-    return Retriever(load_build(root, build_id), embeddings or local_embeddings(root), load_config(root)["retrieval"])
+    return Retriever(load_build(root, build_id), embeddings or local_embeddings(root), load_config(root)["retrieval"],
+                     reranker=LocalReranker() if rerank else None, multi_query=multi_query)
 
 
 def language_model(root, role, budget):

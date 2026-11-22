@@ -16,11 +16,13 @@ def main():
     parser.add_argument("question")
     parser.add_argument("--build", required=True)
     parser.add_argument("--source", help="Ruta relativa de un documento para filtrar ambas ramas.")
+    parser.add_argument("--rerank", action="store_true", help="Reordenar candidatos con el cross-encoder local.")
+    parser.add_argument("--multi-query", action="store_true", help="Fusionar búsquedas con reformulaciones locales.")
     parser.add_argument("--retrieve-only", action="store_true", help="Mostrar rankings y contexto sin llamar a una API.")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[3]
     try:
-        retriever = make_retriever(root, args.build)
+        retriever = make_retriever(root, args.build, rerank=args.rerank, multi_query=args.multi_query)
         result = retriever.retrieve(args.question, source=args.source)
         if args.retrieve_only:
             output = result

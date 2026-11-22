@@ -1,0 +1,132 @@
+{
+  "builds": [
+    "headings_v1-e0f074d5ea1b46c6bde4069cf669889a",
+    "words_v1-03ad090402fe4ce19ee0ebba2d37b585"
+  ],
+  "retrieval": {
+    "candidates": 10,
+    "top_k": 5,
+    "rrf_constant": 60
+  },
+  "reranker": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+  "revision": "1427fd652930e4ba29e8149678df786c240d8825",
+  "golden_sha256": "16ac0b96989c02123576c5ae838e1adad4139f25605c36fb944ecd9f006e03b9",
+  "informal_sha256": "c154384006ec0e6e304db750ae499f0923ab3723fe985df9f7b09ae721b99587",
+  "device": "cpu",
+  "platform": "x86_64",
+  "torch": "2.9.1+cpu",
+  "threads": 4,
+  "repeats": 3,
+  "results": [
+    {
+      "strategy": "headings_v1",
+      "dataset": "original",
+      "mode": "base",
+      "scored": 26,
+      "precision": 0.2153846153846154,
+      "recall": 1.0,
+      "hit1": 23,
+      "median_ms": 7.93,
+      "p95_ms": 9.4
+    },
+    {
+      "strategy": "headings_v1",
+      "dataset": "original",
+      "mode": "multi",
+      "scored": 26,
+      "precision": 0.2153846153846154,
+      "recall": 1.0,
+      "hit1": 23,
+      "median_ms": 10.68,
+      "p95_ms": 20.94
+    },
+    {
+      "strategy": "headings_v1",
+      "dataset": "original",
+      "mode": "rerank",
+      "scored": 26,
+      "precision": 0.2153846153846154,
+      "recall": 1.0,
+      "hit1": 26,
+      "median_ms": 169.36,
+      "p95_ms": 188.31
+    },
+    {
+      "strategy": "headings_v1",
+      "dataset": "informal",
+      "mode": "base",
+      "scored": 26,
+      "precision": 0.16923076923076924,
+      "recall": 0.7692307692307693,
+      "hit1": 17,
+      "median_ms": 7.32,
+      "p95_ms": 8.93
+    },
+    {
+      "strategy": "headings_v1",
+      "dataset": "informal",
+      "mode": "multi",
+      "scored": 26,
+      "precision": 0.18461538461538463,
+      "recall": 0.8653846153846154,
+      "hit1": 18,
+      "median_ms": 10.66,
+      "p95_ms": 21.29
+    },
+    {
+      "strategy": "words_v1",
+      "dataset": "original",
+      "mode": "base",
+      "scored": 26,
+      "precision": 0.23846153846153847,
+      "recall": 0.9615384615384616,
+      "hit1": 22,
+      "median_ms": 7.98,
+      "p95_ms": 9.07
+    },
+    {
+      "strategy": "words_v1",
+      "dataset": "original",
+      "mode": "multi",
+      "scored": 26,
+      "precision": 0.24615384615384617,
+      "recall": 1.0,
+      "hit1": 22,
+      "median_ms": 10.78,
+      "p95_ms": 19.46
+    },
+    {
+      "strategy": "words_v1",
+      "dataset": "original",
+      "mode": "rerank",
+      "scored": 26,
+      "precision": 0.24615384615384617,
+      "recall": 1.0,
+      "hit1": 24,
+      "median_ms": 180.06,
+      "p95_ms": 199.11
+    },
+    {
+      "strategy": "words_v1",
+      "dataset": "informal",
+      "mode": "base",
+      "scored": 26,
+      "precision": 0.2,
+      "recall": 0.8076923076923077,
+      "hit1": 18,
+      "median_ms": 7.0,
+      "p95_ms": 8.37
+    },
+    {
+      "strategy": "words_v1",
+      "dataset": "informal",
+      "mode": "multi",
+      "scored": 26,
+      "precision": 0.2076923076923077,
+      "recall": 0.8653846153846154,
+      "hit1": 16,
+      "median_ms": 10.21,
+      "p95_ms": 17.64
+    }
+  ]
+}

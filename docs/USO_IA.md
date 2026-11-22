@@ -115,3 +115,7 @@ Luis leyó la tabla y aprobó los 16 casos restantes. Codex registró la aprobac
 ## 22/11/2026 · Evaluación con los dos proveedores
 
 Luis configuró las credenciales locales y aprobó el piloto de capacitación y, después, un máximo de 162 llamadas para comparar H2 y ventanas. OpenAI generó las respuestas y Gemini evaluó el respaldo de sus afirmaciones. Codex cotejó las citas con los archivos originales, recuperó los veredictos pendientes tras errores temporales del juez y documentó las métricas y los rechazos. [Resultados y consumo](referencias/evaluacion.md#resultados-del-22-de-noviembre-de-2026)
+
+## 22/11/2026 · Re-ranking, multi-query e interfaz
+
+Luis pidió implementar los tres extra credits. Codex integró el cross-encoder local y la reformulación por vocabulario, redactó 27 versiones informales de las preguntas y comparó los rankings contra los del buscador base. Para verificar las citas navegables usó las respuestas guardadas del proyecto y los documentos originales. Estas pruebas usaron cero llamadas a OpenAI y Gemini. [Resultados y captura](referencias/extra-credits.md)

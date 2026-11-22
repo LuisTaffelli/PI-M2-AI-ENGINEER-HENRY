@@ -63,4 +63,8 @@ Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 pregunt
 
 Evaluamos las mismas 27 preguntas con `gpt-6-luna` como generador y `gemini-3.5-flash-lite` como juez. Los rechazos carecen de afirmaciones verificables y se cuentan por separado. [Respuestas y veredictos por pregunta](evals/resultados/2026-11-22-generacion-golden-revisado.csv) · [Método y reproducción](docs/referencias/evaluacion.md)
 
+## Extra credits
+
+El re-ranking local llevó el pasaje de renovación de notebooks del octavo al primer puesto con ventanas. En H2, multi-query elevó el recall@5 del 76,92 % al 86,54 % en 27 versiones informales de las preguntas. Ambos modos son opcionales. La interfaz Streamlit permite abrir cada cita en su documento y probar los ejemplos guardados sin clave. [Resultados y comandos](docs/referencias/extra-credits.md) · [Abrir la interfaz](docs/referencias/extra-credits.md#interfaz-con-citas-navegables)
+
 El diseño del sistema, las decisiones y la asistencia recibida están documentados en la [arquitectura](docs/ARQUITECTURA.md), el [registro de decisiones](docs/adr/README.md) y el [registro de uso de IA](docs/USO_IA.md).

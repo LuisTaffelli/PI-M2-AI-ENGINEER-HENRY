@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from nubbix_assist.chunking.contracts import Chunk
 
 
@@ -18,3 +18,4 @@ class Retrieval:
     selected: list[Selected]
     elapsed_ms: float
     warnings: list[str]
+    details: dict = field(default_factory=dict)

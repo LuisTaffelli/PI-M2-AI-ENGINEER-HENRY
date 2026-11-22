@@ -51,7 +51,7 @@ La comparación usó **129 llamadas de las 162 autorizadas**. OpenAI generó las
 
 OpenAI informó 58.698 tokens de entrada (45.571 de escritura en caché y cero de lectura) y 7.770 de salida. A la tarifa estándar del modelo, el consumo estimado fue de USD 0,010894 para la comparación. El piloto previo añadió USD 0,000252. [Tarifas de GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna) · [Cálculo de la caché](https://developers.openai.com/api/docs/guides/prompt-caching)
 
-Para la parte opcional, el plan de los tres *extra credits* y el bonus incluye las pruebas de aceptación y los primeros resultados locales de multi-query. [Plan y resultados del piloto](extra-credits.md)
+Los tres *extra credits* tienen una comparación de recuperación local y una interfaz con citas navegables. [Resultados y reproducción](extra-credits.md)
 
 ### Configuración y ejecución
 

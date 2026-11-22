@@ -85,6 +85,8 @@ Salida interna del LLM: system_answer y cited_chunk_ids. La aplicación produce:
 | chunks_related[].content | Contenido preparado del catálogo |
 | chunks_related[].score | rrf_score, no probabilidad |
 
+Con multi-query, el puntaje RRF corresponde a la fusión de los rankings de las consultas distintas. Con re-ranking, el cross-encoder determina el orden de selección. La traza conserva los puntajes del modelo y los candidatos en orden RRF en `details.reranking`. Las citas retienen el puntaje RRF de cada fragmento.
+
 Toda referencia del texto debe estar en chunks_related y cada elemento de esa lista debe estar citado. Se resuelven texto, origen y score desde artefactos de la aplicación, no desde campos inventados por el LLM.
 
 Una respuesta factual sin citas o con IDs ajenos al contexto es inválida. Una respuesta explícita de insuficiencia puede devolver lista vacía; no se contabiliza automáticamente como respuesta correcta.
