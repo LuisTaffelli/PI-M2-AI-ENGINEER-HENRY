@@ -9,3 +9,4 @@ class Document:
     title: str
     source_sha256: str
     raw_text: str
+    version: str = "1"

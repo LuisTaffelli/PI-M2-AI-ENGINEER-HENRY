@@ -7,7 +7,7 @@ from nubbix_assist.ingestion.markdown_loader import load_markdown
 
 
 def source_view(root, chunk, number):
-    document = load_markdown(Path(chunk.source), project_root=root)
+    document = load_markdown(Path(chunk.source), project_root=root, version=chunk.version)
     start, end = chunk.start_char, chunk.end_char
     raw = document.raw_text
     if document.source_sha256 != chunk.source_sha256 or raw[start:end] != chunk.body:
@@ -15,11 +15,12 @@ def source_view(root, chunk, number):
     key = escape(chunk.chunk_id, quote=True)
     section = escape(" · ".join(chunk.section_paths))
     label = escape(document.title.removesuffix(" - Nubbix"))
+    edition = escape(chunk.version if chunk.version.casefold().startswith("versión ") else f"Versión {chunk.version}")
     link = f'''<a class="source-link" href="#pasaje-{key}"><b>[{number}]</b>
-      <span><span class="source-document">{label}</span><span class="source-section">{section}</span></span></a>'''
+      <span><span class="source-document">{label}</span><span class="source-section">{section} · {edition}</span></span></a>'''
     excerpt = escape(chunk.body)
     article = f'''<section class="source-view" id="pasaje-{key}" tabindex="-1">
-      <div class="source-meta">{label} · Cita {number}</div><h3>{section}</h3>
+      <div class="source-meta">{label} · {edition} · Cita {number}</div><h3>{section}</h3>
       <blockquote>{excerpt}</blockquote>
       <details><summary>Leer el documento completo</summary>
         <p class="source-meta">{escape(chunk.source)} · caracteres {start}–{end}</p>

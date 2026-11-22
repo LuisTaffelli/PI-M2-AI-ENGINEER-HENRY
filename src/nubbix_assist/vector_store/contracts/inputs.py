@@ -8,3 +8,4 @@ class VectorRecord:
     source: str
     sections: tuple[str, ...]
     strategy: str
+    version: str = "1"

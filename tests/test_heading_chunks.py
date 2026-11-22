@@ -18,7 +18,7 @@ HR = Path("data/corpus/hr_policies.md")
 
 class HeadingChunkTests(unittest.TestCase):
     def test_beneficios_trace_and_identity(self):
-        chunks = inspect_document(HR, project_root=ROOT, strategy=chunk_by_headings)
+        chunks = inspect_document(HR, project_root=ROOT, strategy=chunk_by_headings, version="1")
         [benefits] = [chunk for chunk in chunks if chunk.section_paths == ("Beneficios",)]
         original = (ROOT / HR).read_bytes().decode("utf-8")
         expected_start = original.index("- Medicina prepaga:")
@@ -26,7 +26,7 @@ class HeadingChunkTests(unittest.TestCase):
         self.assertEqual(benefits.body, original[expected_start:])
         self.assertIn("USD 500", benefits.body)
         self.assertEqual(benefits.ordinal, 6)
-        again = inspect_document(ROOT / HR, project_root=ROOT, strategy=chunk_by_headings)
+        again = inspect_document(ROOT / HR, project_root=ROOT, strategy=chunk_by_headings, version="1")
         self.assertEqual(again, chunks)
 
     def test_unicode_crlf_and_fenced_heading(self):

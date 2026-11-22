@@ -17,7 +17,7 @@ class ExtraCreditsTests(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.root = Path(__file__).resolve().parents[1]
-        cls.chunks = inspect_heading_document(Path("data/corpus/hr_policies.md"), project_root=cls.root)
+        cls.chunks = inspect_heading_document(Path("data/corpus/hr_policies.md"), project_root=cls.root, version="1")
         cls.build = SimpleNamespace(manifest=SimpleNamespace(embeddings="test", build_id="prueba"),
                                     catalog={c.chunk_id: c for c in cls.chunks},
                                     vectors=Mock(), lexical=BM25Index.build(cls.chunks))

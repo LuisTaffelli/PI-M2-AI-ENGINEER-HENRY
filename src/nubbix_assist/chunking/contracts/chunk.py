@@ -17,3 +17,4 @@ class Chunk:
     content: str
     content_sha256: str
     ordinal: int
+    version: str = "1"

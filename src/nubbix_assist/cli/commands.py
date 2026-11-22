@@ -7,6 +7,7 @@ from pathlib import Path
 
 from nubbix_assist.bootstrap import STRATEGIES, build, prepare_local_model
 from nubbix_assist.ingestion.service import inspect_document
+from nubbix_assist.ingestion.revisions import register_version
 
 
 def ingest_cli(project_root: Path) -> None:
@@ -16,6 +17,11 @@ def ingest_cli(project_root: Path) -> None:
     inspect.add_argument("source", type=Path, help="Ruta del Markdown relativa al proyecto.")
     inspect.add_argument("--section", help="Mostrar solo los chunks con este título de sección.")
     inspect.add_argument("--strategy", choices=STRATEGIES, default="headings_v1")
+    inspect.add_argument("--version", help="Etiqueta del documento. Por defecto usa la última registrada.")
+    register = commands.add_parser("add-version", help="Registrar una copia editada con la etiqueta que elijas.")
+    register.add_argument("source", type=Path, help="Ruta del documento original en data/corpus/.")
+    register.add_argument("--version", required=True, help="Etiqueta de la nueva revisión, por ejemplo 1.2 o «Versión N».")
+    register.add_argument("--file", required=True, type=Path, help="Markdown editado que se va a registrar.")
     commands.add_parser("prepare-model", help="Descargar la revisión configurada de E5 a la caché local.")
     commands.add_parser("prepare-reranker", help="Descargar el cross-encoder opcional a la caché local.")
     build_parser = commands.add_parser("build", help="Construir y verificar un índice local.")
@@ -23,6 +29,10 @@ def ingest_cli(project_root: Path) -> None:
     args = parser.parse_args()
 
     try:
+        if args.command == "add-version":
+            path = register_version(project_root, args.source, args.file, args.version)
+            print(json.dumps({"version": args.version, "path": str(path.relative_to(project_root))}, ensure_ascii=False))
+            return
         if args.command == "prepare-reranker":
             from nubbix_assist.retrieval.rerank import prepare_reranker
             print(json.dumps({"snapshot": prepare_reranker()}, ensure_ascii=False))
@@ -33,7 +43,8 @@ def ingest_cli(project_root: Path) -> None:
         if args.command == "build":
             print(json.dumps(asdict(build(project_root, args.strategy)), ensure_ascii=False, indent=2))
             return
-        chunks = inspect_document(args.source, project_root=project_root, strategy=STRATEGIES[args.strategy])
+        chunks = inspect_document(args.source, project_root=project_root, strategy=STRATEGIES[args.strategy],
+                                  version=args.version)
     except (OSError, ValueError) as error:
         parser.exit(1, f"{error}\n")
     if args.section is not None:

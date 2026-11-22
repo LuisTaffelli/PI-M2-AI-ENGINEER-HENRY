@@ -1,8 +1,9 @@
 """Validación del golden y de sus referencias antes de medir o llamar a modelos."""
 
-from hashlib import sha256
 import json
 from pathlib import Path
+
+from nubbix_assist.ingestion.markdown_loader import load_markdown
 
 
 def reviewed_for(row: dict, builds: list) -> bool:
@@ -27,10 +28,10 @@ def load_golden(path: Path, root: Path, builds: list, *, require_review: bool) -
         raise ValueError("La comparación requiere el mismo corpus y espacio de embeddings.")
     sources = {}
     for source, expected in first.sources.items():
-        raw = (root / source).read_bytes()
-        if sha256(raw).hexdigest() != expected:
+        document = load_markdown(Path(source), project_root=root, version=first.source_versions[source])
+        if document.source_sha256 != expected:
             raise ValueError(f"El corpus actual difiere del build en {source}.")
-        sources[source] = raw.decode("utf-8")
+        sources[source] = document.raw_text
     for row in records:
         label = row["question_id"]
         if (row["corpus_fingerprint"] != first.corpus_fingerprint or not row["question"].strip()

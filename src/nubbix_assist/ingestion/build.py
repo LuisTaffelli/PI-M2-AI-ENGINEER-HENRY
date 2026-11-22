@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from nubbix_assist.artifacts.catalog import read_catalog, write_catalog
 from nubbix_assist.artifacts.contracts.manifest import Manifest
-from nubbix_assist.artifacts.validators import digest, file_digest, validate_build
+from nubbix_assist.artifacts.validators import corpus_digest, digest, file_digest, validate_build
 from nubbix_assist.embeddings.contracts.inputs import TextInput
 from nubbix_assist.lexical.index import BM25Index
 from nubbix_assist.vector_store.contracts.inputs import VectorRecord
@@ -24,14 +24,17 @@ def build_index(root: Path, name: str, strategy, embeddings, open_vectors) -> Ma
     reabrir el índice. Devuelve el manifiesto después de verificar el índice en disco.
     """
     sources = {}
+    source_versions = {}
     chunks = []
     provenance = json.loads((root / "docs/fuentes/procedencia.json").read_text())["corpus"]["files"]
     for item in sorted(provenance, key=lambda item: item["path"]):
         source = item["path"]
         batch = inspect_document(Path(source), project_root=root, strategy=strategy)
-        if batch[0].source_sha256 != item["sha256"]:
+        original_hash = batch[0].source_sha256 if batch[0].version == "1" else file_digest(root / source)
+        if original_hash != item["sha256"]:
             raise ValueError(f"El original de {source} difiere de su procedencia registrada.")
         sources[source] = batch[0].source_sha256
+        source_versions[source] = batch[0].version
         chunks.extend(batch)
     if not chunks:
         raise ValueError("El corpus está vacío.")
@@ -46,16 +49,17 @@ def build_index(root: Path, name: str, strategy, embeddings, open_vectors) -> Ma
     for offset in range(0, len(chunks), 32):
         batch = chunks[offset:offset + 32]
         outputs = embeddings.encode([TextInput(c.chunk_id, c.content) for c in batch], "document")
-        vectors.write([VectorRecord(c.chunk_id, out.vector, c.source, c.section_paths, name)
+        vectors.write([VectorRecord(c.chunk_id, out.vector, c.source, c.section_paths, name, c.version)
                        for c, out in zip(batch, outputs, strict=True)])
     write_catalog(directory / "chunks.jsonl", chunks)
     lexical = BM25Index.build(chunks)
     (directory / "bm25.json").write_text(json.dumps(asdict(lexical), ensure_ascii=False), encoding="utf-8")
     manifest = Manifest(
-        1, build_id, datetime.now(timezone.utc).isoformat(), "ready", name, chunks[0].strategy_fingerprint,
-        sources, digest(sources), embeddings.spec, spec, len(ids), digest(sorted(ids)),
+        2, build_id, datetime.now(timezone.utc).isoformat(), "ready", name, chunks[0].strategy_fingerprint,
+        sources, corpus_digest(sources, source_versions), embeddings.spec, spec, len(ids), digest(sorted(ids)),
         {file: file_digest(directory / file) for file in ("chunks.jsonl", "bm25.json")},
-        {package: version(package) for package in ("chromadb", "sentence-transformers", "torch", "transformers")})
+        {package: version(package) for package in ("chromadb", "sentence-transformers", "torch", "transformers")},
+        source_versions)
     reopened = open_vectors(directory / "chroma", spec, create=False)
     validate_build(manifest, read_catalog(directory / "chunks.jsonl"),
                    BM25Index(**json.loads((directory / "bm25.json").read_text())), reopened)

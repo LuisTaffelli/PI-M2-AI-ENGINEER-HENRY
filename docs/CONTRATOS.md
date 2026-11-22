@@ -10,12 +10,13 @@ Los contratos se alojarán en el paquete contracts/ de su funcionalidad. En embe
 
 ## 1. Documento y chunk
 
-Documento conserva source (ruta relativa), title, source_sha256 de los bytes y raw_text UTF-8 sin reescrituras ni cambios de saltos de línea.
+Documento conserva la ruta lógica `source`, el título, la etiqueta editorial `version`, el SHA-256 de los bytes y el texto UTF-8 con sus saltos de línea originales.
 
 | Campo del chunk | Significado |
 |---|---|
 | chunk_id | ID determinista y diferente entre estrategias |
 | source, source_sha256 | Documento y versión exacta |
+| version | Etiqueta de texto elegida por quien publica la revisión. Los originales de Henry corresponden a `1`. |
 | strategy, strategy_fingerprint | Regla/versionado y huella de parámetros |
 | start_char, end_char | Intervalo del original, inicio incluido y fin excluido |
 | section_paths | Secciones alcanzadas; pueden ser varias en ventanas fijas |
@@ -28,7 +29,7 @@ Offsets cuentan caracteres decodificados, no bytes ni tokens. Los títulos agreg
 
 En `headings_v1`, cada H2 abre una sección. El cuerpo empieza después de la línea de encabezado y termina al inicio del siguiente H2 o al final del archivo. Conserva los separadores que caigan dentro del intervalo. El título H1 y el texto anterior al primer H2 quedan fuera del cuerpo de las secciones. Los bloques de código delimitados por acentos graves o virgulillas pueden contener líneas de ejemplo con `##` sin abrir una sección. Los ordinales comienzan en uno y `section_paths` contiene el título del H2. El campo `content` antepone el título del documento y el de la sección, con una línea vacía antes de `body`.
 
-El ID deriva de versión de esquema, documento/hash, estrategia/parámetros, intervalo y contenido preparado; no de la fecha de corrida. Se rechazan IDs duplicados, vacíos, intervalos inválidos y cuerpos distintos de su fuente.
+El ID deriva del esquema, documento, hash, estrategia, parámetros, intervalo y contenido preparado. Las revisiones posteriores a la original también incorporan su etiqueta editorial al ID. Se rechazan IDs duplicados, vacíos, intervalos inválidos y cuerpos distintos de su fuente. [Cómo registrar una versión](referencias/consulta.md#registrar-una-versión-del-documento)
 
 El registro completo persiste en el catálogo. El adaptador de la base transforma sus metadatos al formato admitido sin perder la representación canónica.
 
@@ -37,7 +38,7 @@ El registro completo persiste en el catálogo. El adaptador de la base transform
 | Grupo | Datos |
 |---|---|
 | Identidad | schema_version, build_id, fingerprint, created_at y estado listo |
-| Corpus | Sources/hashes ordenados y hash agregado |
+| Corpus | `sources` registra el hash por documento, `source_versions` su etiqueta editorial y `corpus_fingerprint` la huella del conjunto |
 | Chunking | Estrategia/versionado, parámetros y envoltorio |
 | Embeddings | Modelo local/revisión, dimensión, normalización, prefijos por rol y límites |
 | Vector DB | Proveedor/versión, ruta, colección, métrica y parámetros efectivos |
@@ -82,6 +83,7 @@ Salida interna del LLM: system_answer y cited_chunk_ids. La aplicación produce:
 | chunks_related | Citas usadas y validadas |
 | chunks_related[].chunk_id | ID presente en el contexto enviado |
 | chunks_related[].source | Documento del catálogo |
+| chunks_related[].version | Etiqueta de la edición que se usó para responder |
 | chunks_related[].content | Contenido preparado del catálogo |
 | chunks_related[].score | rrf_score, no probabilidad |
 

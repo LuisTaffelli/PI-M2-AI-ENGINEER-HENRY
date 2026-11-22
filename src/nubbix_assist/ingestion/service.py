@@ -8,8 +8,9 @@ from nubbix_assist.chunking.validators import validate_chunks
 from .markdown_loader import load_markdown
 
 
-def inspect_document(source: Path, *, project_root: Path, strategy: ChunkStrategy) -> list[Chunk]:
-    document = load_markdown(source, project_root=project_root)
+def inspect_document(source: Path, *, project_root: Path, strategy: ChunkStrategy,
+                     version: str | None = None) -> list[Chunk]:
+    document = load_markdown(source, project_root=project_root, version=version)
     chunks = strategy(document)
     validate_chunks(document, chunks)
     return chunks

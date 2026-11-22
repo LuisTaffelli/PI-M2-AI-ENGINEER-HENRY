@@ -7,6 +7,7 @@ class Citation:
     source: str
     content: str
     score: float
+    version: str = "1"
 
 
 @dataclass

@@ -1,4 +1,5 @@
 """Ejecutar con python -m streamlit run ui/app.py desde la raíz."""
+import json
 from pathlib import Path
 import sys
 
@@ -75,7 +76,10 @@ def index_label(build):
 
 
 def live_result():
-    builds = sorted(p.parent.name for p in (ROOT / "data/indexes").glob("*/manifest.json"))
+    manifests = [json.loads(path.read_text(encoding="utf-8")) for path in (ROOT / "data/indexes").glob("*/manifest.json")]
+    # Mostrar primero el índice más reciente dentro de cada estrategia.
+    manifests.sort(key=lambda manifest: manifest["created_at"], reverse=True)
+    builds = [m["build_id"] for m in sorted(manifests, key=lambda manifest: manifest["strategy"])]
     if not builds:
         st.info("Construí un índice con python ingest/run.py build --strategy headings_v1 para hacer consultas.")
         return

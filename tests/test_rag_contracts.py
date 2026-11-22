@@ -28,7 +28,7 @@ def transport_reply(provider, payload):
 class RagContractTests(TestCase):
     def setUp(self):
         root = Path(__file__).resolve().parents[1]
-        document = load_markdown(Path("data/corpus/hr_policies.md"), project_root=root)
+        document = load_markdown(Path("data/corpus/hr_policies.md"), project_root=root, version="1")
         chunk = chunk_by_headings(document)[-1]
         self.key = chunk.chunk_id
         self.trace = Retrieval("¿Cubre libros?", "prueba", {}, [], [], [Selected(chunk, 1 / 61)], 0.0, [])
@@ -55,6 +55,7 @@ class RagContractTests(TestCase):
                         "source": selected.chunk.source,
                         "content": selected.chunk.content,
                         "score": selected.score,
+                        "version": "1",
                     }],
                 })
                 self.assertEqual(len(attempts), 2)

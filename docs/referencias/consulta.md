@@ -17,6 +17,22 @@ El comando `prepare-model` descarga la revisión fijada de `multilingual-e5-smal
 
 Cada índice vive en `data/indexes/<build_id>/` con su catálogo de fragmentos, el índice léxico BM25 y la colección Chroma. La ingesta comprueba hashes e identificadores antes de publicarlo. Al consultar, el buscador recupera hasta diez candidatos por rama y combina sus posiciones con RRF (constante 60). Los cinco primeros forman el contexto. La opción `--source data/corpus/hr_policies.md` limita ambas ramas a las políticas de RR. HH. [Almacenamiento](../ALMACENAMIENTO.md)
 
+## Registrar una versión del documento
+
+Los tres documentos originales de Henry tienen la versión `1`. Para actualizar uno, editá una copia del Markdown y registrala con la etiqueta que elijas. El siguiente ejemplo usa `1.2` para una copia del manual de IT.
+
+```sh
+python ingest/run.py add-version data/corpus/it_manual.md --version "1.2" --file /ruta/al/manual-editado.md
+python ingest/run.py inspect data/corpus/it_manual.md --version "1.2"
+python ingest/run.py build --strategy headings_v1
+```
+
+`version` es texto. Podés pasar `1.10`, `2` o `"Versión N"`. Cada documento tiene su propio historial. La última revisión registrada es la que toma la siguiente ingesta. Repetí el último comando para las estrategias que uses y consultá el identificador del índice recién construido.
+
+El registro guarda la copia y su hash en `data/revisions/`. Incluí esa carpeta en Git para compartir las revisiones. Repetir la misma etiqueta con el mismo archivo devuelve la revisión existente. Para publicar otro contenido hace falta otra etiqueta.
+
+El catálogo, la metadata de Chroma y las citas de los índices nuevos incluyen `version`. El lector abre la edición citada aunque ya haya una más reciente. Los índices anteriores a este campo corresponden a la versión `1`. Los ejemplos y el golden del PI corresponden al corpus original.
+
 ## Generar una respuesta
 
 Copiá `.env.example` a `.env`. En `NUBBIX_GENERATOR_PROVIDER` elegí `openai` o `gemini`. En `NUBBIX_GENERATOR_MODEL` indicá un modelo de tu cuenta que admita salidas JSON con esquema. Completá la clave correspondiente en `OPENAI_API_KEY` o `GEMINI_API_KEY`. El comando siguiente realiza una consulta al proveedor elegido. [Plantilla de configuración](../../.env.example)

@@ -31,7 +31,7 @@ class ChromaIndex:
             validate_vector(record.vector, self.spec.dimension)
         self.collection.add(ids=[r.id for r in records], embeddings=[r.vector for r in records],
                             metadatas=[{"source": r.source, "sections": json.dumps(r.sections, ensure_ascii=False),
-                                        "strategy": r.strategy} for r in records])
+                                        "strategy": r.strategy, "version": r.version} for r in records])
 
     def ids(self) -> set[str]:
         return set(self.collection.get(include=[])["ids"])

@@ -20,8 +20,11 @@ class Manifest:
     ids_sha256: str
     files: dict[str, str]
     versions: dict[str, str]
+    source_versions: dict[str, str]
 
     @classmethod
     def parse(cls, data):
+        if data["schema_version"] == 1:
+            data = {**data, "source_versions": dict.fromkeys(data["sources"], "1")}
         return cls(**{**data, "embeddings": EmbeddingSpec(**data["embeddings"]),
                       "vector_store": IndexSpec(**data["vector_store"])})

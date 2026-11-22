@@ -26,7 +26,8 @@ def load_examples(root: Path) -> dict[str, SavedQuestion]:
         catalogs[strategy] = {
             chunk.chunk_id: chunk
             for source in sorted((root / "data/corpus").glob("*.md"))
-            for chunk in inspect_document(source.relative_to(root), project_root=root, strategy=STRATEGIES[strategy])
+            for chunk in inspect_document(source.relative_to(root), project_root=root,
+                                          strategy=STRATEGIES[strategy], version="1")
         }
 
     saved = {}
