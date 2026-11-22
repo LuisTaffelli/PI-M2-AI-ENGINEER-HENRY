@@ -69,11 +69,27 @@ El híbrido abre una ventana al comenzar cada H2, repite el encabezado en el tex
 
 ## Evaluación
 
-El [golden](evals/dataset.jsonl) contiene 27 preguntas con extractos, offsets, hechos esperados e IDs relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y un caso fuera de alcance. La revisión de `q09` cubre H2 y ventanas corridas. Las etiquetas del híbrido son propuestas pendientes de revisión humana. El runner comprueba la evidencia y cuenta como pendientes las preguntas que aún necesiten revisión para cualquiera de los índices elegidos.
+El [golden](evals/dataset.jsonl) contiene 27 preguntas con extractos, offsets, hechos esperados e IDs relevantes por estrategia. Incluye paráfrasis, distractores, dos cruces documentales y un caso fuera de alcance. La revisión de `q09` cubre las tres estrategias. Las otras 26 preguntas están en borrador.
+
+### Medición preliminar de recuperación · 22/11/2026
+
+Se hicieron 81 búsquedas locales, una por pregunta y estrategia, con el mismo modelo, búsqueda híbrida y cinco resultados por consulta. Los promedios dan el mismo peso a cada una de las 26 preguntas respondibles. La pregunta sobre guardería (`q27`) se ejecutó en los tres índices y se excluyó de los promedios porque carece de fragmentos relevantes. El rechazo se evalúa en la etapa de generación.
+
+| Estrategia | Precisión@5 | Recall@5 | Preguntas con toda la evidencia etiquetada en el top 5 |
+|---|---:|---:|---:|
+| Secciones H2 | 21,54 % | 100 % | 26/26 |
+| Ventanas corridas 80/20 | 23,08 % | 96,15 % | 25/26 |
+| Ventanas 80/20 por sección | 21,54 % | 100 % | 26/26 |
+
+En `q11`, sobre renovación de notebooks, solo las ventanas corridas dejaron fuera del top 5 el fragmento que indica **cada 3 años**. Su precisión media fue mayor porque varias preguntas tienen más de una ventana relevante que cubre la misma evidencia. En H2 y en el híbrido, 24 de las 26 preguntas respondibles tienen un solo fragmento relevante, de modo que recuperarlo da un máximo de 20 % de precisión@5 en esas preguntas.
+
+Los valores por pregunta se guardaron en el [CSV de la medición](evals/resultados/2026-11-22-retrieval-preliminar.csv), con precisión y recall en escala de 0 a 1 y celdas vacías para `q27`. La traza local corresponde a la corrida `2765b989f4bd4b56a7a10f42dd1fe8c2`.
 
 ```sh
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --check-dataset
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --check-dataset
+# Medición preliminar local con las etiquetas actuales
+python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --preliminary-retrieval
 # Tras la revisión humana
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --retrieve-only
 # Para incluir el híbrido una vez revisadas sus etiquetas
@@ -82,7 +98,7 @@ python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --ret
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --max-calls 162
 ```
 
-La corrida completa mide precision@5, recall@5, hit rate, groundedness por afirmación y rechazo correcto. Con 27 preguntas y hasta tres llamadas por pregunta y estrategia, el máximo teórico es de 162 llamadas para dos estrategias y 243 para tres. El presupuesto se elige al ejecutar. El reporte detallado queda en `runs/<run_id>/eval.json` e informa cobertura, errores y casos sin afirmaciones evaluables. Las métricas comparativas y los resultados de las APIs están pendientes de la ronda con etiquetas revisadas y credenciales.
+La corrida completa mide precision@5, recall@5, hit rate, groundedness por afirmación y rechazo correcto. Con 27 preguntas y hasta tres llamadas por pregunta y estrategia, el máximo teórico es de 162 llamadas para dos estrategias y 243 para tres. El presupuesto se elige al ejecutar. El reporte detallado queda en `runs/<run_id>/eval.json` e informa cobertura, errores y casos sin afirmaciones evaluables. Quedan pendientes las métricas definitivas con todas las etiquetas revisadas y la evaluación de las respuestas con generador y juez.
 
 Las pruebas locales de contratos se ejecutan con `PYTHONPATH=src python -m unittest discover -s tests -v`. Las pruebas de los adaptadores usan respuestas controladas.
 

@@ -12,19 +12,22 @@ from nubbix_assist.llm.service import CallBudget
 from nubbix_assist.query.service import answer_retrieval
 from nubbix_assist.configuration.loader import load_config
 from nubbix_assist.retrieval.service import Retriever
+from .contracts.golden import reviewed_for
 from .groundedness.judge import judge
 from .metrics import retrieval_metrics, summarize
 
 
 def evaluate(root, builds, dataset, records, *, retrieval_only, max_calls):
-    """Evalúa los índices de `builds` con los registros revisados de `dataset` recibidos en `records`.
+    """Evalúa los índices de `builds` con los registros de `dataset` recibidos en `records`.
 
     Con `retrieval_only` mide la búsqueda local. La evaluación completa comparte
     `max_calls` entre generación y juez. Devuelve el informe por estrategia y
     lo guarda en `runs/` bajo `root`.
     """
     budget = CallBudget(max_calls)
+    reviewed = sum(reviewed_for(row, builds) for row in records)
     config = {"max_calls": max_calls, "mode": "retrieval" if retrieval_only else "full",
+              "label_review": {"reviewed": reviewed, "pending": len(records) - reviewed},
               "config_sha256": file_digest(root / "config.yaml"), "dataset_sha256": file_digest(dataset)}
     if not retrieval_only:
         generator = language_model(root, "GENERATOR", budget)
@@ -45,7 +48,8 @@ def evaluate(root, builds, dataset, records, *, retrieval_only, max_calls):
         rows = []
         for row in records:
             expected = row["expected_chunks"][manifest.strategy_fingerprint]
-            entry = {"question_id": row["question_id"], "expected_chunks": expected}
+            entry = {"question_id": row["question_id"], "expected_chunks": expected,
+                     "labels_reviewed": reviewed_for(row, [build])}
             rows.append(entry)
             try:
                 trace = retriever.retrieve(row["question"])

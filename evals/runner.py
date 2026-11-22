@@ -17,19 +17,25 @@ def main(root: Path):
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--check-dataset", action="store_true", help="Verificar las etiquetas y contar los borradores.")
     mode.add_argument("--retrieve-only", action="store_true", help="Medir recuperación sin usar las APIs.")
+    mode.add_argument("--preliminary-retrieval", action="store_true",
+                      help="Medir recuperación local incluyendo las etiquetas en borrador.")
     parser.add_argument("--max-calls", type=int, default=0, help="Presupuesto total de llamadas de generación y juez.")
     args = parser.parse_args()
     try:
         builds = [load_build(root, name) for name in args.builds]
         dataset = root / args.dataset
-        rows = load_golden(dataset, root, builds, require_review=not args.check_dataset)
+        require_review = not (args.check_dataset or args.preliminary_retrieval)
+        rows = load_golden(dataset, root, builds, require_review=require_review)
         if args.check_dataset:
             print(json.dumps({"questions": len(rows), "draft": sum(not reviewed_for(r, builds) for r in rows)}))
             return
-        if not args.retrieve_only and args.max_calls < 1:
+        retrieval_only = args.retrieve_only or args.preliminary_retrieval
+        if not retrieval_only and args.max_calls < 1:
             parser.error("La evaluación completa requiere un --max-calls positivo.")
-        report = evaluate(root, builds, dataset, rows, retrieval_only=args.retrieve_only, max_calls=args.max_calls)
+        report = evaluate(root, builds, dataset, rows, retrieval_only=retrieval_only,
+                          max_calls=0 if retrieval_only else args.max_calls)
         print(json.dumps({"run_id": report["run_id"], "calls": report["calls_used"],
+                          "label_review": report["settings"]["label_review"],
                           "strategies": {k: v["summary"] for k, v in report["strategies"].items()}}, indent=2))
     except (ValueError, OSError, RuntimeError, KeyError) as error:
         parser.exit(1, f"{error}\n")

@@ -108,7 +108,9 @@ El caso de uso de respuesta devuelve internamente la respuesta pública, el resu
 
 La evidencia permanece independiente de los chunks. Los IDs se revisan por estrategia; una simple intersección de spans no basta. Se etiquetan alternativas relevantes sin adaptar el golden al resultado del buscador.
 
-El runner exige al menos 25 preguntas revisadas, IDs únicos y etiquetas existentes en cada build elegido. Para medir una pregunta se requiere `labeling_status=reviewed` y aprobación para cada estrategia seleccionada. En un registro revisado sin `reviewed_strategies`, la aprobación abarca las estrategias de `expected_chunks`. Al añadir una estrategia, se enumeran las huellas ya aprobadas antes de proponer sus nuevas etiquetas. Los casos respondibles tienen evidencia e IDs esperados por estrategia.
+El runner exige al menos 25 preguntas, IDs únicos y etiquetas existentes en cada build elegido. Para la evaluación definitiva se requiere `labeling_status=reviewed` y aprobación para cada estrategia seleccionada. En un registro revisado sin `reviewed_strategies`, la aprobación abarca las estrategias de `expected_chunks`. Al añadir una estrategia, se enumeran las huellas ya aprobadas antes de proponer sus nuevas etiquetas. Los casos respondibles tienen evidencia e IDs esperados por estrategia.
+
+El modo `--preliminary-retrieval` permite medir la búsqueda local con etiquetas en borrador. Conserva las validaciones de corpus y referencias y registra cuántas preguntas están revisadas para todas las estrategias elegidas. Cada caso informa el estado de su etiqueta para ese índice.
 
 Cada resultado conserva IDs recuperados/esperados, precision@k, recall@k, hit, respuesta, citas, tiempos, validaciones y estado del juez.
 
