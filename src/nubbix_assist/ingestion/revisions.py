@@ -3,6 +3,7 @@ import errno
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 from tempfile import TemporaryDirectory
 
 
@@ -39,8 +40,10 @@ def register_version(root: Path, source: Path, edited: Path, version: str) -> Pa
         raise ValueError(f"{source}: elegí un documento del corpus.")
     if sha256((root / source).read_bytes()).hexdigest() != expected:
         raise ValueError(f"Guardá una copia de tus cambios, restaurá {source} y pasá la copia con --file.")
-    if not version.strip() or version != version.strip() or not version.isprintable() or version == "1":
-        raise ValueError("Elegí una etiqueta nueva, sin espacios en los extremos. «1» identifica el original.")
+    if not re.fullmatch(r"[0-9]+(?:\.[0-9]+)*", version):
+        raise ValueError("Usá una versión numérica, por ejemplo 2, 1.10 o 3.4.2.")
+    if version == "1":
+        raise ValueError("La versión 1 está reservada para el documento original.")
     raw = edited.read_bytes()
     document = parse_markdown(source, raw, version)
     validate_chunks(document, chunk_by_headings(document))

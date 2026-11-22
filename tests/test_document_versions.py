@@ -25,7 +25,7 @@ class DocumentVersionTests(TestCase):
 
     def test_manual_labels_retries_and_historical_citations(self):
         original = inspect_heading_document(self.source, project_root=self.root)[0]
-        labels = ["1.10", "1.2", "Versión N"]
+        labels = ["1.1", "1.10", "1.2", "3.4.2", "12"]
         ids = set()
         for label in labels:
             entry = register_version(self.root, self.source, self.edited, label)
@@ -45,10 +45,16 @@ class DocumentVersionTests(TestCase):
         with self.assertRaisesRegex(ValueError, "desconocida"):
             inspect_heading_document(self.source, project_root=self.root, version="4")
 
+    def test_new_versions_require_numeric_components(self):
+        for label in ("Versión N", "1.N", "1..2", ".2", "2.", ""):
+            with self.subTest(label=label), self.assertRaisesRegex(ValueError, "versión numérica"):
+                register_version(self.root, self.source, self.edited, label)
+        self.assertFalse((self.root / "data/revisions").exists())
+
     def test_concurrent_registrations_keep_both_labels_and_detect_tampering(self):
         with ThreadPoolExecutor(max_workers=2) as pool:
             entries = list(pool.map(lambda label: register_version(self.root, self.source, self.edited, label),
-                                    ["2", "Edición mayo"]))
+                                    ["2", "2.1"]))
         self.assertEqual(len(set(entries)), 2)
         (entries[0] / "document.md").write_text("# Manual\n## Otro\nCambio.", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "cambió en disco"):

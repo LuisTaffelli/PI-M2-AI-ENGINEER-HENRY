@@ -16,7 +16,7 @@ Documento conserva la ruta lógica `source`, el título, la etiqueta editorial `
 |---|---|
 | chunk_id | ID determinista y diferente entre estrategias |
 | source, source_sha256 | Documento y versión exacta |
-| version | Etiqueta de texto elegida por quien publica la revisión. Los originales de Henry corresponden a `1`. |
+| version | Número de versión elegido por quien publica la revisión, guardado como texto para conservar valores como `1.10`. Los originales de Henry corresponden a `1`. |
 | strategy, strategy_fingerprint | Regla/versionado y huella de parámetros |
 | start_char, end_char | Intervalo del original, inicio incluido y fin excluido |
 | section_paths | Secciones alcanzadas; pueden ser varias en ventanas fijas |

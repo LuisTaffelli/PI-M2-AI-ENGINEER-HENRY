@@ -19,7 +19,7 @@ Cada índice vive en `data/indexes/<build_id>/` con su catálogo de fragmentos, 
 
 ## Registrar una versión del documento
 
-Los tres documentos originales de Henry tienen la versión `1`. Para actualizar uno, editá una copia del Markdown y registrala con la etiqueta que elijas. El siguiente ejemplo usa `1.2` para una copia del manual de IT.
+Los tres documentos originales de Henry tienen la versión `1`. Para actualizar uno, editá una copia del Markdown y elegí su número de versión. El siguiente ejemplo usa `1.2` para una copia del manual de IT.
 
 ```sh
 python ingest/run.py add-version data/corpus/it_manual.md --version "1.2" --file /ruta/al/manual-editado.md
@@ -27,7 +27,7 @@ python ingest/run.py inspect data/corpus/it_manual.md --version "1.2"
 python ingest/run.py build --strategy headings_v1
 ```
 
-`version` es texto. Podés pasar `1.10`, `2` o `"Versión N"`. Cada documento tiene su propio historial. La última revisión registrada es la que toma la siguiente ingesta. Repetí el último comando para las estrategias que uses y consultá el identificador del índice recién construido.
+`version` admite números enteros o secuencias de números separados por puntos, como `2`, `1.10` o `3.4.2`. Se guarda como texto para distinguir `1.10` de `1.1`. Cada documento tiene su propio historial. La siguiente ingesta toma la última revisión registrada. Repetí el último comando para las estrategias que uses y consultá el identificador del índice recién construido.
 
 El registro guarda la copia y su hash en `data/revisions/`. Incluí esa carpeta en Git para compartir las revisiones. Repetir la misma etiqueta con el mismo archivo devuelve la revisión existente. Para publicar otro contenido hace falta otra etiqueta.
 
