@@ -28,7 +28,11 @@ export PYTHONPATH=src
 python -m nubbix_assist.cli.query --build "$BUILD_H2" --retrieve-only "¿Qué cubre el crédito de capacitación?"
 ```
 
-Para obtener la respuesta redactada, configurá el modelo y la clave de OpenAI o Gemini en `.env` según la guía y repetí la consulta sin `--retrieve-only`. La salida es JSON. En una respuesta con evidencia, cada elemento de `chunks_related` identifica el fragmento, su documento, su texto y su puntaje. Este es el formato previsto para una pregunta fuera del corpus. [Configuración de la API y consulta completa](docs/referencias/consulta.md#generar-una-respuesta)
+Para obtener la respuesta redactada, configurá el modelo y la clave en `.env` y repetí la consulta sin `--retrieve-only`. En el piloto de capacitación, el asistente citó a RR. HH. para el crédito anual de USD 500 y a Finanzas para la carga de la factura en ExpenseHub dentro de los 30 días de la compra. Cada entrada de `chunks_related` incluye el ID, el documento, el texto citado y su puntaje de recuperación. [Respuesta JSON real con ambas citas](evals/resultados/2026-11-22-ejemplo-q09.json) · [Comando del ejemplo](docs/referencias/consulta.md#generar-una-respuesta)
+
+### Bonus de rechazo honesto
+
+Ambas estrategias devolvieron este JSON para la única pregunta del golden que el corpus deja sin respuesta (`q27`).
 
 ```json
 {
@@ -48,6 +52,15 @@ Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 pregunt
 | Ventanas de 80 palabras con 20 de solapamiento | 24 | 23,85 % | 96,15 % | 22/26 |
 | Las mismas ventanas dentro de cada sección | 21 | 21,54 % | 100 % | 21/26 |
 
-Con las 27 preguntas y sus etiquetas revisadas, **elegimos el corte por secciones para este corpus**. Recuperó toda la evidencia etiquetada, conservó las políticas completas y ubicó un fragmento relevante en primer lugar en 23 de 26 consultas respondibles. El híbrido también recuperó toda la evidencia y permite acotar el tamaño de las citas cuando una sección es extensa. Las ventanas corridas perdieron el pasaje sobre renovación de notebooks. Queda pendiente evaluar las respuestas del generador y el respaldo de sus citas con el juez. [Resultados por pregunta](evals/resultados/2026-11-22-retrieval-golden-revisado.csv) · [Comparación de cortes](docs/referencias/chunking.md) · [Cómo reproducir la evaluación](docs/referencias/evaluacion.md)
+**Elegimos el corte por secciones para este corpus.** Cuando se preguntó cada cuánto se reemplazan las notebooks, recuperó la política y el asistente respondió «cada 3 años». Con ventanas de 80 palabras, el pasaje quedó fuera de los cinco primeros y el asistente rechazó una pregunta que tenía respuesta. El híbrido también recuperó toda la evidencia en la prueba de búsqueda. [Resultados por pregunta](evals/resultados/2026-11-22-retrieval-golden-revisado.csv) · [Comparación de cortes](docs/referencias/chunking.md)
+
+## Evaluación de las respuestas
+
+| Corte | Preguntas respondibles contestadas | Afirmaciones respaldadas según el juez | Rechazo correcto fuera de alcance |
+|---|---:|---:|---:|
+| Secciones H2 | 26/26 | 36/36 | 1/1 |
+| Ventanas de 80 palabras | 25/26 | 34/34 | 1/1 |
+
+Evaluamos las mismas 27 preguntas con `gpt-6-luna` como generador y `gemini-3.5-flash-lite` como juez. Los rechazos carecen de afirmaciones verificables y se cuentan por separado. [Respuestas y veredictos por pregunta](evals/resultados/2026-11-22-generacion-golden-revisado.csv) · [Método y reproducción](docs/referencias/evaluacion.md)
 
 El diseño del sistema, las decisiones y la asistencia recibida están documentados en la [arquitectura](docs/ARQUITECTURA.md), el [registro de decisiones](docs/adr/README.md) y el [registro de uso de IA](docs/USO_IA.md).

@@ -1,0 +1,18 @@
+{
+  "user_question": "¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?",
+  "system_answer": "El crédito de capacitación cubre hasta USD 500 anuales reembolsables para cursos, certificaciones y libros de tecnología [06414b0dec1a51f4c3bff26eee27c457c87542144bf0b8620e85888a4e4ca829]. La factura del curso se rinde cargándola en ExpenseHub dentro de los 30 días posteriores a la compra [dc41ecef7d5ddb653f269704c23c2b44b2cc14cfa7749a5ec7095b5341434e9d].",
+  "chunks_related": [
+    {
+      "chunk_id": "06414b0dec1a51f4c3bff26eee27c457c87542144bf0b8620e85888a4e4ca829",
+      "source": "data/corpus/hr_policies.md",
+      "content": "Políticas de Recursos Humanos - Nubbix\nBeneficios\n\n- Medicina prepaga: Cubierta al 100% para el empleado y 50% para grupo familiar directo.\n- Crédito de capacitación: USD 500 anuales reembolsables para cursos, certificaciones y libros de tecnología. La rendición del gasto se gestiona con el equipo de Finance.",
+      "score": 0.03225806451612903
+    },
+    {
+      "chunk_id": "dc41ecef7d5ddb653f269704c23c2b44b2cc14cfa7749a5ec7095b5341434e9d",
+      "source": "data/corpus/finance_processes.md",
+      "content": "Procesos Financieros y Reintegros - Nubbix\nPresupuesto de Capacitación y Reembolsos Educativos\n\nEl crédito de capacitación otorgado por People (USD 500 anuales) se rinde cargando la factura del curso o certificación en ExpenseHub, dentro de los 30 días posteriores a la compra.\nLos reembolsos educativos no requieren aprobación del VP si el monto no supera el crédito anual asignado; superado ese monto, se aplica el proceso estándar de Compras de Insumos.\nNo se reembolsan cursos que no estén relacionados con la función técnica o profesional del colaborador.\n\n",
+      "score": 0.03278688524590164
+    }
+  ]
+}

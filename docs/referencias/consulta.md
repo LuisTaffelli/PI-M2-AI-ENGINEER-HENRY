@@ -23,12 +23,14 @@ Copiá `.env.example` a `.env`. En `NUBBIX_GENERATOR_PROVIDER` elegí `openai` o
 
 ```sh
 export PYTHONPATH=src
-python -m nubbix_assist.cli.query --build "$BUILD_H2" "¿Qué cubre el crédito de capacitación?"
+python -m nubbix_assist.cli.query --build "$BUILD_H2" "¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?"
 ```
 
 El generador recibe la pregunta y los fragmentos con sus IDs. El prompt le pide que base cada afirmación en la evidencia y cite su ID junto al texto. Al construir el JSON público, la aplicación recupera del catálogo el origen y el contenido de cada cita y adjunta el puntaje RRF de la búsqueda. Cuando falta evidencia, el prompt pide el rechazo documentado en el README y una lista de citas vacía. [Prompt de generación](../../prompts/generation.yaml) · [Contrato de respuesta](../CONTRATOS.md)
 
 La traza en `runs/<run_id>/query.json` conserva los rankings, el contexto, la huella del prompt y, por intento, el proveedor, el modelo y el uso que informe la API. Se permiten hasta dos intentos con un máximo predeterminado de 48 000 bytes de entrada y hasta 2048 tokens de salida por llamada. [Configuración de límites](../../config.yaml)
+
+El 22 de noviembre de 2026, `gpt-6-luna` respondió esa pregunta en el primer intento (1.010 tokens de entrada y 302 de salida). `gemini-3.5-flash-lite` encontró dos afirmaciones y marcó ambas como respaldadas. Los dos pasajes citados coinciden con los etiquetados en el golden y se cotejaron con sus documentos originales. [Respuesta JSON del piloto](../../evals/resultados/2026-11-22-ejemplo-q09.json) · [Beneficios de RR. HH.](../../data/corpus/hr_policies.md#beneficios) · [Rendición en Finanzas](../../data/corpus/finance_processes.md#presupuesto-de-capacitación-y-reembolsos-educativos)
 
 ## Dónde está el código
 
