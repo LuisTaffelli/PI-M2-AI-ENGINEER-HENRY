@@ -109,3 +109,5 @@ Luis aprobó las etiquetas de la pregunta de capacitación para H2 y ventanas co
 ## 22/11/2026 · Cotejo conjunto del dataset
 
 Luis aprobó las preguntas 09, 11 y 18 a 26 para las tres estrategias. Al pedir que el cotejo restante se hiciera en una sola tanda, Codex contrastó las otras 16 preguntas con el corpus y los catálogos de fragmentos. Precisó los días consecutivos en la 06 y añadió una segunda ventana que conserva la regla de contraseñas en la 13. Se repitió la medición preliminar local con esas correcciones. La [tabla de revisión](referencias/revision-golden.md) reúne la evidencia de los casos que quedaban pendientes de aprobación humana.
+
+Luis leyó la tabla y aprobó los 16 casos restantes. Codex registró la aprobación en el dataset y corrió la evaluación local con las 27 preguntas revisadas. La comparación de secciones e híbrido se basa en los fragmentos y rankings de esa corrida. [Resultados de recuperación](referencias/chunking.md#secciones-e-híbrido-con-el-dataset-aprobado)

@@ -42,12 +42,12 @@ Para obtener la respuesta redactada, configurá el modelo y la clave de OpenAI o
 
 Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 preguntas de referencia con cada índice. La tabla promedia las 26 que tienen evidencia documental y mide qué fragmentos aparecieron entre los primeros cinco.
 
-| Estrategia | Fragmentos | Precisión@5 | Recall@5 |
-|---|---:|---:|---:|
-| Una sección por encabezado H2 | 18 | 21,54 % | 100 % |
-| Ventanas de 80 palabras con 20 de solapamiento | 24 | 23,85 % | 96,15 % |
-| Las mismas ventanas dentro de cada sección | 21 | 21,54 % | 100 % |
+| Estrategia | Fragmentos | Precisión@5 | Recall@5 | Primer resultado relevante |
+|---|---:|---:|---:|---:|
+| Una sección por encabezado H2 | 18 | 21,54 % | 100 % | 23/26 |
+| Ventanas de 80 palabras con 20 de solapamiento | 24 | 23,85 % | 96,15 % | 22/26 |
+| Las mismas ventanas dentro de cada sección | 21 | 21,54 % | 100 % | 21/26 |
 
-Con las etiquetas actuales, los cortes por sección y el híbrido recuperaron toda la evidencia esperada. Las ventanas corridas perdieron el pasaje sobre renovación de notebooks. Conservamos 80 palabras para el híbrido porque con 160 todas las secciones caben enteras. **Los resultados son preliminares.** En la corrida con las etiquetas corregidas, 11 preguntas tenían revisión humana para las tres estrategias y 16 estaban pendientes. La decisión final y la evaluación de respuestas con generador y juez quedan pendientes. [Experimentos y resultados por pregunta](docs/referencias/chunking.md) · [Cómo reproducir la evaluación](docs/referencias/evaluacion.md)
+Con las 27 preguntas y sus etiquetas revisadas, **recomendamos el corte por secciones para este corpus**. Recuperó toda la evidencia etiquetada, conservó las políticas completas y ubicó un fragmento relevante en primer lugar en 23 de 26 consultas respondibles. El híbrido también recuperó toda la evidencia y permite acotar el tamaño de las citas cuando una sección es extensa. Las ventanas corridas perdieron el pasaje sobre renovación de notebooks. Queda pendiente evaluar las respuestas del generador y el respaldo de sus citas con el juez. [Resultados por pregunta](evals/resultados/2026-11-22-retrieval-golden-revisado.csv) · [Comparación de cortes](docs/referencias/chunking.md) · [Cómo reproducir la evaluación](docs/referencias/evaluacion.md)
 
 El diseño del sistema, las decisiones y la asistencia recibida están documentados en la [arquitectura](docs/ARQUITECTURA.md), el [registro de decisiones](docs/adr/README.md) y el [registro de uso de IA](docs/USO_IA.md).

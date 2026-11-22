@@ -1,6 +1,6 @@
-# Revisión de las 16 preguntas pendientes
+# Revisión de las últimas 16 preguntas
 
-Cada fila reúne la respuesta propuesta y los fragmentos que la respaldan. Los números son las posiciones de los fragmentos dentro del documento enlazado, empezando en 1. Cuando figuran dos en una columna, cualquiera de los dos contiene la respuesta completa. Los identificadores íntegros están en el [dataset](../../evals/dataset.jsonl).
+El 22/11/2026 Luis aprobó estas 16 preguntas y sus etiquetas para las tres estrategias. Con ellas se completó la revisión de las 27 preguntas. Cada fila reúne la respuesta y los fragmentos que la respaldan. Los números son las posiciones de los fragmentos dentro del documento enlazado, empezando en 1. Cuando figuran dos en una columna, cualquiera de los dos contiene la respuesta completa. Los identificadores íntegros están en el [dataset](../../evals/dataset.jsonl).
 
 | Pregunta | Respuesta y fuente | H2 | Ventana 80/20 | Ventana por H2 |
 |---|---|---:|---:|---:|

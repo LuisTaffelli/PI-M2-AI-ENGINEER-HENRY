@@ -12,6 +12,14 @@ Las tres estrategias trabajan sobre los mismos documentos y usan el mismo modelo
 
 El híbrido reinicia el solapamiento al cambiar de sección y repite el encabezado en el texto indexado. En la pregunta sobre capacitación (`q09`), tanto H2 como el híbrido ubicaron el fragmento de Finanzas primero y el de RR. HH. segundo. La primera ventana corrida recuperada contenía la política de Finanzas junto a texto sobre el cobro de haberes.
 
+## Secciones e híbrido con el dataset aprobado
+
+En el corte por secciones, todo el cuerpo bajo un H2 se indexa y se cita junto. El híbrido conserva ese encabezado en cada ventana y divide el cuerpo al superar 80 palabras, con 20 compartidas entre ventanas consecutivas. De las 18 secciones del corpus, solo tres superan el umbral. Con políticas breves, el corte por H2 evita duplicar parte del texto. En secciones extensas, las ventanas acotan el pasaje que puede recuperar la consulta, aunque un corte también puede separar una condición de la regla que la explica.
+
+La pregunta sobre días de examen (`q02`) ilustra las dos caras del solapamiento. H2 recuperó primero las 84 palabras de «Licencias y Vacaciones». El híbrido recuperó primero una ventana de 24 palabras con ambos límites (2 días por examen y 10 al año), y en tercer lugar otra ventana de esa misma sección. El pasaje más específico facilita verificar la respuesta, aunque dos de los cinco puestos del contexto corresponden a la misma política. [Política de licencias](../../data/corpus/hr_policies.md#licencias-y-vacaciones)
+
+La corrida de recuperación con las 27 etiquetas revisadas colocó evidencia relevante en primer lugar para 23 de las 26 preguntas respondibles con H2 y para 21 con el híbrido. Los dos alcanzaron 21,54 % de precisión@5 y 100 % de recall@5. Se recomienda H2 para este corpus por el orden de los resultados, la integridad de las políticas y sus 18 fragmentos frente a los 21 del híbrido. La traza local es `runs/b399821329934b418a95671c814f623b/eval.json`. El CSV incluye la posición del primer fragmento relevante dentro de los cinco recuperados. [Resultados de recuperación por pregunta](../../evals/resultados/2026-11-22-retrieval-golden-revisado.csv)
+
 ## Comparación preliminar de las 27 preguntas
 
 El 22/11/2026 se realizaron 81 búsquedas locales con `top_k=5`. Una pregunta (`q09`) tenía las etiquetas revisadas para las tres estrategias. Las 26 restantes conservaban sus etiquetas en borrador. El promedio de precisión y recall incluye las 26 preguntas respondibles, y el detalle por pregunta está en el CSV en escala de 0 a 1. Las celdas de `q27`, sobre guardería, están vacías porque carece de fragmentos relevantes. La traza local de esta medición es `runs/2765b989f4bd4b56a7a10f42dd1fe8c2/eval.json`. [Resultados por pregunta de la primera corrida](../../evals/resultados/2026-11-22-retrieval-preliminar.csv)

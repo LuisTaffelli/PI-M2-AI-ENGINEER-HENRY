@@ -1,0 +1,28 @@
+pregunta_id,pregunta,revision_etiquetas,respondible,headings_v1_precision_at_5,headings_v1_recall_at_5,headings_v1_primera_posicion_relevante_en_top5,words_v1_precision_at_5,words_v1_recall_at_5,words_v1_primera_posicion_relevante_en_top5,section_words_v1_precision_at_5,section_words_v1_recall_at_5,section_words_v1_primera_posicion_relevante_en_top5
+q01,¿Cuántos días corridos tengo por matrimonio?,revisada,sí,0.2,1,1,0.4,1,1,0.2,1,1
+q02,¿Cuántos días por examen puedo usar y cuál es el tope anual?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q03,"Si se suma un hijo a mi familia por adopción y soy el progenitor no gestante, ¿cuánto dura la licencia?",revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q04,¿Cuándo debo dejar cargado mi pedido de vacaciones?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q05,¿Dónde se refleja el pago para cubrir internet y materiales de trabajo en casa?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,2
+q06,"Si voy a trabajar 16 días consecutivos desde fuera de mi país de residencia, ¿quién tiene que autorizarlo?",revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q07,Me ausenté por enfermedad cuatro días. ¿Qué documento tengo que cargar y en qué plazo?,revisada,sí,0.2,1,1,0.2,1,2,0.2,1,1
+q08,¿Cuánto de la prepaga del grupo familiar directo cubre Nubbix?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,revisada,sí,0.4,1,1,0.6,1,1,0.4,1,1
+q10,¿Quiénes autorizan un acceso de Producción?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q11,¿Cada cuánto reemplazan las notebooks por antigüedad?,revisada,sí,0.2,1,2,0,0,,0.2,1,1
+q12,¿Qué apps acepta Nubbix para MFA?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,2
+q13,¿Qué longitud y vigencia tienen las contraseñas de Google Workspace?,revisada,sí,0.2,1,1,0.4,1,1,0.2,1,1
+q14,"Si uso la red inalámbrica de un café, ¿qué conexión adicional necesito?",revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q15,¿Cada cuánto se respalda la base de producción y cuánto dura la copia?,revisada,sí,0.2,1,2,0.2,1,2,0.2,1,2
+q16,¿Cuánto puede demorar la primera respuesta a un incidente crítico frente a una consulta general?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q17,¿Cuándo se desactivan los accesos de alguien que deja la empresa?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",revisada,sí,0.4,1,1,0.4,1,1,0.4,1,2
+q19,¿Cuál es el tope diario para comidas corporativas en viaje?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q20,¿Qué pasa con un reintegro que ingreso en ExpenseHub después del día 25?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,2
+q21,¿Quién aprueba comprar una licencia de USD 750?,revisada,sí,0.2,1,1,0.4,1,1,0.2,1,1
+q22,"Para adquirir software por USD 3000, ¿cuántos presupuestos se comparan y quién aprueba?",revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q23,¿A partir de qué día encuentro mi recibo de sueldo digital y dónde?,revisada,sí,0.2,1,2,0.2,1,1,0.2,1,1
+q24,¿Una capacitación ajena a mi función profesional se reembolsa?,revisada,sí,0.2,1,1,0.2,1,2,0.2,1,1
+q25,¿Cuándo se liquida el bono por desempeño?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q26,¿Qué hace Finance si los datos de una factura no coinciden con la orden de compra?,revisada,sí,0.2,1,1,0.2,1,1,0.2,1,1
+q27,¿Cuántos cupos por mes tiene la guardería infantil de la sede central?,revisada,no,,,,,,,,,
