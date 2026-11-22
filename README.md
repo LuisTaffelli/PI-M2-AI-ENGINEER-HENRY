@@ -85,6 +85,15 @@ En `q11`, sobre renovación de notebooks, solo las ventanas corridas dejaron fue
 
 Los valores por pregunta se guardaron en el [CSV de la medición](evals/resultados/2026-11-22-retrieval-preliminar.csv), con precisión y recall en escala de 0 a 1 y celdas vacías para `q27`. La traza local corresponde a la corrida `2765b989f4bd4b56a7a10f42dd1fe8c2`.
 
+**Prueba del híbrido con 160 palabras.** Se repitieron las 27 consultas con ventanas de 80 y 160 palabras, solapamiento de 20 y el mismo buscador. La sección más extensa tiene 84 palabras. Con 160, los 18 fragmentos coinciden en sección y texto con H2, salvo espacios finales, por lo que se pudieron trasladar sus etiquetas antes de consultar el índice.
+
+| Ventana por sección | Fragmentos | Precisión@5 | Recall@5 | Primer resultado relevante |
+|---|---:|---:|---:|---:|
+| 80 palabras | 21 | 21,54 % | 100 % | 20/26 |
+| 160 palabras | 18 | 21,54 % | 100 % | 21/26 |
+
+Ambas variantes recuperaron toda la evidencia etiquetada en las 26 preguntas respondibles. Con 160, un fragmento relevante pasó al primer puesto en `q06`, `q12` y `q18`, y bajó al segundo en `q11` y `q26`. El híbrido de 80 sigue siendo la variante que permite estudiar el efecto de subdividir secciones en este corpus.
+
 ```sh
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --check-dataset
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --check-dataset
