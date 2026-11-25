@@ -2,17 +2,16 @@
 import argparse
 import csv
 import json
-from math import ceil
 from pathlib import Path
 import platform
-from statistics import mean, median
+from statistics import mean
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT)]
 
 from evals.contracts.golden import load_golden
-from evals.metrics import retrieval_metrics
+from evals.metrics import latency_summary, retrieval_metrics
 from nubbix_assist.artifacts.validators import file_digest
 from nubbix_assist.bootstrap import load_build, local_embeddings
 from nubbix_assist.configuration.loader import load_config
@@ -46,7 +45,7 @@ def measure(build, embeddings, reranker, config, golden, informal, repeats):
                         raise ValueError(f"Ranking inestable en {qid}, {mode}.")
                     ids[mode] = ranking
                     variants[mode] = list(trace.details.get("query_rankings", {}))[1:]
-                    latency[mode].append(trace.elapsed_ms)
+                    latency[mode].append({"retrieval_total": trace.elapsed_ms, **trace.timing_ms})
                     if mode == "rerank":
                         pool = [key for key, _ in trace.details["reranking"]["pool_rrf"]]
                 if "rerank" in modes and pool[:config["top_k"]] != ids["base"]:
@@ -56,14 +55,18 @@ def measure(build, embeddings, reranker, config, golden, informal, repeats):
                 rows.append(dict(strategy=build.manifest.strategy, dataset=dataset, mode=mode, id=qid,
                                  question=query, variants=variants[mode], selected=ids[mode],
                                  precision=metrics.get("precision_at_k"), recall=metrics.get("recall_at_k"),
-                                 hit1=int(ids[mode][0] in expected) if expected else None))
+                                 hit1=int(bool(ids[mode]) and ids[mode][0] in expected) if expected else None,
+                                 rr_at_k=metrics.get("rr_at_k")))
         for mode in modes:
             scored = [r for r in rows if r["dataset"] == dataset and r["mode"] == mode and r["recall"] is not None]
-            times = sorted(latency[mode])
+            timings = latency_summary(latency[mode])
+            total = timings["retrieval_total"]
             summaries.append(dict(strategy=build.manifest.strategy, dataset=dataset, mode=mode,
                                   scored=len(scored), precision=mean(r["precision"] for r in scored),
                                   recall=mean(r["recall"] for r in scored), hit1=sum(r["hit1"] for r in scored),
-                                  median_ms=round(median(times), 2), p95_ms=round(times[ceil(.95*len(times))-1], 2)))
+                                  mrr_at_k=mean(r["rr_at_k"] for r in scored),
+                                  median_ms=round(total["median_ms"], 2), p95_ms=round(total["p95_ms"], 2),
+                                  timings_ms=timings))
     return rows, summaries
 
 

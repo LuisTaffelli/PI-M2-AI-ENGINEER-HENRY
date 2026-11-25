@@ -26,6 +26,7 @@ def ingest_cli(project_root: Path) -> None:
     commands.add_parser("prepare-reranker", help="Descargar el cross-encoder opcional a la caché local.")
     build_parser = commands.add_parser("build", help="Construir y verificar un índice local.")
     build_parser.add_argument("--strategy", required=True, choices=STRATEGIES)
+    build_parser.add_argument("--timings", action="store_true", help="Añadir duraciones por etapa al JSON.")
     args = parser.parse_args()
 
     try:
@@ -41,7 +42,11 @@ def ingest_cli(project_root: Path) -> None:
             print(json.dumps({"snapshot": prepare_local_model(project_root)}, ensure_ascii=False))
             return
         if args.command == "build":
-            print(json.dumps(asdict(build(project_root, args.strategy)), ensure_ascii=False, indent=2))
+            timings = {}
+            result = asdict(build(project_root, args.strategy, timings=timings))
+            if args.timings:
+                result["timing_ms"] = timings
+            print(json.dumps(result, ensure_ascii=False, indent=2))
             return
         chunks = inspect_document(args.source, project_root=project_root, strategy=STRATEGIES[args.strategy],
                                   version=args.version)

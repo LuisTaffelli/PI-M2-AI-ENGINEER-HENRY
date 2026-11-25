@@ -1,0 +1,65 @@
+{
+  "muestras_por_corte": 1,
+  "strategies": {
+    "headings_v1": {
+      "fragmentos": 18,
+      "build_id": "headings_v1-2ba88754ad134b23a8947af51d8b9c91",
+      "versions": {
+        "chromadb": "1.5.9",
+        "sentence-transformers": "5.2.0",
+        "torch": "2.9.1+cpu",
+        "transformers": "4.57.6"
+      },
+      "timing_ms": {
+        "embedding_model_load": 2571.4796179672703,
+        "corpus_and_chunking": 0.9299400262534618,
+        "vector_index": 262.8971629892476,
+        "document_embeddings": 493.3541690115817,
+        "catalog_write": 0.2817969652824104,
+        "bm25_index": 0.9937150171026587,
+        "validation_and_publish": 3.567541018128395,
+        "ingestion_total": 3335.517643019557
+      }
+    },
+    "words_v1": {
+      "fragmentos": 24,
+      "build_id": "words_v1-3ecb9a186c3846ddbc69e42dc5109f8f",
+      "versions": {
+        "chromadb": "1.5.9",
+        "sentence-transformers": "5.2.0",
+        "torch": "2.9.1+cpu",
+        "transformers": "4.57.6"
+      },
+      "timing_ms": {
+        "embedding_model_load": 2521.0245499620214,
+        "corpus_and_chunking": 1.1527020251378417,
+        "vector_index": 260.5528950225562,
+        "document_embeddings": 723.6001759883948,
+        "catalog_write": 0.33303204691037536,
+        "bm25_index": 1.2246089754626155,
+        "validation_and_publish": 4.4388119713403285,
+        "ingestion_total": 3514.940614986699
+      }
+    },
+    "section_words_v1": {
+      "fragmentos": 21,
+      "build_id": "section_words_v1-3201fd8e1eac47979d39978afc940428",
+      "versions": {
+        "chromadb": "1.5.9",
+        "sentence-transformers": "5.2.0",
+        "torch": "2.9.1+cpu",
+        "transformers": "4.57.6"
+      },
+      "timing_ms": {
+        "embedding_model_load": 2528.8162700016983,
+        "corpus_and_chunking": 1.1140630231238902,
+        "vector_index": 265.43588103959337,
+        "document_embeddings": 569.765730004292,
+        "catalog_write": 0.49374595982953906,
+        "bm25_index": 1.6432750271633267,
+        "validation_and_publish": 4.282434994820505,
+        "ingestion_total": 3374.2891370202415
+      }
+    }
+  }
+}

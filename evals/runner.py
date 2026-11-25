@@ -35,6 +35,7 @@ def main(root: Path):
         report = evaluate(root, builds, dataset, rows, retrieval_only=retrieval_only,
                           max_calls=0 if retrieval_only else args.max_calls)
         print(json.dumps({"run_id": report["run_id"], "calls": report["calls_used"],
+                          "setup_ms": report["setup_ms"], "run_wall_ms": report["run_wall_ms"],
                           "label_review": report["settings"]["label_review"],
                           "strategies": {k: v["summary"] for k, v in report["strategies"].items()}}, indent=2))
     except (ValueError, OSError, RuntimeError, KeyError) as error:

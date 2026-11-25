@@ -1,0 +1,298 @@
+{
+  "run_id": "7d3144b19a354319973f1ea30118770c",
+  "calls_first_pass": 144,
+  "judge_retries": 15,
+  "calls_total": 159,
+  "budget": 216,
+  "setup_ms": {
+    "embedding_model_load": 2454.230083967559
+  },
+  "run_wall_ms": 617720.3282190021,
+  "generator": [
+    "openai",
+    "gpt-6-luna"
+  ],
+  "judge": [
+    "gemini",
+    "gemini-3.5-flash-lite"
+  ],
+  "dataset_sha256": "057001f1d40f1b47ead4dd536e8dca7453717ffe9237a553e9993a41180c746f",
+  "strategies": {
+    "headings_v1": {
+      "total": 36,
+      "retrieval_scored": 26,
+      "retrieval_errors": 0,
+      "retrieval_macro": {
+        "precision_at_k": 0.2153846153846154,
+        "recall_at_k": 1.0,
+        "hit": 1,
+        "mrr_at_k": 0.9423076923076923
+      },
+      "rankings_macro": {
+        "bm25": {
+          "5": {
+            "precision_at_k": 0.2076923076923077,
+            "recall_at_k": 0.9807692307692307,
+            "hit": 1,
+            "mrr_at_k": 0.8358974358974359,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.1076923076923077,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.8358974358974359,
+            "n": 26
+          }
+        },
+        "vector": {
+          "5": {
+            "precision_at_k": 0.2076923076923077,
+            "recall_at_k": 0.9615384615384616,
+            "hit": 0.9615384615384616,
+            "mrr_at_k": 0.875,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.1076923076923077,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.8804945054945055,
+            "n": 26
+          }
+        },
+        "rrf": {
+          "5": {
+            "precision_at_k": 0.2153846153846154,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.9423076923076923,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.1076923076923077,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.9423076923076923,
+            "n": 26
+          }
+        }
+      },
+      "timings_ms": {
+        "retrieval_total": {
+          "n": 36,
+          "median_ms": 11.799493513535708,
+          "p95_ms": 18.10516498517245
+        },
+        "query_embedding": {
+          "n": 36,
+          "median_ms": 10.49189650802873,
+          "p95_ms": 16.974666039459407
+        },
+        "bm25": {
+          "n": 36,
+          "median_ms": 0.061717990320175886,
+          "p95_ms": 0.0748689635656774
+        },
+        "vector_lookup": {
+          "n": 36,
+          "median_ms": 1.0376770223956555,
+          "p95_ms": 1.4378210180439055
+        },
+        "rrf": {
+          "n": 36,
+          "median_ms": 0.010107498383149505,
+          "p95_ms": 0.01380703179165721
+        },
+        "vector_with_embedding": {
+          "n": 36,
+          "median_ms": 11.690039973473176,
+          "p95_ms": 17.999007075559348
+        },
+        "generation": {
+          "n": 36,
+          "median_ms": 3973.807764996309,
+          "p95_ms": 6181.036808004137
+        },
+        "query_total": {
+          "n": 36,
+          "median_ms": 3986.6788139916025,
+          "p95_ms": 6194.327827019151
+        },
+        "groundedness_judge": {
+          "n": 36,
+          "median_ms": 3603.727752022678,
+          "p95_ms": 7319.720839965157
+        },
+        "eval_total": {
+          "n": 36,
+          "median_ms": 7553.6918489669915,
+          "p95_ms": 14866.111160023138
+        }
+      },
+      "generation_completed": 36,
+      "generation_errors": 0,
+      "judge_errors": 5,
+      "groundedness_scored": 24,
+      "groundedness_not_applicable": 7,
+      "groundedness_macro": 1.0,
+      "out_of_scope_expected": 10,
+      "out_of_scope_answered": 10,
+      "out_of_scope_correct": 10,
+      "out_of_scope_errors": 0,
+      "out_of_scope_not_run": 0,
+      "correct_refusal_rate": 1,
+      "final_judge_counts": {
+        "generated": 36,
+        "generation_errors": 0,
+        "judge_errors_first": 5,
+        "judge_recovered": 5,
+        "judge_completed": 36,
+        "answerable_nonrefused": 26
+      },
+      "final_claim_statuses": {
+        "supported": 36
+      },
+      "final_groundedness_mean": 1.0,
+      "final_groundedness_n": 26
+    },
+    "words_v1": {
+      "total": 36,
+      "retrieval_scored": 26,
+      "retrieval_errors": 0,
+      "retrieval_macro": {
+        "precision_at_k": 0.23846153846153847,
+        "recall_at_k": 0.9615384615384616,
+        "hit": 0.9615384615384616,
+        "mrr_at_k": 0.9038461538461539
+      },
+      "rankings_macro": {
+        "bm25": {
+          "5": {
+            "precision_at_k": 0.2230769230769231,
+            "recall_at_k": 0.9038461538461539,
+            "hit": 0.9230769230769231,
+            "mrr_at_k": 0.8397435897435898,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.11923076923076924,
+            "recall_at_k": 0.9615384615384616,
+            "hit": 0.9615384615384616,
+            "mrr_at_k": 0.8461538461538461,
+            "n": 26
+          }
+        },
+        "vector": {
+          "5": {
+            "precision_at_k": 0.24615384615384617,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.9358974358974359,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.12307692307692308,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.9358974358974359,
+            "n": 26
+          }
+        },
+        "rrf": {
+          "5": {
+            "precision_at_k": 0.23846153846153847,
+            "recall_at_k": 0.9615384615384616,
+            "hit": 0.9615384615384616,
+            "mrr_at_k": 0.9038461538461539,
+            "n": 26
+          },
+          "10": {
+            "precision_at_k": 0.12307692307692308,
+            "recall_at_k": 1.0,
+            "hit": 1,
+            "mrr_at_k": 0.9086538461538461,
+            "n": 26
+          }
+        }
+      },
+      "timings_ms": {
+        "retrieval_total": {
+          "n": 36,
+          "median_ms": 11.823591485153884,
+          "p95_ms": 16.350160993169993
+        },
+        "query_embedding": {
+          "n": 36,
+          "median_ms": 10.67214852082543,
+          "p95_ms": 15.530765987932682
+        },
+        "bm25": {
+          "n": 36,
+          "median_ms": 0.07640200783498585,
+          "p95_ms": 0.09307003347203135
+        },
+        "vector_lookup": {
+          "n": 36,
+          "median_ms": 0.8665500208735466,
+          "p95_ms": 1.3785139890387654
+        },
+        "rrf": {
+          "n": 36,
+          "median_ms": 0.010851974366232753,
+          "p95_ms": 0.015330035239458084
+        },
+        "vector_with_embedding": {
+          "n": 36,
+          "median_ms": 11.694429005729035,
+          "p95_ms": 16.22628897894174
+        },
+        "generation": {
+          "n": 36,
+          "median_ms": 4273.497689515352,
+          "p95_ms": 5648.840068955906
+        },
+        "query_total": {
+          "n": 36,
+          "median_ms": 4285.156136000296,
+          "p95_ms": 5659.685431921389
+        },
+        "groundedness_judge": {
+          "n": 36,
+          "median_ms": 3760.046637034975,
+          "p95_ms": 7067.357043037191
+        },
+        "eval_total": {
+          "n": 36,
+          "median_ms": 8247.596354020061,
+          "p95_ms": 12101.85817698948
+        }
+      },
+      "generation_completed": 36,
+      "generation_errors": 0,
+      "judge_errors": 7,
+      "groundedness_scored": 19,
+      "groundedness_not_applicable": 10,
+      "groundedness_macro": 1.0,
+      "out_of_scope_expected": 10,
+      "out_of_scope_answered": 10,
+      "out_of_scope_correct": 10,
+      "out_of_scope_errors": 0,
+      "out_of_scope_not_run": 0,
+      "correct_refusal_rate": 1,
+      "final_judge_counts": {
+        "generated": 36,
+        "generation_errors": 0,
+        "judge_errors_first": 7,
+        "judge_recovered": 7,
+        "judge_completed": 36,
+        "answerable_nonrefused": 25
+      },
+      "final_claim_statuses": {
+        "supported": 34
+      },
+      "final_groundedness_mean": 1.0,
+      "final_groundedness_n": 25
+    }
+  }
+}

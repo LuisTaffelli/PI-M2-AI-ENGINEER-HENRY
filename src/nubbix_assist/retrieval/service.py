@@ -3,6 +3,7 @@ from time import perf_counter
 from nubbix_assist.artifacts.repository import Build
 from nubbix_assist.embeddings.contracts.inputs import TextInput
 from nubbix_assist.lexical.search import search
+from nubbix_assist.timing import measure
 from .contracts.candidates import Retrieval, Selected
 from .rrf import fuse
 from .rewrite import QueryRewriter
@@ -26,41 +27,54 @@ class Retriever:
         if not question.strip():
             raise ValueError("La pregunta está vacía.")
         start = perf_counter()
+        timings = {}
         top_k = self.config["top_k"]
         allowed = {key for key, chunk in self.build.catalog.items() if source is None or chunk.source == source}
         limit = min(len(allowed), self.config["candidates"])
         queries = [question]
         if self.rewriter:
-            queries.extend(self.rewriter.variants(question))
+            with measure(timings, "rewrite"):
+                queries.extend(self.rewriter.variants(question))
         inputs = [TextInput(str(i), query) for i, query in enumerate(queries)]
-        encoded = self.embeddings.encode(inputs, "query") if limit else []
+        encoded = []
+        if limit:
+            with measure(timings, "query_embedding"):
+                encoded = self.embeddings.encode(inputs, "query")
         rankings = []
         constant = self.config["rrf_constant"]
         for index, query in enumerate(queries):
-            lexical = search(self.build.lexical, query, limit, allowed)
-            hits = self.build.vectors.search(encoded[index].vector, limit, source) if limit else []
+            with measure(timings, "bm25"):
+                lexical = search(self.build.lexical, query, limit, allowed)
+            hits = []
+            if limit:
+                with measure(timings, "vector_lookup"):
+                    hits = self.build.vectors.search(encoded[index].vector, limit, source)
             vectors = [(hit.id, hit.distance) for hit in hits]
             if any(key not in allowed for key, _ in vectors):
                 raise ValueError("Chroma devolvió un ID fuera del catálogo o filtro.")
             if index == 0:
                 original_vectors, original_lexical = vectors, lexical
             ranks = [[key for key, _ in branch] for branch in (lexical, vectors)]
-            rankings.append(fuse(ranks, constant, limit))
+            with measure(timings, "rrf"):
+                rankings.append(fuse(ranks, constant, limit))
         pool = rankings[0]
         details = {}
         if self.rewriter:
             query_ranks = [[key for key, _ in ranking] for ranking in rankings]
             details["query_rankings"] = dict(zip(queries, query_ranks, strict=True))
             if len(queries) > 1:
-                pool = fuse(query_ranks, constant, limit)
+                with measure(timings, "multi_query_fusion"):
+                    pool = fuse(query_ranks, constant, limit)
         if self.reranker and pool:
             chunks = [self.build.catalog[key] for key, _ in pool]
-            values = self.reranker.score(question, chunks)
-            scores = dict(zip((chunk.chunk_id for chunk in chunks), values, strict=True))
+            with measure(timings, "rerank"):
+                values = self.reranker.score(question, chunks)
+                scores = dict(zip((chunk.chunk_id for chunk in chunks), values, strict=True))
+                ranked = sorted(pool, key=lambda pair: scores[pair[0]], reverse=True)
             details["reranking"] = {"model": self.reranker.model_id, "revision": self.reranker.revision,
                                     "pool_rrf": pool, "scores": scores}
-            pool = sorted(pool, key=lambda pair: scores[pair[0]], reverse=True)
+            pool = ranked
         selected = [Selected(self.build.catalog[key], score) for key, score in pool[:top_k]]
         return Retrieval(question, self.build.manifest.build_id, {**self.config, "source": source},
                          original_vectors, original_lexical, selected, (perf_counter() - start) * 1000,
-                         ["Menos candidatos que top_k."] if len(selected) < top_k else [], details)
+                         ["Menos candidatos que top_k."] if len(selected) < top_k else [], details, timings)

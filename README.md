@@ -32,7 +32,7 @@ Para obtener la respuesta redactada, configurá el modelo y la clave en `.env` y
 
 ### Bonus de rechazo honesto
 
-Ambas estrategias devolvieron este JSON para la única pregunta del golden que el corpus deja sin respuesta (`q27`).
+En la evaluación del 22/11, ambas estrategias devolvieron este JSON para `q27`, el único caso sin respuesta de esa edición. El golden ampliado tiene **10 casos sin respuesta** (36 en total). En la nueva corrida real, H2 tuvo **10/10** rechazos correctos y ventanas **10/10**. [Evaluación y tiempos](docs/referencias/mediciones-rag.md#generación-juez-y-rechazo-honesto). [Casos y distractores](docs/referencias/revision-golden.md#ampliación-de-los-casos-sin-respuesta--25112026)
 
 ```json
 {
@@ -44,7 +44,7 @@ Ambas estrategias devolvieron este JSON para la única pregunta del golden que e
 
 ## Qué aprendimos del chunking
 
-Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 preguntas de referencia con cada índice. La tabla promedia las 26 que tienen evidencia documental y mide qué fragmentos aparecieron entre los primeros cinco.
+Comparamos tres maneras de dividir el mismo corpus sobre las 27 preguntas de la edición original. La ampliación conserva las 26 respondibles y no altera sus etiquetas. La tabla promedia las 26 que tienen evidencia documental y mide qué fragmentos aparecieron entre los primeros cinco.
 
 | Estrategia | Fragmentos | Precisión@5 | Recall@5 | Primer resultado relevante |
 |---|---:|---:|---:|---:|
@@ -56,15 +56,19 @@ Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 pregunt
 
 ## Qué aporta la búsqueda híbrida
 
-Con el corte H2 fijo, comparamos tres búsquedas sobre las mismas 26 preguntas respondibles. BM25 y el buscador vectorial devuelven hasta diez candidatos cada uno. La búsqueda híbrida fusiona ambos rankings con RRF. El recall@10 mide cuánta evidencia aparece entre los diez primeros de cada método. El recall@5 mide cuánta llega a los cinco puestos que usa el generador.
+Con el corte H2 fijo, comparamos tres búsquedas sobre las mismas 26 preguntas respondibles. BM25 y el buscador vectorial devuelven hasta diez candidatos cada uno. La búsqueda híbrida fusiona ambos rankings con RRF. El recall@10 mide cuánta evidencia aparece entre los diez primeros de cada método. El recall@5 mide cuánta llega a los cinco puestos que usa el generador. RR es el inverso de la posición de la primera evidencia pertinente (0 si no aparece dentro del corte); MRR promedia ese número entre las preguntas respondibles.
 
-| Búsqueda sobre secciones H2 | Precisión@5 | Recall@5 | Recall@10 |
-|---|---:|---:|---:|
-| BM25 | 20,77 % | 98,08 % | 100 % |
-| Vectorial (E5) | 20,77 % | 96,15 % | 100 % |
-| Híbrida (RRF) | 21,54 % | 100 % | 100 % |
+| Búsqueda sobre secciones H2 | Precisión@5 | Recall@5 | Recall@10 | MRR@5 | MRR@10 |
+|---|---:|---:|---:|---:|---:|
+| BM25 | 20,77 % | 98,08 % | 100 % | 0,836 | 0,836 |
+| Vectorial (E5) | 20,77 % | 96,15 % | 100 % | 0,875 | 0,880 |
+| Híbrida (RRF) | 21,54 % | 100 % | 100 % | 0,942 | 0,942 |
 
 En H2, los tres métodos encontraron toda la evidencia dentro de sus diez primeros resultados. La fusión también la conservó al quedarse con cinco. Por ejemplo, para «¿Qué apps acepta Nubbix para MFA?», BM25 y RRF ubicaron el pasaje en el primer puesto y el vectorial en el séptimo. El resultado cambió con las ventanas corridas de 80 palabras, donde el vectorial alcanzó 100 % de recall@5 y RRF obtuvo 96,15 %. [Comparación de los tres cortes y reproducción](docs/referencias/evaluacion.md#comparar-bm25-vectorial-y-rrf) · [Posiciones por pregunta](evals/resultados/2026-11-24-comparacion-buscadores.csv)
+
+## Tiempos por etapa
+
+La [medición del RAG por etapa](docs/referencias/mediciones-rag.md) desglosa ingesta, embeddings, BM25, Chroma, fusión y búsqueda total para los tres cortes. Incluye RR por pregunta, MRR por buscador y medianas y p95 de las consultas. Incluye además los tiempos de generación, del juez y de la consulta completa de la nueva corrida con APIs.
 
 ## Evaluación de las respuestas
 
@@ -73,7 +77,7 @@ En H2, los tres métodos encontraron toda la evidencia dentro de sus diez primer
 | Secciones H2 | 26/26 | 36/36 | 1/1 |
 | Ventanas de 80 palabras | 25/26 | 34/34 | 1/1 |
 
-Evaluamos las mismas 27 preguntas con `gpt-6-luna` como generador y `gemini-3.5-flash-lite` como juez. Los rechazos carecen de afirmaciones verificables y se cuentan por separado. [Respuestas y veredictos por pregunta](evals/resultados/2026-11-22-generacion-golden-revisado.csv) · [Método y reproducción](docs/referencias/evaluacion.md)
+En la corrida del 22/11 evaluamos las 27 preguntas originales con `gpt-6-luna` como generador y `gemini-3.5-flash-lite` como juez. Los rechazos carecen de afirmaciones verificables y se cuentan por separado. [Respuestas y veredictos por pregunta](evals/resultados/2026-11-22-generacion-golden-revisado.csv) · [Método y reproducción](docs/referencias/evaluacion.md)
 
 ## Extra credits
 

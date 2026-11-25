@@ -81,4 +81,4 @@ class RagContractTests(TestCase):
         fused = fuse([["b", "a"], ["a", "b"]], 60, 2)
         self.assertEqual([key for key, _ in fused], ["a", "b"])
         self.assertEqual(retrieval_metrics(["a"], ["a", "b"], 5),
-                         {"precision_at_k": 0.2, "recall_at_k": 0.5, "hit": 1})
+                         {"precision_at_k": 0.2, "recall_at_k": 0.5, "hit": 1, "rr_at_k": 1.0})

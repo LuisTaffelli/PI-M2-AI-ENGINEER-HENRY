@@ -19,3 +19,4 @@ class Retrieval:
     elapsed_ms: float
     warnings: list[str]
     details: dict = field(default_factory=dict)
+    timing_ms: dict[str, float] = field(default_factory=dict)

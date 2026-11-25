@@ -1,6 +1,6 @@
 # Extra credits de Nubbix Assist
 
-Los tres extras se pueden probar sobre los índices existentes. La CLI y la interfaz usan el mismo buscador. Los dos experimentos de recuperación se ejecutaron en CPU con cero llamadas a los proveedores de generación. [Consigna](../fuentes/consigna.md) · [Métricas y versiones](../../evals/resultados/extras-2026-11-22/resumen.json) · [Consultas, reformulaciones y rankings por caso](../../evals/resultados/extras-2026-11-22/preguntas.csv)
+Los tres extras se pueden probar sobre los índices existentes. Las tablas de abajo son históricas. La [corrida del golden ampliado](mediciones-rag.md#extras-reformulación-y-re-ranking) añade RR, MRR y tiempos por subetapa. La CLI y la interfaz usan el mismo buscador. Los dos experimentos de recuperación se ejecutaron en CPU con cero llamadas a los proveedores de generación. [Consigna](../fuentes/consigna.md) · [Métricas y versiones](../../evals/resultados/extras-2026-11-22/resumen.json) · [Consultas, reformulaciones y rankings por caso](../../evals/resultados/extras-2026-11-22/preguntas.csv)
 
 ## Re-ranking con cross-encoder
 
@@ -37,7 +37,7 @@ PYTHONPATH=src python -m nubbix_assist.cli.query --build "$BUILD_H2" --retrieve-
 python evals/extra_credits.py --builds "$BUILD_H2" "$BUILD_WORDS" --repeats 3 --threads 4
 ```
 
-El benchmark escribe `runs/extra-credits/resumen.json` y `preguntas.csv`. El promedio de precisión y recall pondera por igual las 26 preguntas respondibles. El caso de guardería se busca y se cronometra con los demás. Las latencias cubren toda la búsqueda local y excluyen carga del modelo y generación. Se midieron en un Intel Core i9-12900KF con cuatro hilos de PyTorch, modelos precargados, calentamiento inicial y tres pasadas de cada consulta alternando el orden de los modos. En la CLI se pueden combinar ambos flags. Las tablas aíslan cada cambio. [Preparar los índices](evaluacion.md#preparar-los-índices-y-las-etiquetas)
+El benchmark escribe `runs/extra-credits/resumen.json` y `preguntas.csv`. El promedio de precisión y recall pondera por igual las 26 preguntas respondibles. En estas tablas históricas se cronometró el caso de guardería junto con los demás. Con el golden ampliado, los 10 casos sin respuesta se buscan y se cronometran, pero quedan fuera de precisión, recall y MRR. Las latencias cubren toda la búsqueda local y excluyen carga del modelo y generación. Se midieron en un Intel Core i9-12900KF con cuatro hilos de PyTorch, modelos precargados, calentamiento inicial y tres pasadas de cada consulta alternando el orden de los modos. En la CLI se pueden combinar ambos flags. Las tablas aíslan cada cambio. [Preparar los índices](evaluacion.md#preparar-los-índices-y-las-etiquetas)
 
 ## Interfaz con citas navegables
 
@@ -48,7 +48,7 @@ python -m pip install -r requirements-ui.txt
 python -m streamlit run ui/app.py --server.address 127.0.0.1
 ```
 
-Abrí la dirección local que imprime Streamlit. **Ejemplos evaluados** reúne las 27 preguntas del golden. En **Respuesta guardada** podés buscar un tema y en **Versión** elegir la respuesta con secciones H2 o con ventanas de 80 palabras. Capacitación también incluye el piloto original. Las 55 respuestas se leen sin índices ni claves. Al pulsar una cita numerada se abre el pasaje y su sección. **Leer el documento completo** resalta ese intervalo en el Markdown original. El lector verifica el hash del archivo y sus offsets. La respuesta de guardería aparece con citas vacías.
+Abrí la dirección local que imprime Streamlit. **Ejemplos evaluados** reúne las 27 preguntas de la corrida original, no los casos de la nueva corrida, que están en el CSV de evaluación. En **Respuesta guardada** podés buscar un tema y en **Versión** elegir la respuesta con secciones H2 o con ventanas de 80 palabras. Capacitación también incluye el piloto original. Las 55 respuestas se leen sin índices ni claves. Al pulsar una cita numerada se abre el pasaje y su sección. **Leer el documento completo** resalta ese intervalo en el Markdown original. El lector verifica el hash del archivo y sus offsets. La respuesta de guardería aparece con citas vacías.
 
 En **Nueva consulta**, **Buscar pasajes** usa el índice local. **Generar respuesta** llama al generador configurado en el `.env` del servidor con un máximo de dos intentos. En **Opciones de búsqueda** se eligen el índice y los extras. Se verificaron los enlaces de RR. HH. y Finanzas, el rechazo y la navegación en Chromium con vistas de escritorio y móvil. El envío a generación se probó con el índice real y un transporte de prueba que devolvió la respuesta guardada del piloto. [Captura de la cita de Finanzas](citas-navegables.png)
 

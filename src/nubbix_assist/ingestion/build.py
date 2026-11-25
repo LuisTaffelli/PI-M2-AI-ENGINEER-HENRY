@@ -12,58 +12,67 @@ from nubbix_assist.artifacts.contracts.manifest import Manifest
 from nubbix_assist.artifacts.validators import corpus_digest, digest, file_digest, validate_build
 from nubbix_assist.embeddings.contracts.inputs import TextInput
 from nubbix_assist.lexical.index import BM25Index
+from nubbix_assist.timing import measure
 from nubbix_assist.vector_store.contracts.inputs import VectorRecord
 from nubbix_assist.vector_store.contracts.spec import IndexSpec
 from .service import inspect_document
 
 
-def build_index(root: Path, name: str, strategy, embeddings, open_vectors) -> Manifest:
+def build_index(root: Path, name: str, strategy, embeddings, open_vectors, *, timings=None) -> Manifest:
     """Indexa el corpus de `root` con la estrategia de corte `strategy`, identificada por `name`.
 
     Usa `embeddings` para codificar los fragmentos y `open_vectors` para crear y
     reabrir el índice. Devuelve el manifiesto después de verificar el índice en disco.
     """
+    timings = {} if timings is None else timings
     sources = {}
     source_versions = {}
     chunks = []
-    provenance = json.loads((root / "docs/fuentes/procedencia.json").read_text())["corpus"]["files"]
-    for item in sorted(provenance, key=lambda item: item["path"]):
-        source = item["path"]
-        batch = inspect_document(Path(source), project_root=root, strategy=strategy)
-        original_hash = batch[0].source_sha256 if batch[0].version == "1" else file_digest(root / source)
-        if original_hash != item["sha256"]:
-            raise ValueError(f"El original de {source} difiere de su procedencia registrada.")
-        sources[source] = batch[0].source_sha256
-        source_versions[source] = batch[0].version
-        chunks.extend(batch)
-    if not chunks:
-        raise ValueError("El corpus está vacío.")
-    ids = [chunk.chunk_id for chunk in chunks]
-    if len(ids) != len(set(ids)):
-        raise ValueError("El catálogo contiene IDs duplicados.")
+    with measure(timings, "corpus_and_chunking"):
+        provenance = json.loads((root / "docs/fuentes/procedencia.json").read_text())["corpus"]["files"]
+        for item in sorted(provenance, key=lambda item: item["path"]):
+            source = item["path"]
+            batch = inspect_document(Path(source), project_root=root, strategy=strategy)
+            original_hash = batch[0].source_sha256 if batch[0].version == "1" else file_digest(root / source)
+            if original_hash != item["sha256"]:
+                raise ValueError(f"El original de {source} difiere de su procedencia registrada.")
+            sources[source] = batch[0].source_sha256
+            source_versions[source] = batch[0].version
+            chunks.extend(batch)
+        if not chunks:
+            raise ValueError("El corpus está vacío.")
+        ids = [chunk.chunk_id for chunk in chunks]
+        if len(ids) != len(set(ids)):
+            raise ValueError("El catálogo contiene IDs duplicados.")
     build_id = f"{name}-{uuid4().hex}"
     directory = root / "data/indexes" / build_id
     directory.mkdir(parents=True, exist_ok=False)
     spec = IndexSpec(embeddings.spec.dimension, digest(asdict(embeddings.spec)))
-    vectors = open_vectors(directory / "chroma", spec, create=True)
+    with measure(timings, "vector_index"):
+        vectors = open_vectors(directory / "chroma", spec, create=True)
     for offset in range(0, len(chunks), 32):
         batch = chunks[offset:offset + 32]
-        outputs = embeddings.encode([TextInput(c.chunk_id, c.content) for c in batch], "document")
-        vectors.write([VectorRecord(c.chunk_id, out.vector, c.source, c.section_paths, name, c.version)
-                       for c, out in zip(batch, outputs, strict=True)])
-    write_catalog(directory / "chunks.jsonl", chunks)
-    lexical = BM25Index.build(chunks)
-    (directory / "bm25.json").write_text(json.dumps(asdict(lexical), ensure_ascii=False), encoding="utf-8")
+        with measure(timings, "document_embeddings"):
+            outputs = embeddings.encode([TextInput(c.chunk_id, c.content) for c in batch], "document")
+        with measure(timings, "vector_index"):
+            vectors.write([VectorRecord(c.chunk_id, out.vector, c.source, c.section_paths, name, c.version)
+                           for c, out in zip(batch, outputs, strict=True)])
+    with measure(timings, "catalog_write"):
+        write_catalog(directory / "chunks.jsonl", chunks)
+    with measure(timings, "bm25_index"):
+        lexical = BM25Index.build(chunks)
+        (directory / "bm25.json").write_text(json.dumps(asdict(lexical), ensure_ascii=False), encoding="utf-8")
     manifest = Manifest(
         2, build_id, datetime.now(timezone.utc).isoformat(), "ready", name, chunks[0].strategy_fingerprint,
         sources, corpus_digest(sources, source_versions), embeddings.spec, spec, len(ids), digest(sorted(ids)),
         {file: file_digest(directory / file) for file in ("chunks.jsonl", "bm25.json")},
         {package: version(package) for package in ("chromadb", "sentence-transformers", "torch", "transformers")},
         source_versions)
-    reopened = open_vectors(directory / "chroma", spec, create=False)
-    validate_build(manifest, read_catalog(directory / "chunks.jsonl"),
-                   BM25Index(**json.loads((directory / "bm25.json").read_text())), reopened)
-    temp = directory / "manifest.tmp"
-    temp.write_text(json.dumps(asdict(manifest), ensure_ascii=False, indent=2), encoding="utf-8")
-    temp.replace(directory / "manifest.json")
+    with measure(timings, "validation_and_publish"):
+        reopened = open_vectors(directory / "chroma", spec, create=False)
+        validate_build(manifest, read_catalog(directory / "chunks.jsonl"),
+                       BM25Index(**json.loads((directory / "bm25.json").read_text())), reopened)
+        temp = directory / "manifest.tmp"
+        temp.write_text(json.dumps(asdict(manifest), ensure_ascii=False, indent=2), encoding="utf-8")
+        temp.replace(directory / "manifest.json")
     return manifest

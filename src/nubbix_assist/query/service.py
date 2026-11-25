@@ -6,6 +6,7 @@ from uuid import uuid4
 from nubbix_assist.artifacts.validators import digest
 from nubbix_assist.generation.service import generate
 from .contracts.result import QueryResult
+from nubbix_assist.timing import measure
 
 
 def answer_retrieval(root: Path, retrieval, model, prompt: str) -> QueryResult:
@@ -18,12 +19,15 @@ def answer_retrieval(root: Path, retrieval, model, prompt: str) -> QueryResult:
     directory = root / "runs" / run_id
     directory.mkdir(parents=True)
     trace = {"run_id": run_id, "retrieval": asdict(retrieval), "prompt_sha256": digest(prompt), "attempts": []}
+    durations = trace["timing_ms"] = {"retrieval_total": retrieval.elapsed_ms}
     try:
-        answer = generate(retrieval, model, prompt, trace["attempts"])
+        with measure(durations, "generation"):
+            answer = generate(retrieval, model, prompt, trace["attempts"])
         trace["answer"] = asdict(answer)
         return QueryResult(run_id, answer, retrieval)
     except (ValueError, RuntimeError) as error:
         trace["error"] = str(error)
         raise
     finally:
+        durations["query_total"] = durations["retrieval_total"] + durations.get("generation", 0)
         (directory / "query.json").write_text(json.dumps(trace, ensure_ascii=False, indent=2), encoding="utf-8")

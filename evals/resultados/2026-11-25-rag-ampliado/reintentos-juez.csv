@@ -1,0 +1,16 @@
+corte,pregunta_id,reintento,juez_ms,estado,error
+headings_v1,q15,1,8865.770444,correcto,
+headings_v1,q20,1,5323.3004,correcto,
+headings_v1,q28,1,3259.27434,correcto,
+headings_v1,q31,1,4891.076377,correcto,
+headings_v1,q35,1,3011.293468,correcto,
+words_v1,q02,1,5162.437895,error,La API devolvió HTTP 503.
+words_v1,q06,1,6051.825457,error,La API devolvió HTTP 503.
+words_v1,q12,1,3414.764073,correcto,
+words_v1,q18,1,3820.318902,correcto,
+words_v1,q20,1,3544.186254,correcto,
+words_v1,q26,1,3649.715213,correcto,
+words_v1,q28,1,3243.125835,correcto,
+words_v1,q02,2,4918.7284,error,La API devolvió HTTP 503.
+words_v1,q06,2,3745.588063,correcto,
+words_v1,q02,3,5221.116132,correcto,

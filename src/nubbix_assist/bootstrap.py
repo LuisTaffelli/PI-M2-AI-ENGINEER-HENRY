@@ -29,11 +29,17 @@ def prepare_local_model(root):
     return download_model(LocalModel(**load_config(root)["embeddings"]))
 
 
-def build(root, name):
+def build(root, name, *, timings=None):
     from .ingestion.build import build_index
     from .vector_store.providers.chroma.adapter import ChromaIndex
 
-    return build_index(root, name, STRATEGIES[name], local_embeddings(root), ChromaIndex)
+    from .timing import measure
+
+    timings = {} if timings is None else timings
+    with measure(timings, "ingestion_total"):
+        with measure(timings, "embedding_model_load"):
+            embeddings = local_embeddings(root)
+        return build_index(root, name, STRATEGIES[name], embeddings, ChromaIndex, timings=timings)
 
 
 def load_build(root, build_id):

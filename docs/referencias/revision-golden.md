@@ -22,3 +22,19 @@ El 22/11/2026 Luis aprobó estas 16 preguntas y sus etiquetas para las tres estr
 | **q27** ¿Cuántos cupos por mes tiene la guardería infantil de la sede central? | El corpus carece de información sobre cupos de guardería. Se espera «La documentación disponible no alcanza para responder la pregunta.» y una lista de citas vacía. | — | — | — |
 
 En la 06 se precisó la continuidad de los días para que el enunciado cumpla la condición de la política. En la 13, la ventana corrida 4 empieza en «contraseñas de Google Workspace» y conserva el sistema, la longitud mínima y la vigencia. Se añadió como alternativa a la ventana 3. En la 27, la ausencia de evidencia justifica el rechazo esperado. El comportamiento del generador se comprueba en la evaluación con modelo.
+
+## Ampliación de los casos sin respuesta · 25/11/2026
+
+El golden pasa de 27 a 36 preguntas: las 26 respondibles y la negativa original se conservaron sin cambios. Los nueve casos nuevos se cotejaron con los tres documentos. En varios hay pasajes cercanos con números o plazos que **no** contestan lo pedido. Las etiquetas no equivalen a haber observado un rechazo del generador.
+
+| Caso | Qué se pregunta | Por qué no alcanza la documentación |
+| --- | --- | --- |
+| q28 | Plazo para habilitar Producción | IT exige doble aprobación; las cuatro horas corresponden a permisos de lectura. |
+| q29 | Plazo máximo para restaurar la base | IT fija frecuencia y retención de backups, no tiempo máximo de restauración. |
+| q30 | Duración del préstamo de notebook en viaje | IT permite pedir reemplazo temporal; IT y Finanzas no fijan su duración. |
+| q31 | Plazo para apelar un reintegro rechazado | Finanzas permite rechazar mientras no se regularice el comprobante; no define apelación ni un plazo. |
+| q32 | Tope por noche de hotel | El límite publicado para viajes aplica a almuerzo/cena, no a alojamiento. |
+| q33 | Arrastre del crédito de capacitación | Figura el monto anual y cómo rendirlo, no si el saldo pasa al año siguiente. |
+| q34 | Plazo de respuesta de People a la declaración por enfermedad | RR. HH. dice cómo justificar la ausencia, no cuándo confirma People. |
+| q35 | Pronóstico de lluvia en CABA | El corpus es de políticas internas y no contiene pronósticos. |
+| q36 | Android mínimo de la aplicación para clientes | Los documentos no especifican una versión compatible para esa aplicación. |
