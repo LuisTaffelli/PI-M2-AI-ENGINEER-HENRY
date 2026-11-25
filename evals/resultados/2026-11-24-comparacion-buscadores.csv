@@ -1,0 +1,92 @@
+corte,pregunta_id,pregunta,chunk_esperado,puesto_bm25,puesto_vectorial,puesto_rrf
+headings_v1,q01,¿Cuántos días corridos tengo por matrimonio?,910268805bd53ceefd3bdc47bf1235ffd4e8b73f163959db9c6043a6785ede28,1,1,1
+headings_v1,q02,¿Cuántos días por examen puedo usar y cuál es el tope anual?,910268805bd53ceefd3bdc47bf1235ffd4e8b73f163959db9c6043a6785ede28,1,1,1
+headings_v1,q03,"Si se suma un hijo a mi familia por adopción y soy el progenitor no gestante, ¿cuánto dura la licencia?",910268805bd53ceefd3bdc47bf1235ffd4e8b73f163959db9c6043a6785ede28,1,1,1
+headings_v1,q04,¿Cuándo debo dejar cargado mi pedido de vacaciones?,910268805bd53ceefd3bdc47bf1235ffd4e8b73f163959db9c6043a6785ede28,1,1,1
+headings_v1,q05,¿Dónde se refleja el pago para cubrir internet y materiales de trabajo en casa?,86eb5032b0ecd8f33cea033d67c6d6b17d433526dc922595c51a85e23841688c,2,1,1
+headings_v1,q06,"Si voy a trabajar 16 días consecutivos desde fuera de mi país de residencia, ¿quién tiene que autorizarlo?",86eb5032b0ecd8f33cea033d67c6d6b17d433526dc922595c51a85e23841688c,1,4,1
+headings_v1,q07,Me ausenté por enfermedad cuatro días. ¿Qué documento tengo que cargar y en qué plazo?,b106a788c028f58693fbd1a49405e3089206a1bed84bec12d1f06a02e70ce976,1,1,1
+headings_v1,q08,¿Cuánto de la prepaga del grupo familiar directo cubre Nubbix?,06414b0dec1a51f4c3bff26eee27c457c87542144bf0b8620e85888a4e4ca829,1,1,1
+headings_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,06414b0dec1a51f4c3bff26eee27c457c87542144bf0b8620e85888a4e4ca829,2,2,2
+headings_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,dc41ecef7d5ddb653f269704c23c2b44b2cc14cfa7749a5ec7095b5341434e9d,1,1,1
+headings_v1,q10,¿Quiénes autorizan un acceso de Producción?,960cae98186968d6a99b1b37a2f2d2f8651c4f2005b8cca51259b033a63e0ae6,2,1,1
+headings_v1,q11,¿Cada cuánto reemplazan las notebooks por antigüedad?,b12eea698abe9c822ac073fb2df60242888a7665ca76aab5b00f661f44952926,5,1,2
+headings_v1,q12,¿Qué apps acepta Nubbix para MFA?,80f42ef877fc459d932490969a776114936c238eb84d71adc5cc984b53ce38ff,1,7,1
+headings_v1,q13,¿Qué longitud y vigencia tienen las contraseñas de Google Workspace?,80f42ef877fc459d932490969a776114936c238eb84d71adc5cc984b53ce38ff,1,1,1
+headings_v1,q14,"Si uso la red inalámbrica de un café, ¿qué conexión adicional necesito?",575fe34a5693190732188b1d535ca84b6938b5564dab8f83a1a2caee0fc41fba,3,2,1
+headings_v1,q15,¿Cada cuánto se respalda la base de producción y cuánto dura la copia?,575fe34a5693190732188b1d535ca84b6938b5564dab8f83a1a2caee0fc41fba,5,1,2
+headings_v1,q16,¿Cuánto puede demorar la primera respuesta a un incidente crítico frente a una consulta general?,059446ed062576efcbb06093b91e674322f0fdc7642cb6617b8a2f0f8c6534b7,1,1,1
+headings_v1,q17,¿Cuándo se desactivan los accesos de alguien que deja la empresa?,17c409010a015d59356d33ec6cdb25f1231edf5a83461f37c8fee6d8dcd97c29,1,1,1
+headings_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",059446ed062576efcbb06093b91e674322f0fdc7642cb6617b8a2f0f8c6534b7,1,2,1
+headings_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",742e0dd5440118c59f5ff5aca3531eb11876875203fc8962b0d979c75d9ba22b,7,3,4
+headings_v1,q19,¿Cuál es el tope diario para comidas corporativas en viaje?,742e0dd5440118c59f5ff5aca3531eb11876875203fc8962b0d979c75d9ba22b,1,1,1
+headings_v1,q20,¿Qué pasa con un reintegro que ingreso en ExpenseHub después del día 25?,742e0dd5440118c59f5ff5aca3531eb11876875203fc8962b0d979c75d9ba22b,1,2,1
+headings_v1,q21,¿Quién aprueba comprar una licencia de USD 750?,740b8bbf0313417732dadde1df402ea8e94a3c4a337109a475ad61f6a3412022,1,1,1
+headings_v1,q22,"Para adquirir software por USD 3000, ¿cuántos presupuestos se comparan y quién aprueba?",740b8bbf0313417732dadde1df402ea8e94a3c4a337109a475ad61f6a3412022,1,1,1
+headings_v1,q23,¿A partir de qué día encuentro mi recibo de sueldo digital y dónde?,e4058318afe1467fb6db94ff6de0f0f961b47b3b8e65c43375f75189e57c7f44,2,1,2
+headings_v1,q24,¿Una capacitación ajena a mi función profesional se reembolsa?,dc41ecef7d5ddb653f269704c23c2b44b2cc14cfa7749a5ec7095b5341434e9d,1,1,1
+headings_v1,q25,¿Cuándo se liquida el bono por desempeño?,cbd7b699ea46364d2ce85bcb8a364bf54ef3b8d00e79edb7f583c1dc25e15920,1,1,1
+headings_v1,q26,¿Qué hace Finance si los datos de una factura no coinciden con la orden de compra?,8573effc30ed2be494e30af21951d4d4b3c485599ccbd3229e2190b5e91fad76,2,1,1
+headings_v1,q27,¿Cuántos cupos por mes tiene la guardería infantil de la sede central?,,,,
+words_v1,q01,¿Cuántos días corridos tengo por matrimonio?,ccc1d8d317f9defdc82309a0eaf750f689a8a1fd3186fa3cd4e2f3d6c80638b0,1,1,1
+words_v1,q01,¿Cuántos días corridos tengo por matrimonio?,582b876523b3bedd19569fb99eb9f01d249f98b27cf695bfb2ee4eb110e52e9b,2,2,2
+words_v1,q02,¿Cuántos días por examen puedo usar y cuál es el tope anual?,582b876523b3bedd19569fb99eb9f01d249f98b27cf695bfb2ee4eb110e52e9b,1,1,1
+words_v1,q03,"Si se suma un hijo a mi familia por adopción y soy el progenitor no gestante, ¿cuánto dura la licencia?",ccc1d8d317f9defdc82309a0eaf750f689a8a1fd3186fa3cd4e2f3d6c80638b0,1,1,1
+words_v1,q04,¿Cuándo debo dejar cargado mi pedido de vacaciones?,ccc1d8d317f9defdc82309a0eaf750f689a8a1fd3186fa3cd4e2f3d6c80638b0,1,1,1
+words_v1,q05,¿Dónde se refleja el pago para cubrir internet y materiales de trabajo en casa?,53a50aabb4fc2ef763dc1f22440669e26a1920e83c3187bdbcf1d9fc1263f2ce,3,1,1
+words_v1,q06,"Si voy a trabajar 16 días consecutivos desde fuera de mi país de residencia, ¿quién tiene que autorizarlo?",53a50aabb4fc2ef763dc1f22440669e26a1920e83c3187bdbcf1d9fc1263f2ce,1,1,1
+words_v1,q07,Me ausenté por enfermedad cuatro días. ¿Qué documento tengo que cargar y en qué plazo?,b61d18b55efa57e6247405ec2fe25c71ce3c8fd6179bbea7b4b6f2e4f3cda6fd,2,1,2
+words_v1,q08,¿Cuánto de la prepaga del grupo familiar directo cubre Nubbix?,380924313ac5be7545623927ffb3703df7820b889c43debbcc8ef780b00e21fa,1,3,1
+words_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,380924313ac5be7545623927ffb3703df7820b889c43debbcc8ef780b00e21fa,3,4,3
+words_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,d851508c396852815de70e221f3bf88883a0a21df0964fa915c99937386b1271,2,1,2
+words_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,6d82d0129f67ef2c85c5e2c65bcdc289c46d67189b5ad7c5fa4734f92277bc66,1,2,1
+words_v1,q10,¿Quiénes autorizan un acceso de Producción?,de843c483f0304224a3eb5cdcc9d04ae9f578a26bcaffad8bb6f3e1facff0b7e,1,1,1
+words_v1,q11,¿Cada cuánto reemplazan las notebooks por antigüedad?,67105090e8b552c7ac7a3808f887f488ea1f843dede1cf8576158f8575b8d4d2,,1,8
+words_v1,q12,¿Qué apps acepta Nubbix para MFA?,3b86852386e0ae3e4f95868fd87a5e78b9d36cf64863f3b97b16b37ccd39dc5f,1,1,1
+words_v1,q13,¿Qué longitud y vigencia tienen las contraseñas de Google Workspace?,3b86852386e0ae3e4f95868fd87a5e78b9d36cf64863f3b97b16b37ccd39dc5f,1,2,1
+words_v1,q13,¿Qué longitud y vigencia tienen las contraseñas de Google Workspace?,45fc50aeab3f2bce0cd7a3f9482ba9d1dc5bcf7dbf1e62bbc2def5d2a6f8b0e4,2,1,2
+words_v1,q14,"Si uso la red inalámbrica de un café, ¿qué conexión adicional necesito?",7244d05653915bd6632e02c5d97aa299edfa485bbf9ce184df2184d0e5a9cfdc,1,1,1
+words_v1,q15,¿Cada cuánto se respalda la base de producción y cuánto dura la copia?,7244d05653915bd6632e02c5d97aa299edfa485bbf9ce184df2184d0e5a9cfdc,6,1,2
+words_v1,q16,¿Cuánto puede demorar la primera respuesta a un incidente crítico frente a una consulta general?,d5670108e018e175b3448ac7a840131a014e03eceb9e75e3f184eede039882ee,1,1,1
+words_v1,q17,¿Cuándo se desactivan los accesos de alguien que deja la empresa?,30dd207c5912424945d486f6d2c00008160643b0abc1cf564c1378a104c67c08,1,1,1
+words_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",d5670108e018e175b3448ac7a840131a014e03eceb9e75e3f184eede039882ee,1,3,1
+words_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",c47aef155dd34795851881ff1b58502a2c81f99dea89d27f60e58e6f0e8bb5cd,9,1,5
+words_v1,q19,¿Cuál es el tope diario para comidas corporativas en viaje?,c47aef155dd34795851881ff1b58502a2c81f99dea89d27f60e58e6f0e8bb5cd,1,1,1
+words_v1,q20,¿Qué pasa con un reintegro que ingreso en ExpenseHub después del día 25?,fe5aec00dfe7970a474bd34adb57e016c9329176266f0fbc1ccbb2eeabc20684,1,1,1
+words_v1,q21,¿Quién aprueba comprar una licencia de USD 750?,fe5aec00dfe7970a474bd34adb57e016c9329176266f0fbc1ccbb2eeabc20684,2,1,1
+words_v1,q21,¿Quién aprueba comprar una licencia de USD 750?,f8da23545239d429f1ec1003bd2f62256b48955a0d83a8f438c818cce6652878,3,2,2
+words_v1,q22,"Para adquirir software por USD 3000, ¿cuántos presupuestos se comparan y quién aprueba?",f8da23545239d429f1ec1003bd2f62256b48955a0d83a8f438c818cce6652878,1,2,1
+words_v1,q23,¿A partir de qué día encuentro mi recibo de sueldo digital y dónde?,6d82d0129f67ef2c85c5e2c65bcdc289c46d67189b5ad7c5fa4734f92277bc66,2,1,1
+words_v1,q24,¿Una capacitación ajena a mi función profesional se reembolsa?,cb750ef04182f4801e4594062d51b545a5458226b8b062301def03314aceae6c,1,2,2
+words_v1,q25,¿Cuándo se liquida el bono por desempeño?,137125bee7a92c4539c5e5916f31ae3b9eb1712b158a6a43705703f790711fea,1,1,1
+words_v1,q26,¿Qué hace Finance si los datos de una factura no coinciden con la orden de compra?,0496c7dd30b4d6adc164ede29f501f534bc03fddd39c50dcfd1bd1ddd4906b2e,1,1,1
+words_v1,q27,¿Cuántos cupos por mes tiene la guardería infantil de la sede central?,,,,
+section_words_v1,q01,¿Cuántos días corridos tengo por matrimonio?,57da5930a1c5a65d827b723c8f17276579198908aa207c67092653cbc00b0b9c,1,1,1
+section_words_v1,q02,¿Cuántos días por examen puedo usar y cuál es el tope anual?,75efaf701d8f9c6580143d64f267535d5c29d8ccb0393bcdac1a6838e6a0c6d0,1,1,1
+section_words_v1,q03,"Si se suma un hijo a mi familia por adopción y soy el progenitor no gestante, ¿cuánto dura la licencia?",57da5930a1c5a65d827b723c8f17276579198908aa207c67092653cbc00b0b9c,1,1,1
+section_words_v1,q04,¿Cuándo debo dejar cargado mi pedido de vacaciones?,57da5930a1c5a65d827b723c8f17276579198908aa207c67092653cbc00b0b9c,1,1,1
+section_words_v1,q05,¿Dónde se refleja el pago para cubrir internet y materiales de trabajo en casa?,f2cea1f2f31b7f2866fe4faaa657e6e7fd5d9b2c1e97963ca2a4259d1887704e,2,1,2
+section_words_v1,q06,"Si voy a trabajar 16 días consecutivos desde fuera de mi país de residencia, ¿quién tiene que autorizarlo?",f2cea1f2f31b7f2866fe4faaa657e6e7fd5d9b2c1e97963ca2a4259d1887704e,1,6,1
+section_words_v1,q07,Me ausenté por enfermedad cuatro días. ¿Qué documento tengo que cargar y en qué plazo?,f26ad7eca6bd6df214402349ab351dba1256e3654e41499e516875c360474265,1,1,1
+section_words_v1,q08,¿Cuánto de la prepaga del grupo familiar directo cubre Nubbix?,bae8c208f14e002f6b3bae1b4b850fc47a179f546fbeaa75f9ba4c47263906b2,1,1,1
+section_words_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,bae8c208f14e002f6b3bae1b4b850fc47a179f546fbeaa75f9ba4c47263906b2,2,2,2
+section_words_v1,q09,¿Qué beneficio cubre libros de tecnología y cómo se rinde la factura de un curso?,cb2a1876ec8b30bd733cecf2ae39f9268dc1f099a8c1be1e2ce179e12798031d,1,1,1
+section_words_v1,q10,¿Quiénes autorizan un acceso de Producción?,97e51a586afa17be853eb8d6ad1902b6a16e3928eda14e3d4d8cb59732a05239,2,1,1
+section_words_v1,q11,¿Cada cuánto reemplazan las notebooks por antigüedad?,4a902f967f1ad7d3d180143700d622cfb9d14365828cfbdd0ba8965e0d147a2d,4,1,1
+section_words_v1,q12,¿Qué apps acepta Nubbix para MFA?,435697120fe804c4e1ce86f06ca4ec3d0db0265f8126d9db4f4101542c95081d,1,9,2
+section_words_v1,q13,¿Qué longitud y vigencia tienen las contraseñas de Google Workspace?,435697120fe804c4e1ce86f06ca4ec3d0db0265f8126d9db4f4101542c95081d,1,1,1
+section_words_v1,q14,"Si uso la red inalámbrica de un café, ¿qué conexión adicional necesito?",fa09d0a075e444b4003e5b25e025572750d59a1de98b140f678b64de657242ee,3,2,1
+section_words_v1,q15,¿Cada cuánto se respalda la base de producción y cuánto dura la copia?,fa09d0a075e444b4003e5b25e025572750d59a1de98b140f678b64de657242ee,5,1,2
+section_words_v1,q16,¿Cuánto puede demorar la primera respuesta a un incidente crítico frente a una consulta general?,24d3a469a7f1d3d804956edbdf9cf0ebd59f3a0a1bc3b39391842efccba2b679,1,1,1
+section_words_v1,q17,¿Cuándo se desactivan los accesos de alguien que deja la empresa?,c61efe729ec8ab373f215b9d7361dbf9179b476674bf269ba982ee06c0467f83,1,1,1
+section_words_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",24d3a469a7f1d3d804956edbdf9cf0ebd59f3a0a1bc3b39391842efccba2b679,1,4,2
+section_words_v1,q18,"Si se daña mi equipo de viaje, ¿puedo pedir uno temporal y qué tipo de factura exige Finance para el reintegro?",e313d96adb34892afef08b414820d463b737cb5f57f24c3673a7ff5fc1b57b07,8,3,5
+section_words_v1,q19,¿Cuál es el tope diario para comidas corporativas en viaje?,e313d96adb34892afef08b414820d463b737cb5f57f24c3673a7ff5fc1b57b07,1,1,1
+section_words_v1,q20,¿Qué pasa con un reintegro que ingreso en ExpenseHub después del día 25?,e313d96adb34892afef08b414820d463b737cb5f57f24c3673a7ff5fc1b57b07,1,2,2
+section_words_v1,q21,¿Quién aprueba comprar una licencia de USD 750?,2ba790911b58289357816a21aa1365443c05ace7bb01dfdb944f8b4cd60d6a76,1,1,1
+section_words_v1,q22,"Para adquirir software por USD 3000, ¿cuántos presupuestos se comparan y quién aprueba?",2ba790911b58289357816a21aa1365443c05ace7bb01dfdb944f8b4cd60d6a76,1,1,1
+section_words_v1,q23,¿A partir de qué día encuentro mi recibo de sueldo digital y dónde?,8cf8ee6722029825a5c3ec181feb96582e866f9288fc0caa9f60ae21b5de842f,1,1,1
+section_words_v1,q24,¿Una capacitación ajena a mi función profesional se reembolsa?,cb2a1876ec8b30bd733cecf2ae39f9268dc1f099a8c1be1e2ce179e12798031d,1,1,1
+section_words_v1,q25,¿Cuándo se liquida el bono por desempeño?,509120b8142bf30c28e448b88d49af3785a80f9362650fa72f5f2fdfca83ba6b,1,1,1
+section_words_v1,q26,¿Qué hace Finance si los datos de una factura no coinciden con la orden de compra?,217ba4e1b2603c84dab8f719273d891a990286bf8fb66afbd3d04597552686ac,1,1,1
+section_words_v1,q27,¿Cuántos cupos por mes tiene la guardería infantil de la sede central?,,,,

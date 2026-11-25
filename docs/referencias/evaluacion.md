@@ -21,7 +21,7 @@ El dataset contiene 27 preguntas con extractos, offsets, hechos esperados e IDs 
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --preliminary-retrieval
 ```
 
-Ese modo admite etiquetas en borrador y registra su estado. Una vez revisadas, usá `--retrieve-only` para la medición definitiva. El primer comando compara las dos estrategias originales y el segundo incluye el híbrido.
+Ese modo admite etiquetas en borrador y registra su estado. Una vez revisadas, usá `--retrieve-only` para la medición definitiva. El primer comando compara los dos cortes originales y el segundo añade las ventanas dentro de cada sección. Los dos comandos usan búsqueda híbrida.
 
 ```sh
 python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" --retrieve-only
@@ -29,6 +29,76 @@ python evals/runner.py --builds "$BUILD_H2" "$BUILD_WORDS" "$BUILD_HYBRID" --ret
 ```
 
 **Precisión@5** indica qué proporción de los cinco resultados estaba etiquetada como relevante. **Recall@5** indica qué proporción de los fragmentos esperados apareció entre esos cinco. **Hit rate** cuenta las preguntas en las que se recuperó al menos un fragmento relevante. El promedio da el mismo peso a cada pregunta respondible. La pregunta sobre guardería (`q27`) se busca en todos los índices y queda fuera de estos promedios porque carece de fragmentos relevantes.
+
+### Comparar BM25, vectorial y RRF
+
+El 24 de noviembre de 2026 repetimos las 27 consultas sobre los tres índices y verificamos que cada fragmento esperado ocupaba el mismo puesto en el top 10 que en la corrida del día 22. Para cada corte usamos las mismas preguntas y etiquetas en las tres búsquedas. Tomamos hasta diez candidatos de BM25 y hasta diez de E5. Aplicamos RRF con constante 60 y el mismo peso por rama. El top 5 reconstruido coincidió en las 81 consultas con los cinco fragmentos seleccionados por el buscador. La medición usó recuperación local, con multi-query y re-ranking desactivados. [Configuración](../../config.yaml) · [Función de fusión](../../src/nubbix_assist/retrieval/rrf.py)
+
+| Corte | Búsqueda | Precisión@5 | Recall@5 | Recall@10 |
+|---|---|---:|---:|---:|
+| Secciones H2 | BM25 | 20,77 % | 98,08 % | 100 % |
+| Secciones H2 | Vectorial | 20,77 % | 96,15 % | 100 % |
+| Secciones H2 | Híbrida (RRF) | 21,54 % | 100 % | 100 % |
+| Ventanas corridas | BM25 | 22,31 % | 90,38 % | 96,15 % |
+| Ventanas corridas | Vectorial | 24,62 % | 100 % | 100 % |
+| Ventanas corridas | Híbrida (RRF) | 23,85 % | 96,15 % | 100 % |
+| Ventanas por sección | BM25 | 20,77 % | 98,08 % | 100 % |
+| Ventanas por sección | Vectorial | 20,00 % | 92,31 % | 100 % |
+| Ventanas por sección | Híbrida (RRF) | 21,54 % | 100 % | 100 % |
+
+Tres preguntas explican dónde cambió el contexto que recibe el generador.
+
+| Pregunta y fragmento esperado | Corte | Puesto BM25 | Puesto vectorial | Puesto RRF |
+|---|---|---:|---:|---:|
+| `q12` · Apps aceptadas para MFA | H2 | 1 | 7 | 1 |
+| `q18` · Equipo temporal durante un viaje (IT) | H2 | 1 | 2 | 1 |
+| `q18` · Factura para el reintegro (Finanzas) | H2 | 7 | 3 | 4 |
+| `q11` · Plazo de renovación de notebooks | Ventanas corridas | Fuera del top 10 | 1 | 8 |
+
+En H2, BM25 aportó el primer puesto para MFA y el vectorial ubicó entre los primeros cinco los dos pasajes necesarios para contestar la consulta del viaje. RRF conservó esas evidencias en ambos casos. Con ventanas corridas, la fusión dejó octavo el fragmento de renovación de notebooks. Ese único caso explica la diferencia de recall@5 entre el vectorial y RRF en ese corte.
+
+El CSV incluye una fila por fragmento esperado y corte. Una posición vacía indica que el fragmento quedó fuera de los diez primeros de ese método. La fila de `q27` en cada corte tiene el campo `chunk_esperado` vacío porque el corpus carece de evidencia para esa pregunta. [Posiciones de los tres métodos por pregunta y fragmento](../../evals/resultados/2026-11-24-comparacion-buscadores.csv)
+
+<details>
+<summary>Recalcular la tabla a partir de una corrida local</summary>
+
+Ejecutá el comando `--retrieve-only` de los tres índices que aparece arriba. Desde la raíz del repositorio, asigná el `run_id` que imprime a `RUN_ID` y ejecutá este bloque. Lee los candidatos de cada traza y usa las funciones de fusión y métricas del proyecto.
+
+```sh
+PYTHONPATH=src python - "runs/$RUN_ID/eval.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+from statistics import mean
+
+from evals.metrics import retrieval_metrics
+from nubbix_assist.retrieval.rrf import fuse
+
+report = json.loads(Path(sys.argv[1]).read_text())
+print("Corte | Búsqueda | Precisión@5 | Recall@5 | Recall@10")
+for corte, estrategia in report["strategies"].items():
+    resultados = {"BM25": [], "Vectorial": [], "RRF": []}
+    for caso in estrategia["cases"]:
+        traza = caso["trace"]
+        config = traza["config"]
+        assert (config["candidates"], config["top_k"]) == (10, 5)
+        bm25 = [key for key, _ in traza["lexical_candidates"]]
+        vectorial = [key for key, _ in traza["vector_candidates"]]
+        rrf = [key for key, _ in fuse([bm25, vectorial], config["rrf_constant"], 10)]
+        assert rrf[:5] == caso["retrieved_ids"]
+        esperados = caso["expected_chunks"]
+        if esperados:
+            for nombre, ranking in (("BM25", bm25), ("Vectorial", vectorial), ("RRF", rrf)):
+                top5 = retrieval_metrics(ranking, esperados, 5)
+                top10 = retrieval_metrics(ranking, esperados, 10)
+                resultados[nombre].append((top5["precision_at_k"], top5["recall_at_k"], top10["recall_at_k"]))
+    for nombre, filas in resultados.items():
+        promedios = [f"{mean(columna):.2%}" for columna in zip(*filas)]
+        print(" | ".join([corte, nombre, *promedios]))
+PY
+```
+
+</details>
 
 ## Evaluar respuestas con generador y juez
 

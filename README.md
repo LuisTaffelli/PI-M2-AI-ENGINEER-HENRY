@@ -52,7 +52,19 @@ Comparamos tres maneras de dividir el mismo corpus. Se ejecutaron las 27 pregunt
 | Ventanas de 80 palabras con 20 de solapamiento | 24 | 23,85 % | 96,15 % | 22/26 |
 | Las mismas ventanas dentro de cada sección | 21 | 21,54 % | 100 % | 21/26 |
 
-**Elegimos el corte por secciones para este corpus.** Cuando se preguntó cada cuánto se reemplazan las notebooks, recuperó la política y el asistente respondió «cada 3 años». Con ventanas de 80 palabras, el pasaje quedó fuera de los cinco primeros y el asistente rechazó una pregunta que tenía respuesta. El híbrido también recuperó toda la evidencia en la prueba de búsqueda. [Resultados por pregunta](evals/resultados/2026-11-22-retrieval-golden-revisado.csv) · [Comparación de cortes](docs/referencias/chunking.md)
+**Elegimos el corte por secciones para este corpus.** Cuando se preguntó cada cuánto se reemplazan las notebooks, recuperó la política y el asistente respondió «cada 3 años». Con ventanas de 80 palabras, el pasaje quedó fuera de los cinco primeros y el asistente rechazó una pregunta que tenía respuesta. Las ventanas dentro de cada sección también recuperaron toda la evidencia en la prueba de búsqueda. [Resultados por pregunta](evals/resultados/2026-11-22-retrieval-golden-revisado.csv) · [Comparación de cortes](docs/referencias/chunking.md)
+
+## Qué aporta la búsqueda híbrida
+
+Con el corte H2 fijo, comparamos tres búsquedas sobre las mismas 26 preguntas respondibles. BM25 y el buscador vectorial devuelven hasta diez candidatos cada uno. La búsqueda híbrida fusiona ambos rankings con RRF. El recall@10 mide cuánta evidencia aparece entre los diez primeros de cada método. El recall@5 mide cuánta llega a los cinco puestos que usa el generador.
+
+| Búsqueda sobre secciones H2 | Precisión@5 | Recall@5 | Recall@10 |
+|---|---:|---:|---:|
+| BM25 | 20,77 % | 98,08 % | 100 % |
+| Vectorial (E5) | 20,77 % | 96,15 % | 100 % |
+| Híbrida (RRF) | 21,54 % | 100 % | 100 % |
+
+En H2, los tres métodos encontraron toda la evidencia dentro de sus diez primeros resultados. La fusión también la conservó al quedarse con cinco. Por ejemplo, para «¿Qué apps acepta Nubbix para MFA?», BM25 y RRF ubicaron el pasaje en el primer puesto y el vectorial en el séptimo. El resultado cambió con las ventanas corridas de 80 palabras, donde el vectorial alcanzó 100 % de recall@5 y RRF obtuvo 96,15 %. [Comparación de los tres cortes y reproducción](docs/referencias/evaluacion.md#comparar-bm25-vectorial-y-rrf) · [Posiciones por pregunta](evals/resultados/2026-11-24-comparacion-buscadores.csv)
 
 ## Evaluación de las respuestas
 
